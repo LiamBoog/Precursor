@@ -86,9 +86,13 @@ public class RectangularCollisionResolver : CollisionResolver
     public override ICollision Collide(Vector2 displacement)
     {
         Vector2 totalDeflection = GetMovementDeflection(displacement); // Deflection along collision normal
-        
+
         Vector2 deflection;
-        if (Mathf.Abs(totalDeflection.x) > Mathf.Abs(totalDeflection.y)) // horizontal deflection
+        if (totalDeflection == default)
+        {
+            deflection = default;
+        }
+        else if (Mathf.Abs(totalDeflection.x) > Mathf.Abs(totalDeflection.y)) // horizontal deflection
         {
             deflection = displacement * (totalDeflection.x / displacement.x);
         }

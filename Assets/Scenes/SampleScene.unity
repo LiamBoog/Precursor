@@ -175,7 +175,7 @@ MonoBehaviour:
   jump: {fileID: 6384440746060477519, guid: cbac4485a791a924082cae6b593cb872, type: 3}
   grapple: {fileID: -4597657922460294237, guid: cbac4485a791a924082cae6b593cb872, type: 3}
   anchor: {fileID: -295736445056874605, guid: cbac4485a791a924082cae6b593cb872, type: 3}
-  collisionResolver: {fileID: 0}
+  collisionResolver: {fileID: 19663147}
 --- !u!212 &19663144
 SpriteRenderer:
   m_ObjectHideFlags: 0

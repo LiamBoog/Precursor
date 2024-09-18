@@ -1,4 +1,8 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -96,7 +100,32 @@ public class PlayerController : MonoBehaviour
     {
         KinematicState<Vector2> kinematics = new (transform.position, velocity);
         movementController.Update(Time.deltaTime, ref kinematics);
-        transform.position = new Vector3(kinematics.position.x, transform.position.y, transform.position.z);
+        Vector2 displacement = kinematics.position - (Vector2) transform.position;
+        displacement = Quaternion.Euler(0f, 0f, 15f) * displacement;
+        CollisionResolver.ICollision collision = collisionResolver.Collide(displacement);
+        //Debug.Log(collision.Normal);
+        if (collision.Normal != default)
+        {
+            Bounds bounds = GetComponent<BoxCollider2D>().bounds;
+            IEnumerable<Vector2> corners = new Vector2[]
+            {
+                bounds.center + bounds.extents, 
+                bounds.center - bounds.extents, 
+                bounds.center + Quaternion.Euler(0f, 0f, 90f) * bounds.extents, 
+                bounds.center - Quaternion.Euler(0f, 0f, 90f) * bounds.extents
+            };
+            foreach (Vector2 corner in corners)
+            {
+                Debug.DrawRay(corner, displacement, Color.blue, 1f);
+                Debug.DrawRay(corner, displacement + collision.Deflection, Color.red, 1f);
+            }
+
+            displacement += collision.Deflection;
+            //EditorApplication.isPaused = true;
+        }
+        
+        transform.position += (Vector3) displacement;
         velocity = kinematics.velocity;
+        Physics2D.SyncTransforms();
     }
 }
