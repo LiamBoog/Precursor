@@ -57,4 +57,6 @@ public class WalkingState : IMovementState
         kinematics.position += kinematics.velocity * t;
         return output;
     }
+    
+    
 }
