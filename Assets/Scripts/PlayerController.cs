@@ -93,9 +93,9 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        IMovementState.KinematicState x = new (transform.position.x, velocity.x);
-        movementController.Update(Time.deltaTime, ref x);
-        transform.position = new Vector3(x.position, transform.position.y, transform.position.z);
-        velocity.x = x.velocity;
+        KinematicState<Vector2> kinematics = new (transform.position, velocity);
+        movementController.Update(Time.deltaTime, ref kinematics);
+        transform.position = new Vector3(kinematics.position.x, transform.position.y, transform.position.z);
+        velocity = kinematics.velocity;
     }
 }

@@ -1,34 +1,35 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public readonly struct KinematicSegment<T> where T : struct, IEquatable<T>, IFormattable
+{
+    public readonly KinematicState<T> initialState;
+    public readonly T acceleration;
+    public readonly T duration;
+
+    public KinematicSegment(KinematicState<T> initialState, T acceleration, T duration)
+    {
+        this.initialState = initialState;
+        this.acceleration = acceleration;
+        this.duration = duration;
+    }
+}
+
+public struct KinematicState<T> where T : struct, IEquatable<T>, IFormattable
+{
+    public T position;
+    public T velocity;
+
+    public KinematicState(T position, T velocity)
+    {
+        this.position = position;
+        this.velocity = velocity;
+    }
+}
+
 public interface IMovementState
 {
-    public struct KinematicState
-    {
-        public float position;
-        public float velocity;
-
-        public KinematicState(float position, float velocity)
-        {
-            this.position = position;
-            this.velocity = velocity;
-        }
-    }
-    
-    public readonly struct KinematicSegment
-    {
-        public readonly KinematicState initialState;
-        public readonly float acceleration;
-        public readonly float duration;
-
-        public KinematicSegment(KinematicState initialState, float acceleration, float duration)
-        {
-            this.initialState = initialState;
-            this.acceleration = acceleration;
-            this.duration = duration;
-        }
-    }
-
-    IMovementState Update(float t, out IMovementState.KinematicSegment[] kinematicSegments, ref IMovementState.KinematicState kinematics);
+    IMovementState Update(float t, ref KinematicState<Vector2> kinematics);
 }

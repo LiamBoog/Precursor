@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class WalkingState : IMovementState
@@ -12,16 +11,19 @@ public class WalkingState : IMovementState
         parameters = movementParameters;
     }
     
-    public IMovementState Update(float t, out IMovementState.KinematicSegment[] kinematicSegments, ref IMovementState.KinematicState kinematics)
+    public IMovementState Update(float t, ref KinematicState<Vector2> kinematics)
     {
-        kinematicSegments = WalkingCurve(t, ref kinematics, parameters.Aim.x);
+        KinematicState<float> xKinematics = new(kinematics.position.x, kinematics.velocity.x);
+        WalkingCurve(t, ref xKinematics, parameters.Aim.x);
+        kinematics = new(
+            new(xKinematics.position, kinematics.position.y), 
+            new(xKinematics.velocity, kinematics.velocity.y));
         return this;
     }
 
-    public IMovementState.KinematicSegment[] WalkingCurve(float t, ref IMovementState.KinematicState kinematics, float input)
+    public KinematicSegment<float>[] WalkingCurve(float t, ref KinematicState<float> kinematics, float input)
     {
-        List<IMovementState.KinematicSegment> output = new();
-
+        List<KinematicSegment<float>> output = new();
         float targetVelocity = parameters.TopSpeed * input;
 
         float decelerationTarget = kinematics.velocity * targetVelocity < 0f ? 0f : targetVelocity;
@@ -35,13 +37,13 @@ public class WalkingState : IMovementState
         return output.ToArray();
     }
     
-    public IMovementState.KinematicSegment AccelerateTowardTargetVelocity(ref float t, float targetVelocity, float accelerationMagnitude, ref IMovementState.KinematicState kinematics)
+    public KinematicSegment<float> AccelerateTowardTargetVelocity(ref float t, float targetVelocity, float accelerationMagnitude, ref KinematicState<float> kinematics)
     {
         float acceleration = Math.Sign(targetVelocity - kinematics.velocity) * accelerationMagnitude;
         float maxAccelerationTime = acceleration == 0f ? 0f : (targetVelocity - kinematics.velocity) / acceleration;
         float accelerationTime = Mathf.Min(t, maxAccelerationTime);
 
-        IMovementState.KinematicSegment output = new IMovementState.KinematicSegment(kinematics, acceleration, accelerationTime);
+        KinematicSegment<float> output = new(kinematics, acceleration, accelerationTime);
         kinematics.position += kinematics.velocity * accelerationTime + 0.5f * acceleration * accelerationTime * accelerationTime;
         kinematics.velocity = accelerationTime < maxAccelerationTime ? kinematics.velocity + acceleration * accelerationTime : targetVelocity;
         t -= accelerationTime;
@@ -49,9 +51,9 @@ public class WalkingState : IMovementState
         return output;
     }
 
-    public IMovementState.KinematicSegment LinearMotionCurve(float t, ref IMovementState.KinematicState kinematics)
+    public KinematicSegment<float> LinearMotionCurve(float t, ref KinematicState<float> kinematics)
     {
-        IMovementState.KinematicSegment output = new IMovementState.KinematicSegment(kinematics, 0f, t);
+        KinematicSegment<float> output = new(kinematics, 0f, t);
         kinematics.position += kinematics.velocity * t;
         return output;
     }

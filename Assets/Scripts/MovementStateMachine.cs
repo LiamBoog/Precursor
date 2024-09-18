@@ -12,8 +12,8 @@ public class MovementStateMachine
         state = new WalkingState(movementParameters);
     }
 
-    public void Update(float t, ref IMovementState.KinematicState kinematics)
+    public void Update(float t, ref KinematicState<Vector2> kinematics)
     {
-        state = state.Update(t, out IMovementState.KinematicSegment[] _, ref kinematics);
+        state = state.Update(t, ref kinematics);
     }
 }
