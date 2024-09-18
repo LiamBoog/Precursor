@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MovementStateMachine
@@ -12,8 +9,8 @@ public class MovementStateMachine
         state = new WalkingState(movementParameters);
     }
 
-    public void Update(float t, ref KinematicState<Vector2> kinematics)
+    public void Update(float t, ref KinematicState<Vector2> kinematics, IPlayerInfo playerInfo)
     {
-        state = state.Update(t, ref kinematics);
+        state = state.Update(t, ref kinematics, playerInfo);
     }
 }

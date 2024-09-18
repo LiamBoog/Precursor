@@ -11,13 +11,15 @@ public class WalkingState : IMovementState
         parameters = movementParameters;
     }
     
-    public IMovementState Update(float t, ref KinematicState<Vector2> kinematics)
+    public IMovementState Update(float t, ref KinematicState<Vector2> kinematics, IPlayerInfo playerInfo)
     {
         KinematicState<float> xKinematics = new(kinematics.position.x, kinematics.velocity.x);
-        WalkingCurve(t, ref xKinematics, parameters.Aim.x);
+        KinematicState<float> yKinematics = new(kinematics.position.y, kinematics.velocity.y);
+        WalkingCurve(t, ref xKinematics, playerInfo.Aim.x);
+        FallingCurve(t, ref yKinematics, playerInfo.Aim.x, playerInfo.WallCheck);
         kinematics = new(
-            new(xKinematics.position, kinematics.position.y), 
-            new(xKinematics.velocity, kinematics.velocity.y));
+            new(xKinematics.position, yKinematics.position), 
+            new(xKinematics.velocity, yKinematics.velocity));
         return this;
     }
 
@@ -58,5 +60,16 @@ public class WalkingState : IMovementState
         return output;
     }
     
-    
+    private KinematicSegment<float>[] FallingCurve(float t, ref KinematicState<float> kinematics, float input, Func<int> wallCheck)
+    {
+        List<KinematicSegment<float>> output = new();
+
+        bool aimingAtWall = input != 0f && wallCheck() * input < 0f; // TODO - maybe replace this with a wall sliding state
+        float targetVelocity = aimingAtWall ? -parameters.WallSlideVelocity : -parameters.TerminalVelocity;
+        kinematics.velocity = Mathf.Max(targetVelocity, kinematics.velocity);
+        
+        output.Add(AccelerateTowardTargetVelocity(ref t, targetVelocity, parameters.FallGravity, ref kinematics));
+        output.Add(LinearMotionCurve(t, ref kinematics));
+        return output.ToArray();
+    }
 }
