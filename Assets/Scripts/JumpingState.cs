@@ -6,12 +6,7 @@ using UnityEngine;
 
 public abstract partial class MovementState
 {
-    protected bool CanJump(KinematicState<Vector2> kinematics)
-    {
-        float fallTime = -kinematics.velocity.y / parameters.FallGravity;
-        bool coyoteCheck = this is not JumpingState && fallTime < parameters.CoyoteTime;
-        return coyoteCheck || player.GroundCheck();
-    }
+    
 }
 
 public class JumpingState : MovementState

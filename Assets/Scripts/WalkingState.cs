@@ -75,9 +75,9 @@ public class WalkingState : MovementState
         }
         
         // Process collisions
-        if (interrupts.Any(i => i is ICollision))
+        if (interrupts.FirstOrDefault(i => i is ICollision) is ICollision collision)
         {
-            Vector2 deflection = ((ICollision) interrupts.First(i => i is ICollision)).Deflection;
+            Vector2 deflection = collision.Deflection;
             if (deflection.x != 0f)
             {
                 kinematics.velocity.x = 0f;
@@ -100,5 +100,12 @@ public class WalkingState : MovementState
         t = 0f;
 
         return this;
+    }
+    
+    private bool CanJump(KinematicState<Vector2> kinematics)
+    {
+        float fallTime = -kinematics.velocity.y / parameters.FallGravity;
+        bool coyoteCheck = fallTime < parameters.CoyoteTime;
+        return coyoteCheck || player.GroundCheck();
     }
 }
