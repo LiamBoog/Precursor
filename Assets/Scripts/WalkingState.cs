@@ -70,8 +70,7 @@ public class WalkingState : MovementState
                 case JumpInterrupt jumpInterrupt:
                     if (jumpInterrupt.type == JumpInterrupt.Type.Cancelled || !CanJump(kinematics))
                         break;
-                    Debug.Log("JUMP");
-                    return new JumpingState(kinematics, parameters, player);
+                    return new JumpingState(parameters, player, kinematics);
             }
         }
         

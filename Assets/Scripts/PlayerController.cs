@@ -18,12 +18,12 @@ public class MovementParameters
     [SerializeField] private float accelerationDistance = 0.5f;
     [SerializeField] private float decelerationDistance = 0.5f;
 
-    [Header("Jump Parameters")] 
-    [SerializeField] private float maxJumpHeight = 4f;
-    [SerializeField] private float minJumpHeight = 2f;
+    [field: Header("Jump Parameters")] 
+    [field: SerializeField] public float MaxJumpHeight {get; private set; } = 4f;
+    [field: SerializeField] public float MinJumpHeight {get; private set; } = 2f;
     [SerializeField] private float riseDistance = 3.5f;
     [SerializeField] private float fallDistance = 2.5f;
-    [SerializeField] private float cancelledJumpRise = 0.75f;
+    [field: SerializeField] public float CancelledJumpRise { get; private set; } = 0.75f;
     [SerializeField] private int coyoteFrames = 4;
     [SerializeField] private int jumpBufferFrames = 3;
 
@@ -38,10 +38,10 @@ public class MovementParameters
 
     public float Acceleration => 0.5f * TopSpeed * TopSpeed / accelerationDistance;
     public float Deceleration => 0.5f * TopSpeed * TopSpeed / decelerationDistance;
-    public float RiseGravity => 2f * maxJumpHeight * TopSpeed * TopSpeed / (riseDistance * riseDistance);
-    public float FallGravity => 2f * maxJumpHeight * TopSpeed * TopSpeed / (fallDistance * fallDistance);
-    public float JumpVelocity => 2f * maxJumpHeight * TopSpeed / riseDistance;
-    public float TerminalVelocity => 2f * maxJumpHeight * TopSpeed / fallDistance;
+    public float RiseGravity => 2f * MaxJumpHeight * TopSpeed * TopSpeed / (riseDistance * riseDistance);
+    public float FallGravity => 2f * MaxJumpHeight * TopSpeed * TopSpeed / (fallDistance * fallDistance);
+    public float JumpVelocity => 2f * MaxJumpHeight * TopSpeed / riseDistance;
+    public float TerminalVelocity => 2f * MaxJumpHeight * TopSpeed / fallDistance;
     public float JumpBufferDuration => jumpBufferFrames / REFERENCE_FRAMERATE;
     public float CoyoteTime => coyoteFrames / REFERENCE_FRAMERATE;
 
