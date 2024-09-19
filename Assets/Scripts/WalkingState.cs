@@ -1,25 +1,55 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class WalkingState : IMovementState
 {
     private PlayerController.MovementParameters parameters;
+    private IPlayerInfo player;
     
-    public WalkingState(PlayerController.MovementParameters movementParameters)
+    public WalkingState(PlayerController.MovementParameters movementParameters, IPlayerInfo playerInfo)
     {
         parameters = movementParameters;
+        player = playerInfo;
     }
     
-    public IMovementState Update(float t, ref KinematicState<Vector2> kinematics, IPlayerInfo playerInfo)
+    public IMovementState Update(float t, ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
+        if (interrupts.LastOrDefault(i => i is not ICollision) is { } interrupt)
+        {
+            switch (interrupt)
+            {
+                case JumpInterrupt:
+                    // return new JumpingState
+                    Debug.Log("JUMP");
+                    break;
+            }
+        }
+
         KinematicState<float> xKinematics = new(kinematics.position.x, kinematics.velocity.x);
         KinematicState<float> yKinematics = new(kinematics.position.y, kinematics.velocity.y);
-        WalkingCurve(t, ref xKinematics, playerInfo.Aim.x);
-        FallingCurve(t, ref yKinematics, playerInfo.Aim.x, playerInfo.WallCheck);
+        float xInput = player.Aim.x;
+        
+        WalkingCurve(t, ref xKinematics, xInput);
+        FallingCurve(t, ref yKinematics, xInput, player.WallCheck);
         kinematics = new(
             new(xKinematics.position, yKinematics.position), 
             new(xKinematics.velocity, yKinematics.velocity));
+
+        if (interrupts.Any(i => i is ICollision))
+        {
+            Vector2 deflection = ((ICollision) interrupts.First(i => i is ICollision)).Deflection;
+            if (deflection.x != 0f)
+            {
+                kinematics.velocity.x = 0f;
+            }
+            else
+            {
+                kinematics.velocity.y = 0f;
+            }
+        }
+        
         return this;
     }
 

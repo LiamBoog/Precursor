@@ -21,6 +21,7 @@ public class RectangularCollisionResolver : CollisionResolver
 
     private struct Collision : ICollision
     {
+        public Vector2 Penetration { get; set; }
         public Vector2 Deflection { get; set; }
         public Vector2 Normal { get; set; }
     }
@@ -85,26 +86,27 @@ public class RectangularCollisionResolver : CollisionResolver
 
     public override ICollision Collide(Vector2 displacement)
     {
-        Vector2 totalDeflection = GetMovementDeflection(displacement); // Deflection along collision normal
+        Vector2 deflection = GetMovementDeflection(displacement); // Deflection along collision normal
 
-        Vector2 deflection;
-        if (totalDeflection == default)
+        Vector2 penetration;
+        if (deflection == default)
         {
-            deflection = default;
+            penetration = default;
         }
-        else if (Mathf.Abs(totalDeflection.x) > Mathf.Abs(totalDeflection.y)) // horizontal deflection
+        else if (Mathf.Abs(deflection.x) > Mathf.Abs(deflection.y)) // horizontal deflection
         {
-            deflection = displacement * (totalDeflection.x / displacement.x);
+            penetration = -displacement * (deflection.x / displacement.x);
         }
         else
         {
-            deflection = displacement * (totalDeflection.y / displacement.y);
+            penetration = -displacement * (deflection.y / displacement.y);
         }
         
         return new Collision
         {
+            Penetration = penetration,
             Deflection = deflection,
-            Normal = totalDeflection.normalized
+            Normal = deflection.normalized
         };
     }
 

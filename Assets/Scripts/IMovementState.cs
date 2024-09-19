@@ -31,5 +31,5 @@ public struct KinematicState<T> where T : struct, IEquatable<T>, IFormattable
 
 public interface IMovementState
 {
-    IMovementState Update(float t, ref KinematicState<Vector2> kinematics, IPlayerInfo playerInfo);
+    IMovementState Update(float t, ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts = default);
 }

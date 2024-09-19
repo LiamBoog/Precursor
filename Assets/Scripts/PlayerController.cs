@@ -70,7 +70,8 @@ public class PlayerController : MonoBehaviour, IPlayerInfo
 
     private MovementStateMachine movementController;
     private Vector2 velocity;
-    
+    private List<IInterrupt> interrupts = new();
+
     public Vector2 Aim => aim.action.ReadValue<Vector2>();
     private float WallCheckOverlapDistance
     {
@@ -83,12 +84,14 @@ public class PlayerController : MonoBehaviour, IPlayerInfo
 
     private void OnEnable()
     {
-        movementController = new(movementParameters);
+        movementController = new(movementParameters, this);
         
         aim.action.Enable();
         jump.action.Enable();
         grapple.action.Enable();
         anchor.action.Enable();
+
+        jump.action.performed += OnJump;
     }
 
     private void OnDisable()
@@ -97,19 +100,23 @@ public class PlayerController : MonoBehaviour, IPlayerInfo
         jump.action.Disable();
         grapple.action.Disable();
         anchor.action.Disable();
+        
+        jump.action.performed -= OnJump;
     }
 
     private void Update()
     {
         // Compute new kinematics
         KinematicState<Vector2> kinematics = new (transform.position, velocity);
-        movementController.Update(Time.deltaTime, ref kinematics, this);
+        movementController.Update(Time.deltaTime, ref kinematics, interrupts);
+        interrupts.Clear();
         
         // Check for collisions
         Vector2 displacement = kinematics.position - (Vector2) transform.position;
         if (collisionResolver.Collide(displacement) is { } collision && collision.Normal != default)
         {
             displacement += collision.Deflection;
+            movementController.Update(0f, ref kinematics, new[] { collision });
         }
         
         // Apply motion
@@ -125,5 +132,10 @@ public class PlayerController : MonoBehaviour, IPlayerInfo
             collisionResolver.Touching(Vector2.right, overlapDistance) ? -1 : 0;
 
         return normal;
+    }
+
+    private void OnJump(InputAction.CallbackContext _)
+    {
+        interrupts.Add(new JumpInterrupt());
     }
 }
