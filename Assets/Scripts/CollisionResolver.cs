@@ -13,5 +13,5 @@ public abstract class CollisionResolver : MonoBehaviour
 {
     public abstract bool Touching(Vector2 direction, float overlapDistance = 0f);
     
-    public abstract ICollision Collide(Vector2 displacement);
+    public abstract bool Collide(Vector2 displacement, out ICollision collision);
 }

@@ -84,16 +84,17 @@ public class RectangularCollisionResolver : CollisionResolver
             .Last();
     }
 
-    public override ICollision Collide(Vector2 displacement)
+    public override bool Collide(Vector2 displacement, out ICollision collision)
     {
         Vector2 deflection = GetMovementDeflection(displacement); // Deflection along collision normal
 
         Vector2 penetration;
         if (deflection == default)
         {
-            penetration = default;
+            collision = null;
+            return false;
         }
-        else if (Mathf.Abs(deflection.x) > Mathf.Abs(deflection.y)) // horizontal deflection
+        if (Mathf.Abs(deflection.x) > Mathf.Abs(deflection.y)) // horizontal deflection
         {
             penetration = -displacement * (deflection.x / displacement.x);
         }
@@ -102,12 +103,13 @@ public class RectangularCollisionResolver : CollisionResolver
             penetration = -displacement * (deflection.y / displacement.y);
         }
         
-        return new Collision
+        collision = new Collision
         {
             Penetration = penetration,
             Deflection = deflection,
             Normal = deflection.normalized
         };
+        return true;
     }
 
     private Vector2 MoveWithNudge(Vector2 displacement)

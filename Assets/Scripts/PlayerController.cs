@@ -128,7 +128,7 @@ public class PlayerController : MonoBehaviour, IPlayerInfo
         
         // Check for collisions
         Vector2 displacement = kinematics.position - (Vector2) transform.position;
-        if (collisionResolver.Collide(displacement) is { } collision && collision.Normal != default)
+        if (collisionResolver.Collide(displacement, out ICollision collision) && collision.Normal != default)
         {
             displacement += collision.Deflection;
             interrupts.Add(collision);

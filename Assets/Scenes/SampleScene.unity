@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementParameters:
-    topSpeed: 10
+    <TopSpeed>k__BackingField: 10
     accelerationDistance: 0.5
     decelerationDistance: 0.5
     maxJumpHeight: 4
@@ -167,11 +167,12 @@ MonoBehaviour:
     coyoteFrames: 4
     jumpBufferFrames: 3
     climbHeight: 0
-    gracePixels: 2
+    <GracePixels>k__BackingField: 2
     wallSlideVelocityFactor: 0.15
     ropeLength: 7.5
     angleSnapIncrement: 22.5
-    aim: {fileID: 7593096924056170982, guid: cbac4485a791a924082cae6b593cb872, type: 3}
+  camera: {fileID: 519420031}
+  aim: {fileID: 7593096924056170982, guid: cbac4485a791a924082cae6b593cb872, type: 3}
   jump: {fileID: 6384440746060477519, guid: cbac4485a791a924082cae6b593cb872, type: 3}
   grapple: {fileID: -4597657922460294237, guid: cbac4485a791a924082cae6b593cb872, type: 3}
   anchor: {fileID: -295736445056874605, guid: cbac4485a791a924082cae6b593cb872, type: 3}
@@ -304,7 +305,7 @@ MonoBehaviour:
   skin: 0.001
   collisionLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 64
   maxRaycastOffset: 1
   maxNudgeDistance: 0.5
 --- !u!1 &411437030
@@ -318,7 +319,7 @@ GameObject:
   - component: {fileID: 411437033}
   - component: {fileID: 411437032}
   - component: {fileID: 411437031}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
