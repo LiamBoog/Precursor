@@ -60,8 +60,9 @@ public class WalkingState : MovementState
 {
     public WalkingState(MovementParameters movementParameters, IPlayerInfo playerInfo) : base(movementParameters, playerInfo) { }
 
-    protected override MovementState Update(float t, ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
+    protected override MovementState Update(ref float t, ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
+        // Process inputs
         if (interrupts.LastOrDefault(i => i is not ICollision) is { } interrupt)
         {
             switch (interrupt)
@@ -69,22 +70,12 @@ public class WalkingState : MovementState
                 case JumpInterrupt jumpInterrupt:
                     if (jumpInterrupt.type == JumpInterrupt.Type.Cancelled || !CanJump(kinematics))
                         break;
-                    // return new JumpingState
                     Debug.Log("JUMP");
-                    break;
+                    return new JumpingState(kinematics, parameters, player);
             }
         }
-
-        KinematicState<float> xKinematics = new(kinematics.position.x, kinematics.velocity.x);
-        KinematicState<float> yKinematics = new(kinematics.position.y, kinematics.velocity.y);
-        float xInput = player.Aim.x;
         
-        WalkingCurve(t, ref xKinematics, xInput);
-        FallingCurve(t, ref yKinematics, xInput, player.WallCheck);
-        kinematics = new(
-            new(xKinematics.position, yKinematics.position), 
-            new(xKinematics.velocity, yKinematics.velocity));
-
+        // Process collisions
         if (interrupts.Any(i => i is ICollision))
         {
             Vector2 deflection = ((ICollision) interrupts.First(i => i is ICollision)).Deflection;
@@ -97,7 +88,18 @@ public class WalkingState : MovementState
                 kinematics.velocity.y = 0f;
             }
         }
+
+        KinematicState<float> xKinematics = new(kinematics.position.x, kinematics.velocity.x);
+        KinematicState<float> yKinematics = new(kinematics.position.y, kinematics.velocity.y);
+        float xInput = player.Aim.x;
         
+        WalkingCurve(t, ref xKinematics, xInput);
+        FallingCurve(t, ref yKinematics, xInput, player.WallCheck);
+        kinematics = new(
+            new(xKinematics.position, yKinematics.position), 
+            new(xKinematics.velocity, yKinematics.velocity));
+        t = 0f;
+
         return this;
     }
 }
