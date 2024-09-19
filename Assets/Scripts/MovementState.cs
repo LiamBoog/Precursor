@@ -29,7 +29,29 @@ public struct KinematicState<T> where T : struct, IEquatable<T>, IFormattable
     }
 }
 
-public interface IMovementState
+public abstract partial class MovementState
 {
-    IMovementState Update(float t, ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts = default);
+    protected MovementParameters parameters;
+    protected IPlayerInfo player;
+
+    protected MovementState(MovementParameters movementParameters, IPlayerInfo playerInfo)
+    {
+        parameters = movementParameters;
+        player = playerInfo;
+    }
+
+    protected abstract MovementState Update(float t, ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts);
+
+
+    public MovementState Update(float t, ref KinematicState<Vector2> kinematics, List<IInterrupt> interrupts)
+    {
+        try
+        {
+            return Update(t, ref kinematics, (IEnumerable<IInterrupt>) interrupts);
+        }
+        finally
+        {
+            interrupts.Clear();
+        }
+    }
 }

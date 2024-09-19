@@ -7,56 +7,69 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
+[Serializable]
+public class MovementParameters
+{
+    public const float REFERENCE_FRAMERATE = 60f;
+
+    [field: FormerlySerializedAs("topSpeed")]
+    [field: Header("Movement Parameters")]
+    [field: SerializeField] public float TopSpeed { get; private set; } = 10f;
+    [SerializeField] private float accelerationDistance = 0.5f;
+    [SerializeField] private float decelerationDistance = 0.5f;
+
+    [Header("Jump Parameters")] 
+    [SerializeField] private float maxJumpHeight = 4f;
+    [SerializeField] private float minJumpHeight = 2f;
+    [SerializeField] private float riseDistance = 3.5f;
+    [SerializeField] private float fallDistance = 2.5f;
+    [SerializeField] private float cancelledJumpRise = 0.75f;
+    [SerializeField] private int coyoteFrames = 4;
+    [SerializeField] private int jumpBufferFrames = 3;
+
+    [Header("Wall Jump Parameters")] 
+    [SerializeField] private float climbHeight = 0f;
+    [field: SerializeField] public int GracePixels { get; private set; } = 2;
+    [SerializeField] private float wallSlideVelocityFactor = 0.15f;
+
+    [Header("Rope Dart Parameters")] 
+    [SerializeField] private float ropeLength = 7.5f;
+    [SerializeField] private float angleSnapIncrement = 22.5f;
+
+    public float Acceleration => 0.5f * TopSpeed * TopSpeed / accelerationDistance;
+    public float Deceleration => 0.5f * TopSpeed * TopSpeed / decelerationDistance;
+    public float RiseGravity => 2f * maxJumpHeight * TopSpeed * TopSpeed / (riseDistance * riseDistance);
+    public float FallGravity => 2f * maxJumpHeight * TopSpeed * TopSpeed / (fallDistance * fallDistance);
+    public float JumpVelocity => 2f * maxJumpHeight * TopSpeed / riseDistance;
+    public float TerminalVelocity => 2f * maxJumpHeight * TopSpeed / fallDistance;
+    public float JumpBufferDuration => jumpBufferFrames / REFERENCE_FRAMERATE;
+    public float CoyoteTime => coyoteFrames / REFERENCE_FRAMERATE;
+
+    public float WallSlideVelocity => wallSlideVelocityFactor * TerminalVelocity;
+}
+
 public interface IPlayerInfo
 {
     Vector2 Aim { get; }
+    float JumpBuffer { get; }
 
+    bool GroundCheck();
     int WallCheck();
+}
+
+public struct JumpInterrupt : IInterrupt
+{
+    public enum Type
+    {
+        Started,
+        Cancelled
+    }
+
+    public Type type;
 }
 
 public class PlayerController : MonoBehaviour, IPlayerInfo
 {
-    [Serializable]
-    public class MovementParameters
-    {
-        public const float REFERENCE_FRAMERATE = 60f;
-
-        [field: FormerlySerializedAs("topSpeed")]
-        [field: Header("Movement Parameters")]
-        [field: SerializeField] public float TopSpeed { get; private set; } = 10f;
-        [SerializeField] private float accelerationDistance = 0.5f;
-        [SerializeField] private float decelerationDistance = 0.5f;
-
-        [Header("Jump Parameters")] 
-        [SerializeField] private float maxJumpHeight = 4f;
-        [SerializeField] private float minJumpHeight = 2f;
-        [SerializeField] private float riseDistance = 3.5f;
-        [SerializeField] private float fallDistance = 2.5f;
-        [SerializeField] private float cancelledJumpRise = 0.75f;
-        [SerializeField] private int coyoteFrames = 4;
-        [SerializeField] private int jumpBufferFrames = 3;
-
-        [Header("Wall Jump Parameters")] 
-        [SerializeField] private float climbHeight = 0f;
-        [field: SerializeField] public int GracePixels { get; private set; } = 2;
-        [SerializeField] private float wallSlideVelocityFactor = 0.15f;
-
-        [Header("Rope Dart Parameters")] 
-        [SerializeField] private float ropeLength = 7.5f;
-        [SerializeField] private float angleSnapIncrement = 22.5f;
-
-        public float Acceleration => 0.5f * TopSpeed * TopSpeed / accelerationDistance;
-        public float Deceleration => 0.5f * TopSpeed * TopSpeed / decelerationDistance;
-        public float RiseGravity => 2f * maxJumpHeight * TopSpeed * TopSpeed / (riseDistance * riseDistance);
-        public float FallGravity => 2f * maxJumpHeight * TopSpeed * TopSpeed / (fallDistance * fallDistance);
-        public float JumpVelocity => 2f * maxJumpHeight * TopSpeed / riseDistance;
-        public float TerminalVelocity => 2f * maxJumpHeight * TopSpeed / fallDistance;
-        public float JumpBufferDuration => jumpBufferFrames / REFERENCE_FRAMERATE;
-        public float CoyoteTime => coyoteFrames / REFERENCE_FRAMERATE;
-
-        public float WallSlideVelocity => wallSlideVelocityFactor * TerminalVelocity;
-    }
-
     [SerializeField] private MovementParameters movementParameters;
     [SerializeField] private new Camera camera;
     
@@ -81,6 +94,7 @@ public class PlayerController : MonoBehaviour, IPlayerInfo
             return movementParameters.GracePixels * pixelWidth;
         }
     }
+    public float JumpBuffer { get; private set; }
 
     private void OnEnable()
     {
@@ -92,6 +106,7 @@ public class PlayerController : MonoBehaviour, IPlayerInfo
         anchor.action.Enable();
 
         jump.action.performed += OnJump;
+        jump.action.canceled += OnJumpCancelled;
     }
 
     private void OnDisable()
@@ -102,6 +117,7 @@ public class PlayerController : MonoBehaviour, IPlayerInfo
         anchor.action.Disable();
         
         jump.action.performed -= OnJump;
+        jump.action.canceled -= OnJumpCancelled;
     }
 
     private void Update()
@@ -109,20 +125,25 @@ public class PlayerController : MonoBehaviour, IPlayerInfo
         // Compute new kinematics
         KinematicState<Vector2> kinematics = new (transform.position, velocity);
         movementController.Update(Time.deltaTime, ref kinematics, interrupts);
-        interrupts.Clear();
         
         // Check for collisions
         Vector2 displacement = kinematics.position - (Vector2) transform.position;
         if (collisionResolver.Collide(displacement) is { } collision && collision.Normal != default)
         {
             displacement += collision.Deflection;
-            movementController.Update(0f, ref kinematics, new[] { collision });
+            interrupts.Add(collision);
+            movementController.Update(0f, ref kinematics, interrupts);
         }
         
         // Apply motion
         transform.position += (Vector3) displacement;
         velocity = kinematics.velocity;
         Physics2D.SyncTransforms();
+    }
+
+    public bool GroundCheck()
+    {
+        return collisionResolver.Touching(Vector2.down);
     }
 
     public int WallCheck()
@@ -136,6 +157,17 @@ public class PlayerController : MonoBehaviour, IPlayerInfo
 
     private void OnJump(InputAction.CallbackContext _)
     {
-        interrupts.Add(new JumpInterrupt());
+        interrupts.Add(new JumpInterrupt
+        {
+            type = JumpInterrupt.Type.Started
+        });
+    }
+
+    private void OnJumpCancelled(InputAction.CallbackContext _)
+    {
+        interrupts.Add(new JumpInterrupt
+        {
+            type = JumpInterrupt.Type.Cancelled
+        });
     }
 }
