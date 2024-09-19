@@ -46,7 +46,12 @@ public class JumpingState : MovementState
         if (interrupts.FirstOrDefault(i => i is ICollision) is ICollision collision)
         {
             if (Vector2.Dot(collision.Normal, Vector2.up) > 0.5f) // Collision with ground
+            {
+                if (player.JumpBuffer.Flush())
+                    return new JumpingState(parameters, player, kinematics);
+                
                 return new WalkingState(parameters, player);
+            }
         }
         
         KinematicState<float> xKinematics = new(kinematics.position.x, kinematics.velocity.x);

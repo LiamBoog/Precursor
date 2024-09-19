@@ -51,7 +51,7 @@ public class MovementParameters
 public interface IPlayerInfo
 {
     Vector2 Aim { get; }
-    float JumpBuffer { get; }
+    IInputBuffer JumpBuffer { get; }
 
     bool GroundCheck();
     int WallCheck();
@@ -68,8 +68,33 @@ public struct JumpInterrupt : IInterrupt
     public Type type;
 }
 
+public interface IInputBuffer
+{
+    bool Flush();
+}
+
 public class PlayerController : MonoBehaviour, IPlayerInfo
 {
+    private struct InputBuffer : IInputBuffer
+    {
+        private readonly Func<float> bufferDuration;
+    
+        public float LastInputTime { get; set; }
+
+        public InputBuffer(Func<float> bufferDuration)
+        {
+            this.bufferDuration = bufferDuration;
+            LastInputTime = float.MinValue;
+        }
+
+        public bool Flush()
+        {
+            bool output = Time.time - LastInputTime <= bufferDuration();
+            LastInputTime = float.MaxValue;
+            return output;
+        }
+    }
+    
     [SerializeField] private MovementParameters movementParameters;
     [SerializeField] private new Camera camera;
     
@@ -84,6 +109,7 @@ public class PlayerController : MonoBehaviour, IPlayerInfo
     private MovementStateMachine movementController;
     private Vector2 velocity;
     private List<IInterrupt> interrupts = new();
+    private InputBuffer jumpBuffer;
 
     public Vector2 Aim => aim.action.ReadValue<Vector2>();
     private float WallCheckOverlapDistance
@@ -94,11 +120,13 @@ public class PlayerController : MonoBehaviour, IPlayerInfo
             return movementParameters.GracePixels * pixelWidth;
         }
     }
-    public float JumpBuffer { get; private set; }
+
+    public IInputBuffer JumpBuffer => jumpBuffer;
 
     private void OnEnable()
     {
         movementController = new(movementParameters, this);
+        jumpBuffer = new InputBuffer(() => movementParameters.JumpBufferDuration);
         
         aim.action.Enable();
         jump.action.Enable();
@@ -157,6 +185,7 @@ public class PlayerController : MonoBehaviour, IPlayerInfo
 
     private void OnJump(InputAction.CallbackContext _)
     {
+        jumpBuffer.LastInputTime = Time.time;
         interrupts.Add(new JumpInterrupt
         {
             type = JumpInterrupt.Type.Started

@@ -85,6 +85,8 @@ public class WalkingState : MovementState
             else
             {
                 kinematics.velocity.y = 0f;
+                if (player.JumpBuffer.Flush())
+                    return new JumpingState(parameters, player, kinematics);
             }
         }
 
