@@ -15,20 +15,21 @@ public class MovementParameters
     [field: FormerlySerializedAs("topSpeed")]
     [field: Header("Movement Parameters")]
     [field: SerializeField] public float TopSpeed { get; private set; } = 10f;
-    [SerializeField] private float accelerationDistance = 0.5f;
-    [SerializeField] private float decelerationDistance = 0.5f;
+    [field: SerializeField] public float AccelerationDistance { get; private set; } = 0.5f;
+    [field: SerializeField] public float DecelerationDistance { get; private set; } = 0.5f;
 
     [field: Header("Jump Parameters")] 
     [field: SerializeField] public float MaxJumpHeight {get; private set; } = 4f;
     [field: SerializeField] public float MinJumpHeight {get; private set; } = 2f;
-    [SerializeField] private float riseDistance = 3.5f;
-    [SerializeField] private float fallDistance = 2.5f;
+    [field: SerializeField] public float RiseDistance {get; private set; } = 3.5f;
+    [field: SerializeField] public float FallDistance {get; private set; } = 2.5f;
     [field: SerializeField] public float CancelledJumpRise { get; private set; } = 0.75f;
     [SerializeField] private int coyoteFrames = 4;
     [SerializeField] private int jumpBufferFrames = 3;
 
-    [Header("Wall Jump Parameters")] 
-    [SerializeField] private float climbHeight = 0f;
+    [field: FormerlySerializedAs("climbHeight")]
+    [field: Header("Wall Jump Parameters")] 
+    [field: SerializeField] public float ClimbHeight { get; private set; } = 0f;
     [field: SerializeField] public int GracePixels { get; private set; } = 2;
     [SerializeField] private float wallSlideVelocityFactor = 0.15f;
 
@@ -36,12 +37,12 @@ public class MovementParameters
     [SerializeField] private float ropeLength = 7.5f;
     [SerializeField] private float angleSnapIncrement = 22.5f;
 
-    public float Acceleration => 0.5f * TopSpeed * TopSpeed / accelerationDistance;
-    public float Deceleration => 0.5f * TopSpeed * TopSpeed / decelerationDistance;
-    public float RiseGravity => 2f * MaxJumpHeight * TopSpeed * TopSpeed / (riseDistance * riseDistance);
-    public float FallGravity => 2f * MaxJumpHeight * TopSpeed * TopSpeed / (fallDistance * fallDistance);
-    public float JumpVelocity => 2f * MaxJumpHeight * TopSpeed / riseDistance;
-    public float TerminalVelocity => 2f * MaxJumpHeight * TopSpeed / fallDistance;
+    public float Acceleration => 0.5f * TopSpeed * TopSpeed / AccelerationDistance;
+    public float Deceleration => 0.5f * TopSpeed * TopSpeed / DecelerationDistance;
+    public float RiseGravity => 2f * MaxJumpHeight * TopSpeed * TopSpeed / (RiseDistance * RiseDistance);
+    public float FallGravity => 2f * MaxJumpHeight * TopSpeed * TopSpeed / (FallDistance * FallDistance);
+    public float JumpVelocity => 2f * MaxJumpHeight * TopSpeed / RiseDistance;
+    public float TerminalVelocity => 2f * MaxJumpHeight * TopSpeed / FallDistance;
     public float JumpBufferDuration => jumpBufferFrames / REFERENCE_FRAMERATE;
     public float CoyoteTime => coyoteFrames / REFERENCE_FRAMERATE;
 

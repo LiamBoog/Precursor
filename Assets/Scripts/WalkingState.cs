@@ -71,9 +71,13 @@ public class WalkingState : MovementState
             switch (interrupt)
             {
                 case JumpInterrupt jumpInterrupt:
-                    if (jumpInterrupt.type == JumpInterrupt.Type.Cancelled || !CanJump(kinematics))
+                    if (jumpInterrupt.type == JumpInterrupt.Type.Cancelled)
                         break;
-                    return new JumpingState(parameters, player, kinematics);
+                    if (CanJump(kinematics))
+                        return new JumpingState(parameters, player, kinematics);
+                    if (player.WallCheck() is int normal && normal != 0)
+                        return new WallJumpState(parameters, player, normal);
+                    break;
             }
         }
         
@@ -84,13 +88,16 @@ public class WalkingState : MovementState
             kinematics.velocity.y = deflection.y != 0f ? 0f : kinematics.velocity.y;
             kinematics.velocity.x = deflection.x != 0f ? 0f : kinematics.velocity.x;
             
-            if (deflection.y != 0f)
+            if (deflection.y > 0f)
             {
                 if (player.JumpBuffer.Flush())
                     return new JumpingState(parameters, player, kinematics);
             }
             else if (deflection.x != 0f)
-                return new WallSlideState(parameters, player);
+            {
+                if (player.JumpBuffer.Flush())
+                    return new WallSlideState(parameters, player);
+            }
         }
 
         ApplyMotionCurves(t, ref kinematics, WalkingCurve, FreeFallingCurve);

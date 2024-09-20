@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -26,13 +27,11 @@ public class JumpingState : MovementState
     public JumpingState(MovementParameters movementParameters, IPlayerInfo playerInfo, KinematicState<Vector2> initialKinematics) : base(movementParameters, playerInfo)
     {
         initialHeight = initialKinematics.position.y;
-        onFirstUpdate = OnFirstUpdate;
-        
-        void OnFirstUpdate(ref KinematicState<Vector2> kinematics)
+        onFirstUpdate = (ref KinematicState<Vector2> kinematics) =>
         {
             onFirstUpdate = null;
             kinematics.velocity.y = parameters.JumpVelocity;
-        }
+        };
     }
 
     protected override MovementState Update(ref float t, ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
@@ -43,6 +42,11 @@ public class JumpingState : MovementState
         if (interrupts.Any(i => i is JumpInterrupt { type: JumpInterrupt.Type.Cancelled }))
         {
             return new CancelledJumpState(parameters, player, GetCancelledJumpGravityMagnitude(kinematics));
+        }
+
+        if (interrupts.Any(i => i is JumpInterrupt { type: JumpInterrupt.Type.Started }) && player.WallCheck() is int normal && normal != 0)
+        {
+            return new WallJumpState(parameters, player, normal);
         }
         
         // Handle collision
@@ -57,6 +61,11 @@ public class JumpingState : MovementState
                     return new JumpingState(parameters, player, kinematics);
                 
                 return new WalkingState(parameters, player);
+            }
+
+            if (collision.Normal.x != 0 && player.JumpBuffer.Flush())
+            {
+                return new WallJumpState(parameters, player, Math.Sign(collision.Normal.x));
             }
         }
         

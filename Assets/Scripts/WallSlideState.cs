@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public abstract partial class MovementState
@@ -17,6 +19,9 @@ public class WallSlideState : MovementState
     {
         if (player.Aim.x * player.WallCheck() >= 0f) // Not wall sliding anymore
             return new CancelledJumpState(parameters, player, parameters.FallGravity);
+
+        if (interrupts.Any(i => i is JumpInterrupt { type: JumpInterrupt.Type.Started }))
+            return new WallJumpState(parameters, player, -Math.Sign(player.Aim.x));
         
         ApplyMotionCurves(t, ref kinematics, (float _, ref KinematicState<float> _) => default, WallSlidingCurve);
         t = 0f;
