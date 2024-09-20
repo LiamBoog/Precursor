@@ -5,10 +5,10 @@ using UnityEngine;
 
 public abstract partial class MovementState
 {
-    protected KinematicSegment<float>[] WalkingCurve(float t, ref KinematicState<float> kinematics, float input)
+    protected KinematicSegment<float>[] WalkingCurve(float t, ref KinematicState<float> kinematics)
     {
         List<KinematicSegment<float>> output = new();
-        float targetVelocity = parameters.TopSpeed * input;
+        float targetVelocity = parameters.TopSpeed * player.Aim.x;
 
         float decelerationTarget = kinematics.velocity * targetVelocity < 0f ? 0f : targetVelocity;
         if (Mathf.Abs(decelerationTarget) < Mathf.Abs(kinematics.velocity))
@@ -42,11 +42,12 @@ public abstract partial class MovementState
         return output;
     }
     
-    protected KinematicSegment<float>[] FallingCurve(float t, ref KinematicState<float> kinematics, float input, Func<int> wallCheck)
+    protected KinematicSegment<float>[] FallingCurve(float t, ref KinematicState<float> kinematics)
     {
         List<KinematicSegment<float>> output = new();
 
-        bool aimingAtWall = input != 0f && wallCheck() * input < 0f; // TODO - maybe replace this with a wall sliding state
+        float aimInput = player.Aim.x;
+        bool aimingAtWall = aimInput != 0f && player.WallCheck() * aimInput < 0f; // TODO - maybe replace this with a wall sliding state
         float targetVelocity = aimingAtWall ? -parameters.WallSlideVelocity : -parameters.TerminalVelocity;
         kinematics.velocity = Mathf.Max(targetVelocity, kinematics.velocity);
         
@@ -60,7 +61,7 @@ public class WalkingState : MovementState
 {
     public WalkingState(MovementParameters movementParameters, IPlayerInfo playerInfo) : base(movementParameters, playerInfo) { }
 
-    protected override MovementState Update(ref float t, ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
+    protected override MovementState Update(float t, ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
         // Process inputs
         if (interrupts.LastOrDefault(i => i is not ICollision) is { } interrupt)
@@ -90,16 +91,7 @@ public class WalkingState : MovementState
             }
         }
 
-        KinematicState<float> xKinematics = new(kinematics.position.x, kinematics.velocity.x);
-        KinematicState<float> yKinematics = new(kinematics.position.y, kinematics.velocity.y);
-        float xInput = player.Aim.x;
-        
-        WalkingCurve(t, ref xKinematics, xInput);
-        FallingCurve(t, ref yKinematics, xInput, player.WallCheck);
-        kinematics = new(
-            new(xKinematics.position, yKinematics.position), 
-            new(xKinematics.velocity, yKinematics.velocity));
-        t = 0f;
+        ApplyMotionCurves(t, ref kinematics, WalkingCurve, FallingCurve);
 
         return this;
     }
@@ -107,7 +99,6 @@ public class WalkingState : MovementState
     private bool CanJump(KinematicState<Vector2> kinematics)
     {
         float fallTime = -kinematics.velocity.y / parameters.FallGravity;
-        bool coyoteCheck = fallTime < parameters.CoyoteTime;
-        return coyoteCheck || player.GroundCheck();
+        return fallTime < parameters.CoyoteTime;
     }
 }

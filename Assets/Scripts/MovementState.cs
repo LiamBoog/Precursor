@@ -31,6 +31,8 @@ public struct KinematicState<T> where T : struct, IEquatable<T>, IFormattable
 
 public abstract partial class MovementState
 {
+    protected delegate KinematicSegment<float>[] MotionCurve(float t, ref KinematicState<float> kinematics);
+    
     protected MovementParameters parameters;
     protected IPlayerInfo player;
 
@@ -40,18 +42,30 @@ public abstract partial class MovementState
         player = playerInfo;
     }
 
-    protected abstract MovementState Update(ref float t, ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts);
+    protected abstract MovementState Update(float t, ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts);
 
 
-    public MovementState Update(ref float t, ref KinematicState<Vector2> kinematics, List<IInterrupt> interrupts)
+    public MovementState Update(float t, ref KinematicState<Vector2> kinematics, List<IInterrupt> interrupts)
     {
         try
         {
-            return Update(ref t, ref kinematics, (IEnumerable<IInterrupt>) interrupts);
+            return Update(t, ref kinematics, (IEnumerable<IInterrupt>) interrupts);
         }
         finally
         {
             interrupts.Clear();
         }
+    }
+
+    protected void ApplyMotionCurves(float t, ref KinematicState<Vector2> kinematics, MotionCurve horizontal, MotionCurve vertical)
+    {
+        KinematicState<float> xKinematics = new(kinematics.position.x, kinematics.velocity.x);
+        KinematicState<float> yKinematics = new(kinematics.position.y, kinematics.velocity.y);
+
+        horizontal(t, ref xKinematics);
+        vertical(t, ref yKinematics);
+        kinematics = new(
+            new(xKinematics.position, yKinematics.position), 
+            new(xKinematics.velocity, yKinematics.velocity));
     }
 }
