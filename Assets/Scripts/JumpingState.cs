@@ -1,9 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 public abstract partial class MovementState
 {
@@ -14,7 +11,7 @@ public abstract partial class MovementState
         {
             output.Add(AccelerateTowardTargetVelocity(ref t, 0f, gravity, ref kinematics));
         }
-        output.AddRange(FallingCurve(t, ref kinematics));
+        output.AddRange(FreeFallingCurve(t, ref kinematics));
         return output.ToArray();
     }
 }
@@ -38,14 +35,17 @@ public class JumpingState : MovementState
         }
     }
 
-    protected override MovementState Update(float t, ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
+    protected override MovementState Update(ref float t, ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
         onFirstUpdate?.Invoke(ref kinematics);
 
+        // Handle cancelled jump
         if (interrupts.Any(i => i is JumpInterrupt { type: JumpInterrupt.Type.Cancelled }))
         {
             return new CancelledJumpState(parameters, player, GetCancelledJumpGravityMagnitude(kinematics));
         }
+        
+        // Handle collision
         if (interrupts.FirstOrDefault(i => i is ICollision) is ICollision collision)
         {
             if (Vector2.Dot(collision.Normal, Vector2.up) > 0.5f) // Collision with ground
@@ -59,8 +59,9 @@ public class JumpingState : MovementState
         
         KinematicSegment<float>[] Vertical(float t, ref KinematicState<float> kinematics) => JumpCurve(t, ref kinematics, parameters.RiseGravity);
         ApplyMotionCurves(t, ref kinematics, WalkingCurve, Vertical);
+        t = 0f;
 
-        return this;
+        return kinematics.velocity.y <= 0f ? new CancelledJumpState(parameters, player, parameters.FallGravity) : this;
     }
     
     private float GetCancelledJumpGravityMagnitude(KinematicState<Vector2> kinematics)
@@ -84,7 +85,7 @@ public class CancelledJumpState : MovementState
         this.gravity = gravity;
     }
 
-    protected override MovementState Update(float t, ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
+    protected override MovementState Update(ref float t, ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
         if (interrupts.FirstOrDefault(i => i is ICollision) is ICollision collision)
         {
@@ -95,10 +96,16 @@ public class CancelledJumpState : MovementState
                 
                 return new WalkingState(parameters, player);
             }
+
+            if (collision.Normal.x != 0f) // horizontal collision
+            {
+                return new WallSlideState(parameters, player);
+            }
         }
         
         KinematicSegment<float>[] Vertical(float t, ref KinematicState<float> kinematics) => JumpCurve(t, ref kinematics, gravity);
         ApplyMotionCurves(t, ref kinematics, WalkingCurve, Vertical);
+        t = 0f;
 
         return this;
     }

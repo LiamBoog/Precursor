@@ -15,6 +15,9 @@ public class MovementStateMachine
 
     public void Update(float t, ref KinematicState<Vector2> kinematics, List<IInterrupt> interrupts)
     {
-        state = state.Update(t, ref kinematics, interrupts);
+        while (t > 0f)
+        {
+            state = state.Update(ref t, ref kinematics, interrupts);
+        }
     }
 }

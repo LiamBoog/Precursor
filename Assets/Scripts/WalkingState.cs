@@ -41,19 +41,21 @@ public abstract partial class MovementState
         kinematics.position += kinematics.velocity * t;
         return output;
     }
-    
-    protected KinematicSegment<float>[] FallingCurve(float t, ref KinematicState<float> kinematics)
+
+    protected KinematicSegment<float>[] FallingCurve(float t, float targetVelocity, ref KinematicState<float> kinematics)
     {
         List<KinematicSegment<float>> output = new();
-
-        float aimInput = player.Aim.x;
-        bool aimingAtWall = aimInput != 0f && player.WallCheck() * aimInput < 0f; // TODO - maybe replace this with a wall sliding state
-        float targetVelocity = aimingAtWall ? -parameters.WallSlideVelocity : -parameters.TerminalVelocity;
+        
         kinematics.velocity = Mathf.Max(targetVelocity, kinematics.velocity);
         
         output.Add(AccelerateTowardTargetVelocity(ref t, targetVelocity, parameters.FallGravity, ref kinematics));
         output.Add(LinearMotionCurve(t, ref kinematics));
         return output.ToArray();
+    }
+
+    protected KinematicSegment<float>[] FreeFallingCurve(float t, ref KinematicState<float> kinematics)
+    {
+        return FallingCurve(t, -parameters.TerminalVelocity, ref kinematics);
     }
 }
 
@@ -61,7 +63,7 @@ public class WalkingState : MovementState
 {
     public WalkingState(MovementParameters movementParameters, IPlayerInfo playerInfo) : base(movementParameters, playerInfo) { }
 
-    protected override MovementState Update(float t, ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
+    protected override MovementState Update(ref float t, ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
         // Process inputs
         if (interrupts.LastOrDefault(i => i is not ICollision) is { } interrupt)
@@ -79,19 +81,20 @@ public class WalkingState : MovementState
         if (interrupts.FirstOrDefault(i => i is ICollision) is ICollision collision)
         {
             Vector2 deflection = collision.Deflection;
-            if (deflection.x != 0f)
+            kinematics.velocity.y = deflection.y != 0f ? 0f : kinematics.velocity.y;
+            kinematics.velocity.x = deflection.x != 0f ? 0f : kinematics.velocity.x;
+            
+            if (deflection.y != 0f)
             {
-                kinematics.velocity.x = 0f;
-            }
-            else
-            {
-                kinematics.velocity.y = 0f;
                 if (player.JumpBuffer.Flush())
                     return new JumpingState(parameters, player, kinematics);
             }
+            else if (deflection.x != 0f)
+                return new WallSlideState(parameters, player);
         }
 
-        ApplyMotionCurves(t, ref kinematics, WalkingCurve, FallingCurve);
+        ApplyMotionCurves(t, ref kinematics, WalkingCurve, FreeFallingCurve);
+        t = 0f;
 
         return this;
     }

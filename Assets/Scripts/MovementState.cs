@@ -42,14 +42,14 @@ public abstract partial class MovementState
         player = playerInfo;
     }
 
-    protected abstract MovementState Update(float t, ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts);
+    protected abstract MovementState Update(ref float t, ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts);
 
 
-    public MovementState Update(float t, ref KinematicState<Vector2> kinematics, List<IInterrupt> interrupts)
+    public MovementState Update(ref float t, ref KinematicState<Vector2> kinematics, List<IInterrupt> interrupts)
     {
         try
         {
-            return Update(t, ref kinematics, (IEnumerable<IInterrupt>) interrupts);
+            return Update(ref t, ref kinematics, (IEnumerable<IInterrupt>) interrupts);
         }
         finally
         {
