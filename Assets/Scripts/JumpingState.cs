@@ -48,6 +48,9 @@ public class JumpingState : MovementState
         // Handle collision
         if (interrupts.FirstOrDefault(i => i is ICollision) is ICollision collision)
         {
+            kinematics.velocity.y = collision.Deflection.y != 0f ? 0f : kinematics.velocity.y;
+            kinematics.velocity.x = collision.Deflection.x != 0f ? 0f : kinematics.velocity.x;
+            
             if (Vector2.Dot(collision.Normal, Vector2.up) > 0.5f) // Collision with ground
             {
                 if (player.JumpBuffer.Flush())
