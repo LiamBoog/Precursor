@@ -42,20 +42,20 @@ public abstract partial class MovementState
         return output;
     }
 
-    protected KinematicSegment<float>[] FallingCurve(float t, float targetVelocity, ref KinematicState<float> kinematics)
+    protected KinematicSegment<float>[] FallingCurve(float t, float targetVelocity, float gravity, ref KinematicState<float> kinematics)
     {
         List<KinematicSegment<float>> output = new();
         
         kinematics.velocity = Mathf.Max(targetVelocity, kinematics.velocity);
         
-        output.Add(AccelerateTowardTargetVelocity(ref t, targetVelocity, parameters.FallGravity, ref kinematics));
+        output.Add(AccelerateTowardTargetVelocity(ref t, targetVelocity, gravity, ref kinematics));
         output.Add(LinearMotionCurve(t, ref kinematics));
         return output.ToArray();
     }
 
     protected KinematicSegment<float>[] FreeFallingCurve(float t, ref KinematicState<float> kinematics)
     {
-        return FallingCurve(t, -parameters.TerminalVelocity, ref kinematics);
+        return FallingCurve(t, -parameters.TerminalVelocity, parameters.FallGravity, ref kinematics);
     }
 }
 
@@ -76,7 +76,7 @@ public class WalkingState : MovementState
                     if (CanJump(kinematics))
                         return new JumpingState(parameters, player, kinematics);
                     if (player.WallCheck() is int normal && normal != 0)
-                        return new WallJumpState(parameters, player, normal);
+                        return new WallJumpState(parameters, player, normal, kinematics);
                     break;
             }
         }

@@ -1,24 +1,25 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class WallJumpState : MovementState
+public class WallJumpState : JumpingState
 {
     private delegate void WallJumpInitializer(ref KinematicState<Vector2> kinematics);
     
     private float elapsedTime;
     private float controlTime;
-    private WallJumpInitializer onFirstUpdate;
-    
-    public WallJumpState(MovementParameters movementParameters, IPlayerInfo playerInfo, int direction) : base(movementParameters, playerInfo)
+    private JumpInitializer onFirstUpdate;
+
+    public WallJumpState(MovementParameters movementParameters, IPlayerInfo playerInfo, int direction, KinematicState<Vector2> initialKinematics) : base(movementParameters, playerInfo, initialKinematics)
     {
         elapsedTime = 0f;
         controlTime = GetWallJumpControlTime();
         onFirstUpdate = (ref KinematicState<Vector2> kinematics) =>
         {
             onFirstUpdate = null;
-            kinematics.velocity = new Vector2(direction * parameters.TopSpeed, parameters.JumpVelocity);
+            kinematics.velocity.x = direction * parameters.TopSpeed;
         };
     }
     
@@ -26,31 +27,35 @@ public class WallJumpState : MovementState
     {
         onFirstUpdate?.Invoke(ref kinematics);
         
-        if (elapsedTime >= controlTime)
-            return new CancelledJumpState(parameters, player, parameters.RiseGravity);
-
         KinematicState<float> xKinematics = new(kinematics.position.x, kinematics.velocity.x);
+        HorizontalMotion(t, ref xKinematics);
+
+        MovementState output = base.Update(ref t, ref kinematics, interrupts);
         KinematicState<float> yKinematics = new(kinematics.position.y, kinematics.velocity.y);
-        
-        float totalTime = t;
-        ControlledMovement(ref t, ref xKinematics);
-        elapsedTime += totalTime - t;
-        JumpCurve(totalTime - t, ref yKinematics, parameters.RiseGravity);
+
         kinematics = new(
             new(xKinematics.position, yKinematics.position),
             new(xKinematics.velocity, yKinematics.velocity)
         );
-        
-        return t > 0f ? new CancelledJumpState(parameters, player, parameters.RiseGravity) : this;
+
+        return output;
     }
     
-    private KinematicSegment<float> ControlledMovement(ref float t, ref KinematicState<float> kinematics)
+    private KinematicSegment<float>[] HorizontalMotion(float t, ref KinematicState<float> kinematics)
     {
-        float maxMovementTime = controlTime - elapsedTime;
-        float movementTime = Mathf.Min(t, maxMovementTime);
+        List<KinematicSegment<float>> output = new();
+        if (elapsedTime < controlTime)
+        {
+            float maxMovementTime = controlTime - elapsedTime;
+            float movementTime = Mathf.Min(t, maxMovementTime);
+            elapsedTime += movementTime;
         
-        t -= movementTime;
-        return LinearMotionCurve(movementTime, ref kinematics);
+            t -= movementTime;
+            output.Add(LinearMotionCurve(movementTime, ref kinematics));
+        }
+        
+        output.AddRange(WalkingCurve(t, ref kinematics));
+        return output.ToArray();
     }
     
     private float GetWallJumpControlTime()

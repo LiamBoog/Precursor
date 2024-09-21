@@ -57,13 +57,13 @@ public abstract partial class MovementState
         }
     }
 
-    protected void ApplyMotionCurves(float t, ref KinematicState<Vector2> kinematics, MotionCurve horizontal, MotionCurve vertical)
+    protected void ApplyMotionCurves(float t, ref KinematicState<Vector2> kinematics, MotionCurve horizontal = null, MotionCurve vertical = null)
     {
         KinematicState<float> xKinematics = new(kinematics.position.x, kinematics.velocity.x);
         KinematicState<float> yKinematics = new(kinematics.position.y, kinematics.velocity.y);
 
-        horizontal(t, ref xKinematics);
-        vertical(t, ref yKinematics);
+        horizontal?.Invoke(t, ref xKinematics);
+        vertical?.Invoke(t, ref yKinematics);
         kinematics = new(
             new(xKinematics.position, yKinematics.position), 
             new(xKinematics.velocity, yKinematics.velocity));

@@ -7,7 +7,7 @@ public abstract partial class MovementState
 {
     protected KinematicSegment<float>[] WallSlidingCurve(float t, ref KinematicState<float> kinematics)
     {
-        return FallingCurve(t, -parameters.WallSlideVelocity, ref kinematics);
+        return FallingCurve(t, -parameters.WallSlideVelocity, parameters.FallGravity, ref kinematics);
     }
 }
 
@@ -18,10 +18,10 @@ public class WallSlideState : MovementState
     protected override MovementState Update(ref float t, ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
         if (player.Aim.x * player.WallCheck() >= 0f) // Not wall sliding anymore
-            return new CancelledJumpState(parameters, player, parameters.FallGravity);
+            return new FallingState(parameters, player, parameters.FallGravity);
 
         if (interrupts.Any(i => i is JumpInterrupt { type: JumpInterrupt.Type.Started }))
-            return new WallJumpState(parameters, player, -Math.Sign(player.Aim.x));
+            return new WallJumpState(parameters, player, -Math.Sign(player.Aim.x), kinematics);
         
         ApplyMotionCurves(t, ref kinematics, (float _, ref KinematicState<float> _) => default, WallSlidingCurve);
         t = 0f;
