@@ -75,8 +75,6 @@ public class WalkingState : MovementState
                         break;
                     if (CanJump(kinematics))
                         return new JumpingState(parameters, player, kinematics);
-                    if (player.WallCheck() is int normal && normal != 0)
-                        return new WallJumpState(parameters, player, normal, kinematics);
                     break;
             }
         }
@@ -96,7 +94,9 @@ public class WalkingState : MovementState
             else if (deflection.x != 0f)
             {
                 if (player.JumpBuffer.Flush())
-                    return new WallSlideState(parameters, player);
+                    return new WallJumpState(parameters, player, Math.Sign(collision.Normal.x), kinematics);
+
+                return new WallSlideState(parameters, player);
             }
         }
 
@@ -109,6 +109,6 @@ public class WalkingState : MovementState
     private bool CanJump(KinematicState<Vector2> kinematics)
     {
         float fallTime = -kinematics.velocity.y / parameters.FallGravity;
-        return fallTime < parameters.CoyoteTime;
+        return fallTime < parameters.CoyoteTime || player.GroundCheck();
     }
 }

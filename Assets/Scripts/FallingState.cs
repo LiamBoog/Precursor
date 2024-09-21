@@ -28,9 +28,13 @@ public class FallingState : MovementState
                 return new WalkingState(parameters, player);
             }
             
-            if (collision.Normal.x != 0 && player.JumpBuffer.Flush())
+            if (collision.Normal.x != 0)
             {
-                return new WallJumpState(parameters, player, Math.Sign(collision.Normal.x), kinematics);
+                if (player.JumpBuffer.Flush())
+                    return new WallJumpState(parameters, player, Math.Sign(collision.Normal.x), kinematics);
+
+                if (player.WallCheck() * player.Aim.x < 0f)
+                    return new WallSlideState(parameters, player);
             }
         }
         
