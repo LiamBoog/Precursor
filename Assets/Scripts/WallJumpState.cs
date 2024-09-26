@@ -1,13 +1,8 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class WallJumpState : JumpingState
 {
-    private delegate void WallJumpInitializer(ref KinematicState<Vector2> kinematics);
-    
     private float elapsedTime;
     private float controlTime;
     private JumpInitializer onFirstUpdate;
