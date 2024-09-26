@@ -721,10 +721,11 @@ MonoBehaviour:
   camera: {fileID: 519420031}
   target: {fileID: 19663145}
   verticalOffset: 0
+  velocityThreshold: 0.5
   horizontalPosition:
-    timeConstant: 0.2
+    timeConstant: 0.1
   verticalPosition:
-    timeConstant: 0.3
+    timeConstant: 0.2
 --- !u!1 &603169996
 GameObject:
   m_ObjectHideFlags: 0

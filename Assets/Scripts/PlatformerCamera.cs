@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlatformerCamera : MonoBehaviour
@@ -12,8 +9,6 @@ public class PlatformerCamera : MonoBehaviour
     [SerializeField] private ExpMovingAverageFloat horizontalPosition;
     [SerializeField] private ExpMovingAverageFloat verticalPosition;
 
-    private float lastUpdateTime;
-
     private void OnEnable()
     {
         horizontalPosition.Reset(target.position.x);
@@ -22,21 +17,18 @@ public class PlatformerCamera : MonoBehaviour
 
     private void Update()
     {
-        float previous = horizontalPosition;
+        Vector2 previous = new(horizontalPosition, verticalPosition);
+        
         horizontalPosition.AddSample(target.position.x, Time.deltaTime);
-        if (Mathf.Abs(horizontalPosition - previous) / Time.deltaTime < velocityThreshold)
-        {
-            horizontalPosition.Reset(previous);
-        }
-
-        previous = verticalPosition;
         float verticalDistance = Mathf.Abs(camera.WorldToScreenPoint(target.position + verticalOffset * Vector3.up).y - camera.pixelHeight / 2f);
-        verticalPosition.AddSample(verticalOffset + target.position.y, Time.deltaTime * FollowStrengthMultiplier(verticalDistance));
-        if (Mathf.Abs(verticalPosition - previous) / Time.deltaTime < velocityThreshold)
-        {
-            verticalPosition.Reset(previous);
-        }
+        verticalPosition.AddSample(target.position.y + verticalOffset, Time.deltaTime * FollowStrengthMultiplier(verticalDistance));
 
+        if ((new Vector2(horizontalPosition, verticalPosition) - previous).magnitude / Time.deltaTime < velocityThreshold)
+        {
+            horizontalPosition.Reset(previous.x);
+            verticalPosition.Reset(previous.y);
+        }
+        
         transform.position = new(horizontalPosition, verticalPosition, transform.position.z);
     }
 
