@@ -38,6 +38,11 @@ public class FallingState : MovementState
             }
         }
         
+        if (interrupts.Any(i => i is JumpInterrupt { type: JumpInterrupt.Type.Started }) && player.WallCheck() is int normal && normal != 0)
+        {
+            return new WallJumpState(parameters, player, normal, kinematics);
+        }
+        
         ApplyMotionCurves(t, ref kinematics, WalkingCurve, 
             (float t, ref KinematicState<float> kinematics) => FallingCurve(t, -parameters.TerminalVelocity, gravity, ref kinematics));
         t = 0f;
