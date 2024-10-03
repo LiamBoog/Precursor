@@ -74,7 +74,7 @@ public interface IInputBuffer
     bool Flush();
 }
 
-public class PlayerController : MonoBehaviour, IPlayerInfo
+public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
 {
     private struct InputBuffer : IInputBuffer
     {
@@ -123,6 +123,8 @@ public class PlayerController : MonoBehaviour, IPlayerInfo
     }
 
     public IInputBuffer JumpBuffer => jumpBuffer;
+    public Vector2 Position => transform.position;
+    public Vector2 Velocity => velocity;
 
     private void OnEnable()
     {
