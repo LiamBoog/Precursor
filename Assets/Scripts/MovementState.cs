@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public readonly struct KinematicSegment<T> where T : struct, IEquatable<T>, IFormattable
@@ -59,7 +60,7 @@ public abstract partial class MovementState
 
         return MergeKinematicSegments(xMotion, yMotion);
     }
-
+    
     protected static KinematicSegment<Vector2>[] MergeKinematicSegments(KinematicSegment<float>[] x, KinematicSegment<float>[] y)
     {
         List<KinematicSegment<Vector2>> output = new();
@@ -82,23 +83,11 @@ public abstract partial class MovementState
             
             if (x[i].duration < y[j].duration)
             {
-                KinematicState<float> newInitialState = y[j].initialState;
-                AccelerationCurve(x[i].duration, ref newInitialState, y[j].acceleration);
-                y[j] = new(
-                    newInitialState,
-                    y[j].acceleration,
-                    y[j].duration - x[i++].duration
-                );
+                ContractLongerSegment(x[i++], ref y[j]);
             }
             else if (x[i].duration > y[j].duration)
             {
-                KinematicState<float> newInitialState = x[i].initialState;
-                AccelerationCurve(y[j].duration, ref newInitialState, x[i].acceleration);
-                x[i] = new(
-                    newInitialState,
-                    x[i].acceleration,
-                    x[i].duration - y[j++].duration
-                );
+                ContractLongerSegment(y[j++], ref x[i]);
             }
             else
             {
@@ -108,6 +97,17 @@ public abstract partial class MovementState
         }
 
         return output.ToArray();
+
+        void ContractLongerSegment(KinematicSegment<float> shorter, ref KinematicSegment<float> longer)
+        {
+            KinematicState<float> newInitialState = longer.initialState;
+            AccelerationCurve(shorter.duration, ref newInitialState, longer.acceleration);
+            longer = new(
+                newInitialState,
+                longer.acceleration,
+                longer.duration - shorter.duration
+            );
+        }
     }
 
     protected static KinematicSegment<float> AccelerationCurve(float t, ref KinematicState<float> kinematics, float acceleration)
