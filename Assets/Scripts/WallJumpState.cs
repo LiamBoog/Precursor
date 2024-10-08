@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class WallJumpState : JumpingState
@@ -23,7 +24,7 @@ public class WallJumpState : JumpingState
         onFirstUpdate?.Invoke(ref kinematics);
         
         KinematicState<float> xKinematics = new(kinematics.position.x, kinematics.velocity.x);
-        HorizontalMotion(t, ref xKinematics);
+        KinematicSegment<float>[] xMotion = HorizontalMotion(t, ref xKinematics);
 
         MovementState output = base.UpdateKinematics(ref t, ref kinematics, out motion);
         KinematicState<float> yKinematics = new(kinematics.position.y, kinematics.velocity.y);
@@ -32,6 +33,16 @@ public class WallJumpState : JumpingState
             new(xKinematics.position, yKinematics.position),
             new(xKinematics.velocity, yKinematics.velocity)
         );
+
+        KinematicSegment<float>[] yMotion = motion
+            .Select(segment =>
+                new KinematicSegment<float>(
+                    new(segment.initialState.position.y, segment.initialState.velocity.y),
+                    segment.acceleration.y,
+                    segment.duration
+                ))
+            .ToArray();
+        motion = MergeKinematicSegments(xMotion, yMotion);
 
         return output;
     }
