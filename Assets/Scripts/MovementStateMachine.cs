@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public interface IInterrupt { }
@@ -15,9 +14,11 @@ public class MovementStateMachine
 
     public void Update(float t, ref KinematicState<Vector2> kinematics, List<IInterrupt> interrupts)
     {
+        state = state.ProcessInterrupts(ref kinematics, interrupts);
+        interrupts.Clear();
         while (t > 0f)
         {
-            state = state.Update(ref t, ref kinematics, interrupts);
+            state = state.UpdateKinematics(ref t, ref kinematics, out _);
         }
     }
 }

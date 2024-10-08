@@ -33,10 +33,8 @@ public class JumpingState : MovementState
         };
     }
 
-    protected override MovementState Update(ref float t, ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
+    public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
-        onFirstUpdate?.Invoke(ref kinematics);
-
         // Handle cancelled jump
         if (interrupts.Any(i => i is JumpInterrupt { type: JumpInterrupt.Type.Cancelled }))
         {
@@ -59,8 +57,14 @@ public class JumpingState : MovementState
                 return new WallJumpState(parameters, player, Math.Sign(collision.Normal.x), kinematics);
             }
         }
-        
-        ApplyMotionCurves(t, ref kinematics, WalkingCurve, 
+
+        return this;
+    }
+
+    public override MovementState UpdateKinematics(ref float t, ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion)
+    {
+        onFirstUpdate?.Invoke(ref kinematics);
+        motion = ApplyMotionCurves(t, ref kinematics, WalkingCurve, 
             (float t, ref KinematicState<float> kinematics) => JumpCurve(t, ref kinematics, gravity));
         t = 0f;
 

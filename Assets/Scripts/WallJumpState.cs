@@ -18,14 +18,14 @@ public class WallJumpState : JumpingState
         };
     }
     
-    protected override MovementState Update(ref float t, ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
+    public override MovementState UpdateKinematics(ref float t, ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion)
     {
         onFirstUpdate?.Invoke(ref kinematics);
         
         KinematicState<float> xKinematics = new(kinematics.position.x, kinematics.velocity.x);
         HorizontalMotion(t, ref xKinematics);
 
-        MovementState output = base.Update(ref t, ref kinematics, interrupts);
+        MovementState output = base.UpdateKinematics(ref t, ref kinematics, out motion);
         KinematicState<float> yKinematics = new(kinematics.position.y, kinematics.velocity.y);
 
         kinematics = new(

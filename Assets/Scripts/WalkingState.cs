@@ -20,50 +20,13 @@ public abstract partial class MovementState
         output.Add(LinearMotionCurve(t, ref kinematics));
         return output.ToArray();
     }
-    
-    protected KinematicSegment<float> AccelerateTowardTargetVelocity(ref float t, float targetVelocity, float accelerationMagnitude, ref KinematicState<float> kinematics)
-    {
-        float acceleration = Math.Sign(targetVelocity - kinematics.velocity) * accelerationMagnitude;
-        float maxAccelerationTime = acceleration == 0f ? 0f : (targetVelocity - kinematics.velocity) / acceleration;
-        float accelerationTime = Mathf.Min(t, maxAccelerationTime);
-
-        KinematicSegment<float> output = new(kinematics, acceleration, accelerationTime);
-        kinematics.position += kinematics.velocity * accelerationTime + 0.5f * acceleration * accelerationTime * accelerationTime;
-        kinematics.velocity = accelerationTime < maxAccelerationTime ? kinematics.velocity + acceleration * accelerationTime : targetVelocity;
-        t -= accelerationTime;
-        
-        return output;
-    }
-
-    protected KinematicSegment<float> LinearMotionCurve(float t, ref KinematicState<float> kinematics)
-    {
-        KinematicSegment<float> output = new(kinematics, 0f, t);
-        kinematics.position += kinematics.velocity * t;
-        return output;
-    }
-
-    protected KinematicSegment<float>[] FallingCurve(float t, float targetVelocity, float gravity, ref KinematicState<float> kinematics)
-    {
-        List<KinematicSegment<float>> output = new();
-        
-        kinematics.velocity = Mathf.Max(targetVelocity, kinematics.velocity);
-        
-        output.Add(AccelerateTowardTargetVelocity(ref t, targetVelocity, gravity, ref kinematics));
-        output.Add(LinearMotionCurve(t, ref kinematics));
-        return output.ToArray();
-    }
-
-    protected KinematicSegment<float>[] FreeFallingCurve(float t, ref KinematicState<float> kinematics)
-    {
-        return FallingCurve(t, -parameters.TerminalVelocity, parameters.FallGravity, ref kinematics);
-    }
 }
 
 public class WalkingState : MovementState
 {
     public WalkingState(MovementParameters movementParameters, IPlayerInfo playerInfo) : base(movementParameters, playerInfo) { }
 
-    protected override MovementState Update(ref float t, ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
+    public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
         // Process inputs
         if (interrupts.LastOrDefault(i => i is not ICollision) is { } interrupt)
@@ -71,7 +34,7 @@ public class WalkingState : MovementState
             switch (interrupt)
             {
                 case JumpInterrupt jumpInterrupt:
-                    if (jumpInterrupt.type == JumpInterrupt.Type.Cancelled)
+                    if (jumpInterrupt.type == JumpInterrupt.Type.Cancelled) 
                         break;
                     if (CanJump(kinematics))
                         return new JumpingState(parameters, player, kinematics);
@@ -83,6 +46,7 @@ public class WalkingState : MovementState
         if (interrupts.FirstOrDefault(i => i is ICollision) is ICollision collision)
         {
             Vector2 deflection = collision.Deflection;
+            // TODO - Might make sense to set a callback to do this in UpdateKinematics instead of here
             kinematics.velocity.y = deflection.y != 0f ? 0f : kinematics.velocity.y;
             kinematics.velocity.x = deflection.x != 0f ? 0f : kinematics.velocity.x;
             
@@ -100,7 +64,12 @@ public class WalkingState : MovementState
             }
         }
 
-        ApplyMotionCurves(t, ref kinematics, WalkingCurve, FreeFallingCurve);
+        return this;
+    }
+
+    public override MovementState UpdateKinematics(ref float t, ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion)
+    {
+        motion = ApplyMotionCurves(t, ref kinematics, WalkingCurve, FreeFallingCurve);
         t = 0f;
 
         return this;
