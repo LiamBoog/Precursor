@@ -33,9 +33,10 @@ public class MovementParameters
     [field: SerializeField] public int GracePixels { get; private set; } = 2;
     [SerializeField] private float wallSlideVelocityFactor = 0.15f;
 
-    [Header("Rope Dart Parameters")] 
-    [SerializeField] private float ropeLength = 7.5f;
-    [SerializeField] private float angleSnapIncrement = 22.5f;
+    [field: Header("Rope Dart Parameters")] 
+    [field: SerializeField] public float RopeLength { get; private set; } = 7.5f;
+
+    [field: SerializeField] public float AngleSnapIncrement { get; private set; } = 22.5f;
 
     public float Acceleration => 0.5f * TopSpeed * TopSpeed / AccelerationDistance;
     public float Deceleration => 0.5f * TopSpeed * TopSpeed / DecelerationDistance;
@@ -56,6 +57,7 @@ public interface IPlayerInfo
 
     bool GroundCheck();
     int WallCheck();
+    bool GrappleRaycast(out Vector2 anchor);
 }
 
 public struct JumpInterrupt : IInterrupt
@@ -184,6 +186,17 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
             collisionResolver.Touching(Vector2.right, overlapDistance) ? -1 : 0;
 
         return normal;
+    }
+
+    public bool GrappleRaycast(out Vector2 anchor)
+    {
+        float aimAngle = Vector2.SignedAngle(Vector2.right, aim.action.ReadValue<Vector2>());
+        float snappedAngle = Mathf.Round(aimAngle / movementParameters.AngleSnapIncrement) * movementParameters.AngleSnapIncrement;
+        Vector2 direction = Quaternion.Euler(0f, 0f, snappedAngle) * Vector3.right;
+        
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, movementParameters.RopeLength, LayerMask.GetMask("Ground"));
+        anchor = hit.point;
+        return hit;
     }
 
     private void OnJump(InputAction.CallbackContext _)

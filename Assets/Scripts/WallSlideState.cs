@@ -23,7 +23,7 @@ public class WallSlideState : MovementState
         if (interrupts.Any(i => i is JumpInterrupt { type: JumpInterrupt.Type.Started }))
             return new WallJumpState(parameters, player, -Math.Sign(player.Aim.x), kinematics);
 
-        return this;
+        return base.ProcessInterrupts(ref kinematics, interrupts);
     }
 
     public override MovementState UpdateKinematics(ref float t, ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -43,7 +44,37 @@ public abstract partial class MovementState
         player = playerInfo;
     }
 
-    public abstract MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts);
+    public virtual MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
+    {
+        // Process collisions
+        if (interrupts.FirstOrDefault(i => i is ICollision) is ICollision collision)
+        {
+            Vector2 normal = collision.Normal;
+            // TODO - Might make sense to set a callback to do this in UpdateKinematics instead of here
+            kinematics.velocity.y = normal.y != 0f ? 0f : kinematics.velocity.y;
+            kinematics.velocity.x = normal.x != 0f ? 0f : kinematics.velocity.x;
+            
+            if (normal.y > 0f)
+            {
+                if (player.JumpBuffer.Flush())
+                    return new JumpingState(parameters, player, kinematics);
+
+                if (this is not WalkingState)
+                    return new WalkingState(parameters, player);
+            }
+            
+            if (collision.Normal.x != 0)
+            {
+                if (player.JumpBuffer.Flush())
+                    return new WallJumpState(parameters, player, Math.Sign(collision.Normal.x), kinematics);
+
+                if (player.WallCheck() * player.Aim.x < 0f)
+                    return new WallSlideState(parameters, player);
+            }
+        }
+
+        return this;
+    }
     
     public abstract MovementState UpdateKinematics(ref float t, ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion);
 

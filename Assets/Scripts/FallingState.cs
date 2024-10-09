@@ -21,6 +21,18 @@ public abstract partial class MovementState
     {
         return FallingCurve(t, -parameters.TerminalVelocity, parameters.FallGravity, ref kinematics);
     }
+
+    protected bool TryWallJump(KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts, out MovementState newState)
+    {
+        if (interrupts.Any(i => i is JumpInterrupt { type: JumpInterrupt.Type.Started }) && player.WallCheck() is int normal && normal != 0)
+        {
+            newState = new WallJumpState(parameters, player, normal, kinematics);
+            return true;
+        }
+
+        newState = this;
+        return false;
+    }
 }
 
 public class FallingState : MovementState
@@ -34,35 +46,10 @@ public class FallingState : MovementState
 
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
-        if (interrupts.FirstOrDefault(i => i is ICollision) is ICollision collision)
-        {
-            kinematics.velocity.y = collision.Deflection.y != 0f ? 0f : kinematics.velocity.y;
-            kinematics.velocity.x = collision.Deflection.x != 0f ? 0f : kinematics.velocity.x;
-            
-            if (Vector2.Dot(collision.Normal, Vector2.up) > 0.5f) // Collision with ground
-            {
-                if (player.JumpBuffer.Flush())
-                    return new JumpingState(parameters, player, kinematics);
-                
-                return new WalkingState(parameters, player);
-            }
-            
-            if (collision.Normal.x != 0)
-            {
-                if (player.JumpBuffer.Flush())
-                    return new WallJumpState(parameters, player, Math.Sign(collision.Normal.x), kinematics);
+        if (TryWallJump(kinematics, interrupts, out MovementState newState))
+            return newState;
 
-                if (player.WallCheck() * player.Aim.x < 0f)
-                    return new WallSlideState(parameters, player);
-            }
-        }
-        
-        if (interrupts.Any(i => i is JumpInterrupt { type: JumpInterrupt.Type.Started }) && player.WallCheck() is int normal && normal != 0)
-        {
-            return new WallJumpState(parameters, player, normal, kinematics);
-        }
-
-        return this;
+        return base.ProcessInterrupts(ref kinematics, interrupts);
     }
 
     public override MovementState UpdateKinematics(ref float t, ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion)

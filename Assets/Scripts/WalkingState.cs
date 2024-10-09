@@ -28,7 +28,7 @@ public class WalkingState : MovementState
 
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
-        // Process inputs
+        // Process Jump
         if (interrupts.LastOrDefault(i => i is not ICollision) is { } interrupt)
         {
             switch (interrupt)
@@ -41,30 +41,8 @@ public class WalkingState : MovementState
                     break;
             }
         }
-        
-        // Process collisions
-        if (interrupts.FirstOrDefault(i => i is ICollision) is ICollision collision)
-        {
-            Vector2 deflection = collision.Deflection;
-            // TODO - Might make sense to set a callback to do this in UpdateKinematics instead of here
-            kinematics.velocity.y = deflection.y != 0f ? 0f : kinematics.velocity.y;
-            kinematics.velocity.x = deflection.x != 0f ? 0f : kinematics.velocity.x;
-            
-            if (deflection.y > 0f)
-            {
-                if (player.JumpBuffer.Flush())
-                    return new JumpingState(parameters, player, kinematics);
-            }
-            else if (deflection.x != 0f)
-            {
-                if (player.JumpBuffer.Flush())
-                    return new WallJumpState(parameters, player, Math.Sign(collision.Normal.x), kinematics);
 
-                return new WallSlideState(parameters, player);
-            }
-        }
-
-        return this;
+        return base.ProcessInterrupts(ref kinematics, interrupts);
     }
 
     public override MovementState UpdateKinematics(ref float t, ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion)

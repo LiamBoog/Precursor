@@ -723,11 +723,10 @@ MonoBehaviour:
   camera: {fileID: 519420031}
   verticalOffset: 0
   velocityThreshold: 0.5
-  lookaheadStrength: {x: 0, y: 0.5}
   horizontalPosition:
-    timeConstant: 0.1
+    timeConstant: 0.075
   verticalPosition:
-    timeConstant: 0.2
+    timeConstant: 0.25
 --- !u!114 &519420034
 MonoBehaviour:
   m_ObjectHideFlags: 0
