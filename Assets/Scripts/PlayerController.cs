@@ -37,6 +37,7 @@ public class MovementParameters
     [field: SerializeField] public float RopeLength { get; private set; } = 7.5f;
 
     [field: SerializeField] public float AngleSnapIncrement { get; private set; } = 22.5f;
+    [field: SerializeField] public float MinRopeLengthFactor { get; private set; } = 0.75f;
 
     public float Acceleration => 0.5f * TopSpeed * TopSpeed / AccelerationDistance;
     public float Deceleration => 0.5f * TopSpeed * TopSpeed / DecelerationDistance;
@@ -70,6 +71,8 @@ public struct JumpInterrupt : IInterrupt
 
     public Type type;
 }
+
+public struct AnchorInterrupt : IInterrupt { }
 
 public interface IInputBuffer
 {
@@ -108,6 +111,7 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
     [SerializeField] private InputActionReference anchor;
     
     [SerializeField] private CollisionResolver collisionResolver;
+    [SerializeField] private LayerMask grappleLayer;
 
     private MovementStateMachine movementController;
     private Vector2 velocity;
@@ -140,6 +144,7 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
 
         jump.action.performed += OnJump;
         jump.action.canceled += OnJumpCancelled;
+        anchor.action.performed += OnAnchor;
     }
 
     private void OnDisable()
@@ -151,6 +156,7 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
         
         jump.action.performed -= OnJump;
         jump.action.canceled -= OnJumpCancelled;
+        anchor.action.performed -= OnAnchor;
     }
 
     private void Update()
@@ -194,7 +200,7 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
         float snappedAngle = Mathf.Round(aimAngle / movementParameters.AngleSnapIncrement) * movementParameters.AngleSnapIncrement;
         Vector2 direction = Quaternion.Euler(0f, 0f, snappedAngle) * Vector3.right;
         
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, movementParameters.RopeLength, LayerMask.GetMask("Ground"));
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, movementParameters.RopeLength, grappleLayer);
         anchor = hit.point;
         return hit;
     }
@@ -214,5 +220,10 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
         {
             type = JumpInterrupt.Type.Cancelled
         });
+    }
+
+    private void OnAnchor(InputAction.CallbackContext _)
+    {
+        interrupts.Add(new AnchorInterrupt());
     }
 }

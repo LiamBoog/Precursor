@@ -46,6 +46,11 @@ public abstract partial class MovementState
 
     public virtual MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
+        if (interrupts.Any(i => i is AnchorInterrupt) && player.GrappleRaycast(out Vector2 anchor))
+        {
+            return new AnchoredState(parameters, player, anchor, this);
+        }
+        
         // Process collisions
         if (interrupts.FirstOrDefault(i => i is ICollision) is ICollision collision)
         {
@@ -97,7 +102,7 @@ public abstract partial class MovementState
         List<KinematicSegment<Vector2>> output = new();
 
         int i = 0, j = 0;
-        while (i < x.Length && j < y.Length)
+        while (i < x?.Length && j < y?.Length)
         {
             output.Add(new(
                 new KinematicState<Vector2>(
