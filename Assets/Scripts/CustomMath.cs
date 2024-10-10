@@ -36,7 +36,7 @@ public static class CustomMath
                 return double.Epsilon;
 
             long bits = BitConverter.DoubleToInt64Bits(x);
-            long nextBits = bits + (x < 0 ? 1 : -1);
+            long nextBits = bits + (x > 0 ? 1 : -1);
 
             double next = BitConverter.Int64BitsToDouble(nextBits);
             return Math.Abs(next - x);
