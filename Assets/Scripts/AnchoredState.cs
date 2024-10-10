@@ -38,7 +38,7 @@ public class AnchoredState : MovementState
         }
         if (Vector2.Distance(kinematics.position, anchor) >= radius)
         {
-            innerState = initialInnerState;
+            innerState = initialInnerState; 
             Debug.DrawLine(initialKinematics.position, kinematics.position, Color.yellow);
             t = ComputeCircleIntersectionTime(initialKinematics, kinematics, motion);
             Debug.Log(t);
@@ -47,7 +47,7 @@ public class AnchoredState : MovementState
             {
                 innerState = innerState.UpdateKinematics(ref t, ref kinematics, out motion);
             }
-            Debug.DrawLine(anchor, kinematics.position, Color.magenta);
+            //Debug.DrawLine(anchor, kinematics.position, Color.magenta);
             CustomDebug.DrawArc2D(kinematics.position, anchor, radius, 360f, Color.blue);
 
             EditorApplication.isPaused = true;
@@ -61,6 +61,9 @@ public class AnchoredState : MovementState
         IEnumerable<float> intersectionPoints = new float[] {};
         IEnumerable<double> possibleRoots = Enumerable.Empty<double>();
         float elapsedTime = 0f;
+
+        Color[] colours = { Color.red, Color.magenta, Color.blue, Color.cyan, Color.green, Color.yellow };
+        int j = 0;
         foreach (KinematicSegment<Vector2> segment in motion)
         {
             double a = -(segment.acceleration.x * segment.acceleration.x + parameters.FallGravity * parameters.FallGravity) / 4d;
@@ -79,6 +82,24 @@ public class AnchoredState : MovementState
                 .ToArray();
 
             elapsedTime += segment.duration;
+            
+            Vector2 ParametricCurve(float t)
+            {
+                return segment.initialState.position + segment.initialState.velocity * t + 0.5f * segment.acceleration * t * t;
+            }
+
+            Vector3[] curve = Enumerable
+                .Range(-1000, 2000)
+                .Select(i => i * 0.001f)
+                .Select(ParametricCurve)
+                .Select(v => (Vector3) v)
+                .ToArray();
+            CustomDebug.DrawCurve(curve, colours[j]);
+            Debug.DrawLine(Vector3.zero, segment.initialState.position, colours[j++]);
+            foreach (double root in roots)
+            {
+                Debug.DrawLine(anchor, ParametricCurve((float) root), Color.cyan);
+            }
         }
         
         foreach (double root in possibleRoots)
@@ -89,7 +110,7 @@ public class AnchoredState : MovementState
                 KinematicState<float> yKinematics = new(initialKinematics.position.y, initialKinematics.velocity.y);
                 AccelerationCurve((float) root, ref xKinematics, motion[0].acceleration.x);
                 AccelerationCurve((float) root, ref yKinematics, motion[0].acceleration.y);
-                Debug.DrawLine(new Vector3(xKinematics.position, yKinematics.position), anchor, Color.red);
+                //Debug.DrawLine(new Vector3(xKinematics.position, yKinematics.position), anchor, Color.red);
             }
             else    
             {
@@ -104,7 +125,7 @@ public class AnchoredState : MovementState
                 KinematicState<float> yKinematics = new(motion[i].initialState.position.y, motion[i].initialState.velocity.y);
                 AccelerationCurve((float) root - elapsedTime, ref xKinematics, motion[i].acceleration.x);
                 AccelerationCurve((float) root - elapsedTime, ref yKinematics, motion[i].acceleration.y);
-                Debug.DrawLine(new Vector3(xKinematics.position, yKinematics.position), anchor, Color.cyan);
+                //Debug.DrawLine(new Vector3(xKinematics.position, yKinematics.position), anchor, Color.cyan);
             }
 
             Debug.Log(root);
