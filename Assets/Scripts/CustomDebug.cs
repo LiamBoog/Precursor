@@ -57,7 +57,7 @@ public static class CustomDebug
     /// <param name="curve">The curve to draw.</param>
     /// <param name="colour">The colour of the curve.</param>
     /// <param name="duration">The duration of the curve.</param>
-    public static void DrawCurve(Vector3[] curve, Color colour, float duration)
+    public static void DrawCurve(Vector3[] curve, Color colour, float duration = 0f)
     {
         for (int i = 1; i < curve.Length; i++)
         {
@@ -71,7 +71,7 @@ public static class CustomDebug
     /// <param name="contour">The contour to draw.</param>
     /// <param name="colour">The colour of the contour.</param>
     /// <param name="duration">The duration of the contour.</param>
-    public static void DrawContour(Vector3[] contour, Color colour, float duration)
+    public static void DrawContour(Vector3[] contour, Color colour, float duration = 0f)
     {
         DrawCurve(contour, colour, duration);
         Debug.DrawLine(contour[0], contour[^1], colour, duration);
