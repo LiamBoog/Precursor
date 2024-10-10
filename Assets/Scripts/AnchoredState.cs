@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -56,14 +55,16 @@ public class AnchoredState : MovementState
         float elapsedTime = 0f;
         foreach (KinematicSegment<Vector2> segment in motion)
         {
-            IEnumerable<float> intersectionTimes = GetQuarticRoots(segment)
+            float[] intersectionTimes = GetQuarticRoots(segment.initialState.position, segment.initialState.velocity, segment.acceleration)
                     .Where(t => t > -CustomMath.EPSILON && t <= segment.duration)
-                    .Select(t => (float) t + elapsedTime);
+                    .Select(t => (float) t + elapsedTime)
+                    .OrderBy(t => t)
+                    .ToArray();
 
-            if (intersectionTimes.Any())
+            if (intersectionTimes.Length > 0)
             {
                 Debug.Log("Quartic");
-                return intersectionTimes.Min();
+                return intersectionTimes[0];
             }
 
             elapsedTime += segment.duration;
@@ -71,28 +72,35 @@ public class AnchoredState : MovementState
 
         // Failsafe in case no quartic solution is found (can happen when moving in a straight line or when initial position is outside the circle for some reason) 
         Debug.Log("Linear");
-        return (float) GetQuadraticRoots()
+        return (float) GetQuadraticRoots(initialKinematics.position, finalKinematics.position)
             .Select(t => t * Time.deltaTime)
             .OrderBy(t => t)
             .LastOrDefault();
 
-        double[] GetQuarticRoots(KinematicSegment<Vector2> segment)
+        double[] GetQuarticRoots(Vector2 position, Vector2 velocity, Vector2 acceleration)
         {
-            double a = -(segment.acceleration.x * segment.acceleration.x + parameters.FallGravity * parameters.FallGravity) / 4d;
-            double b = parameters.FallGravity * segment.initialState.velocity.y - segment.acceleration.x * segment.initialState.velocity.x;
-            double c = segment.acceleration.x * (anchor.x - segment.initialState.position.x) + parameters.FallGravity * (segment.initialState.position.y - anchor.y) - segment.initialState.velocity.x * segment.initialState.velocity.x - segment.initialState.velocity.y * segment.initialState.velocity.y;
-            double d = 2d * (segment.initialState.velocity.x * (anchor.x - segment.initialState.position.x) + segment.initialState.velocity.y * (anchor.y - segment.initialState.position.y));
-            double e = -anchor.x * anchor.x + 2d * anchor.x * segment.initialState.position.x - anchor.y * anchor.y + 2d * anchor.y * segment.initialState.position.y + radius * radius - segment.initialState.position.x * segment.initialState.position.x - segment.initialState.position.y * segment.initialState.position.y;
+            Vector2 f = new Vector2(-1f, 1f) * acceleration;
+            Vector2 g = new Vector2(1f, -1f) * anchor;
+            Vector2 h = new Vector2(-1f, 1f) * position;
+            
+            double a = -0.25d * Vector2.Dot(acceleration, acceleration);
+            double b = Vector2.Dot(f, velocity);
+            double c = Vector2.Dot(acceleration, g + h) - Vector2.Dot(velocity, velocity);
+            double d = 2d * Vector2.Dot(velocity, anchor - position);
+            double e = 2d * Vector2.Dot(anchor, position) - Vector2.Dot(position, position) - Vector2.Dot(anchor, anchor) + radius * radius;
+            
             return CustomMath.SolveQuartic(a, b, c, d, e);
         }
 
-        double[] GetQuadraticRoots()
+        double[] GetQuadraticRoots(Vector2 initialPosition, Vector2 finalPosition)
         {
-            Vector2 d = finalKinematics.position - initialKinematics.position;
-            Vector2 f = initialKinematics.position - anchor;
+            Vector2 d = finalPosition - initialPosition;
+            Vector2 f = initialPosition - anchor;
+            
             double a = Vector2.Dot(d, d);
             double b = 2d * Vector2.Dot(f, d);
             double c = Vector2.Dot(f, f) - radius * radius;
+            
             return CustomMath.SolveQuadratic(a, b, c);
         }
     }
