@@ -64,7 +64,7 @@ public abstract partial class MovementState
                 if (player.JumpBuffer.Flush())
                     return new JumpingState(parameters, player, kinematics);
 
-                if (this is not WalkingState)
+                if (this is not WalkingState && this is not AnchoredState)
                     return new WalkingState(parameters, player);
             }
             
