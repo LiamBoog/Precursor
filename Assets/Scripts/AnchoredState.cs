@@ -47,7 +47,7 @@ public class AnchoredState : MovementState
             {
                 innerState = innerState.UpdateKinematics(ref t, ref kinematics, out motion);
             }
-            //Debug.DrawLine(anchor, kinematics.position, Color.magenta);
+            Debug.DrawLine(Vector3.zero, kinematics.position, Color.black);
             CustomDebug.DrawArc2D(kinematics.position, anchor, radius, 360f, Color.blue);
 
             EditorApplication.isPaused = true;
@@ -76,8 +76,8 @@ public class AnchoredState : MovementState
 
             intersectionPoints = intersectionPoints
                 .Concat(roots
-                    .Select(t => (float) (elapsedTime + t))
-                    .Where(t => t >= 0f)
+                    .Where(t => t > -CustomMath.EPSILON && t <= segment.duration)
+                    .Select(t => (float) t + elapsedTime)
                 )
                 .ToArray();
 
@@ -99,6 +99,12 @@ public class AnchoredState : MovementState
             foreach (double root in roots)
             {
                 Debug.DrawLine(anchor, ParametricCurve((float) root), Color.cyan);
+            }
+            
+            if (intersectionPoints.Any())
+            {
+                intersectionPoints = intersectionPoints.OrderBy(t => t);
+                break;
             }
         }
         
@@ -128,13 +134,17 @@ public class AnchoredState : MovementState
                 //Debug.DrawLine(new Vector3(xKinematics.position, yKinematics.position), anchor, Color.cyan);
             }
 
-            Debug.Log(root);
+            //Debug.Log(root);
         }
         
         float t;
         if (intersectionPoints.Any())
         {
             t = intersectionPoints.Min();
+            foreach (float p in intersectionPoints)
+            {
+                Debug.Log(p);
+            }
             Debug.Log("Quartic");
         }
         else
