@@ -148,10 +148,12 @@ public abstract partial class MovementState
 
     protected static KinematicSegment<float> AccelerationCurve(float t, ref KinematicState<float> kinematics, float acceleration)
     {
+        KinematicSegment<float> output = new(kinematics, acceleration, t);
+        
         kinematics.position += kinematics.velocity * t + 0.5f * acceleration * t * t;
         kinematics.velocity += acceleration * t;
         
-        return new(kinematics, acceleration, t);
+        return output;
     }
     
     protected KinematicSegment<float> AccelerateTowardTargetVelocity(ref float t, float targetVelocity, float accelerationMagnitude, ref KinematicState<float> kinematics)
