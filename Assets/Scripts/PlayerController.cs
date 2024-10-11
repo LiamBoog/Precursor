@@ -72,7 +72,16 @@ public struct JumpInterrupt : IInterrupt
     public Type type;
 }
 
-public struct AnchorInterrupt : IInterrupt { }
+public struct AnchorInterrupt : IInterrupt
+{
+    public enum Type
+    {
+        Started,
+        Cancelled
+    }
+
+    public Type type;
+}
 
 public interface IInputBuffer
 {
@@ -225,6 +234,9 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
 
     private void OnAnchor(InputAction.CallbackContext _)
     {
-        interrupts.Add(new AnchorInterrupt());
+        interrupts.Add(new AnchorInterrupt
+        {
+            type = aim.action.ReadValue<Vector2>() == default ? AnchorInterrupt.Type.Cancelled : AnchorInterrupt.Type.Started
+        });
     }
 }

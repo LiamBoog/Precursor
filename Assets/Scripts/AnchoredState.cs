@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 public class AnchoredState : MovementState
@@ -20,12 +19,16 @@ public class AnchoredState : MovementState
             radius = Mathf.Max(parameters.MinRopeLengthFactor * parameters.RopeLength, (kinematics.position - this.anchor).magnitude);
         };
 
-        innerState = previousState;
+        Debug.Log(previousState);
+        innerState = previousState is AnchoredState anchoredState ? anchoredState.innerState : previousState;
     }
 
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
-        innerState = innerState.ProcessInterrupts(ref kinematics, interrupts);
+        if (interrupts.Any(i => i is AnchorInterrupt { type: AnchorInterrupt.Type.Cancelled }))
+            return innerState;
+        
+        innerState = innerState.ProcessInterrupts(ref kinematics, interrupts.Where(i => i is not AnchorInterrupt));
         return base.ProcessInterrupts(ref kinematics, interrupts);
     }
 
@@ -44,7 +47,6 @@ public class AnchoredState : MovementState
         Debug.DrawLine(Vector3.zero, initialKinematics.position, Color.green);
         Debug.DrawLine(Vector3.zero, kinematics.position, Color.magenta);
         Debug.DrawLine(initialKinematics.position, kinematics.position, Color.cyan);
-        Debug.Log(Vector2.Distance(kinematics.position, anchor) - Vector2.Distance(initialKinematics.position, anchor));
         if (Vector2.Distance(kinematics.position, anchor) >= radius && Vector2.Distance(kinematics.position, anchor) - Vector2.Distance(initialKinematics.position, anchor) > 0f)
         {
             innerState = initialInnerState; 

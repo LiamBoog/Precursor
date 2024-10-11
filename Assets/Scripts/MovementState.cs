@@ -46,7 +46,7 @@ public abstract partial class MovementState
 
     public virtual MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
-        if (interrupts.Any(i => i is AnchorInterrupt) && player.GrappleRaycast(out Vector2 anchor))
+        if (interrupts.Any(i => i is AnchorInterrupt { type: AnchorInterrupt.Type.Started }) && player.GrappleRaycast(out Vector2 anchor))
         {
             return new AnchoredState(parameters, player, anchor, this);
         }
