@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -22,6 +23,12 @@ public class AnchoredState : MovementState
         innerState = previousState;
     }
 
+    public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
+    {
+        innerState = innerState.ProcessInterrupts(ref kinematics, interrupts);
+        return base.ProcessInterrupts(ref kinematics, interrupts);
+    }
+
     public override MovementState UpdateKinematics(ref float t, ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion)
     {
         onFirstUpdate?.Invoke(kinematics);
@@ -34,7 +41,11 @@ public class AnchoredState : MovementState
         {
             innerState = innerState.UpdateKinematics(ref t, ref kinematics, out motion);
         }
-        if (Vector2.Distance(kinematics.position, anchor) >= radius)
+        Debug.DrawLine(Vector3.zero, initialKinematics.position, Color.green);
+        Debug.DrawLine(Vector3.zero, kinematics.position, Color.magenta);
+        Debug.DrawLine(initialKinematics.position, kinematics.position, Color.cyan);
+        Debug.Log(Vector2.Distance(kinematics.position, anchor) - Vector2.Distance(initialKinematics.position, anchor));
+        if (Vector2.Distance(kinematics.position, anchor) >= radius && Vector2.Distance(kinematics.position, anchor) - Vector2.Distance(initialKinematics.position, anchor) > 0f)
         {
             innerState = initialInnerState; 
             t = ComputeCircleIntersectionTime(initialKinematics, kinematics, motion);
@@ -44,8 +55,19 @@ public class AnchoredState : MovementState
                 innerState = innerState.UpdateKinematics(ref t, ref kinematics, out motion);
             }
 
-            EditorApplication.isPaused = true;
+            kinematics.velocity = Vector2.zero;
+            
+            CustomDebug.DrawCircle2D(anchor, radius, Color.blue);
+
+            //EditorApplication.isPaused = true;
         }
+
+        if (innerState is FallingState)
+        {
+            // Start swinging
+        }
+        
+        Debug.DrawLine(anchor, kinematics.position, Color.blue);
 
         return this;
     }
@@ -63,6 +85,17 @@ public class AnchoredState : MovementState
 
             if (intersectionTimes.Length > 0)
             {
+                Vector3 Curve(float t) => segment.initialState.position + segment.initialState.velocity * t + 0.5f * segment.acceleration * t * t;
+
+                CustomDebug.DrawCurve(
+                    Enumerable
+                    .Range(-100, 200)
+                    .Select(i => i * 0.001f)
+                    .Select(Curve)
+                    .ToArray(),
+                    Color.yellow,
+                    0.5f);
+                Debug.DrawLine(Vector3.zero, Curve(intersectionTimes[0] - elapsedTime), Color.yellow);
                 Debug.Log("Quartic");
                 return intersectionTimes[0];
             }

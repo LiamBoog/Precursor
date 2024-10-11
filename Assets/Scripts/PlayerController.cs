@@ -200,6 +200,7 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
         float snappedAngle = Mathf.Round(aimAngle / movementParameters.AngleSnapIncrement) * movementParameters.AngleSnapIncrement;
         Vector2 direction = Quaternion.Euler(0f, 0f, snappedAngle) * Vector3.right;
         
+        Debug.DrawRay(transform.position, movementParameters.RopeLength * direction, Color.magenta, 0.5f);
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, movementParameters.RopeLength, grappleLayer);
         anchor = hit.point;
         return hit;

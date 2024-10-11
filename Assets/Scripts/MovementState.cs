@@ -61,7 +61,7 @@ public abstract partial class MovementState
             
             if (normal.y > 0f)
             {
-                if (player.JumpBuffer.Flush())
+                if (player.JumpBuffer.Flush() && this is not AnchoredState)
                     return new JumpingState(parameters, player, kinematics);
 
                 if (this is not WalkingState && this is not AnchoredState)
@@ -158,14 +158,9 @@ public abstract partial class MovementState
         float acceleration = Math.Sign(targetVelocity - kinematics.velocity) * accelerationMagnitude;
         float maxAccelerationTime = acceleration == 0f ? 0f : (targetVelocity - kinematics.velocity) / acceleration;
         float accelerationTime = Mathf.Min(t, maxAccelerationTime);
-
-        /*KinematicSegment<float> output = new(kinematics, acceleration, accelerationTime);
-        kinematics.position += kinematics.velocity * accelerationTime + 0.5f * acceleration * accelerationTime * accelerationTime;
-        kinematics.velocity = accelerationTime < maxAccelerationTime ? kinematics.velocity + acceleration * accelerationTime : targetVelocity;*/
+        
         t -= accelerationTime;
         return AccelerationCurve(accelerationTime, ref kinematics, acceleration);
-        
-        //return output;
     }
 
     protected KinematicSegment<float> LinearMotionCurve(float t, ref KinematicState<float> kinematics)
