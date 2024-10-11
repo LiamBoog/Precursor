@@ -52,6 +52,18 @@ public static class CustomDebug
     }
 
     /// <summary>
+    /// Draw a circle in the x-y plane.
+    /// </summary>
+    /// <param name="center">The center of the circle.</param>
+    /// <param name="radius">The radius of the circle.</param>
+    /// <param name="colour">The colour of the circle.</param>
+    /// <param name="duration">The duration of the circle.</param>
+    public static void DrawCircle2D(Vector3 center, float radius, Color colour, float duration = 0f)
+    {
+        DrawArc2D(center + radius * Vector3.up, center, radius, 360f, colour, true, duration);
+    }
+
+    /// <summary>
     /// Draw a curve defined by the given array of points.
     /// </summary>
     /// <param name="curve">The curve to draw.</param>
