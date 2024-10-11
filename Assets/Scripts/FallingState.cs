@@ -33,6 +33,18 @@ public abstract partial class MovementState
         newState = this;
         return false;
     }
+
+    protected bool TryWallSlide(IEnumerable<IInterrupt> interrupts, out MovementState newState)
+    {
+        if (interrupts.FirstOrDefault(i => i is ICollision) is ICollision collision && collision.Normal.x != 0f && player.WallCheck() * player.Aim.x < 0f)
+        {
+            newState = new WallSlideState(parameters, player);
+            return true;
+        }
+
+        newState = this;
+        return false;
+    }
 }
 
 public class FallingState : MovementState
@@ -46,8 +58,11 @@ public class FallingState : MovementState
 
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
-        if (TryWallJump(kinematics, interrupts, out MovementState newState))
-            return newState;
+        if (TryWallSlide(interrupts, out MovementState wallSlideState))
+            return wallSlideState;
+            
+        if (TryWallJump(kinematics, interrupts, out MovementState wallJumpState))
+            return wallJumpState;
 
         return base.ProcessInterrupts(ref kinematics, interrupts);
     }

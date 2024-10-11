@@ -72,9 +72,6 @@ public abstract partial class MovementState
             {
                 if (player.JumpBuffer.Flush())
                     return new WallJumpState(parameters, player, Math.Sign(collision.Normal.x), kinematics);
-
-                if (player.WallCheck() * player.Aim.x < 0f)
-                    return new WallSlideState(parameters, player);
             }
         }
 

@@ -28,6 +28,9 @@ public class WalkingState : MovementState
 
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
+        if (TryWallSlide(interrupts, out MovementState wallSlideState))
+            return wallSlideState;
+        
         // Process Jump
         if (interrupts.LastOrDefault(i => i is not ICollision) is { } interrupt)
         {
