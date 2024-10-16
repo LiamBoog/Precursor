@@ -59,11 +59,8 @@ public class AnchoredState : MovementState
             
             // ReSharper disable once CompareOfFloatsByEqualityOperator
             if (innerState is FallingState fallingState && fallingState.Gravity == parameters.FallGravity)
-            {
                 return new SwingingState(parameters, player, anchor);
-            }
         }
-        CustomDebug.DrawCircle2D(anchor, radius, Color.magenta, 0.1f);
 
         Debug.DrawLine(anchor, kinematics.position, Color.blue);
 

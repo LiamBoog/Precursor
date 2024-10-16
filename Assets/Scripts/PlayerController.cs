@@ -179,9 +179,6 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
         KinematicState<Vector2> kinematics = new (transform.position, velocity);
         movementController.Update(Time.deltaTime, ref kinematics, interrupts);
         
-        Debug.DrawLine(transform.position, kinematics.position, Color.red, 0.1f);
-        Debug.DrawRay(kinematics.position, velocity / 10f, Color.cyan, 0.1f);
-
         // Check for collisions
         Vector2 displacement = kinematics.position - (Vector2) transform.position;
         if (collisionResolver.Collide(displacement, out ICollision collision) && collision.Normal != default)
