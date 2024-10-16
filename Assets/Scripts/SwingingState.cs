@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
+using MathNet.Numerics.RootFinding;
 using UnityEngine;
 
 public class SwingingState : MovementState
@@ -72,6 +72,7 @@ public class SwingingState : MovementState
         motion = null;
         t = 0f;
         return this;
+
         
         void UnderdampedPendulumCurve(float t, ref float angle, ref float angularVelocity)
         {

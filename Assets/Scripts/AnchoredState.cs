@@ -58,7 +58,7 @@ public class AnchoredState : MovementState
             innerState = innerState.FullyUpdateKinematics(ref moveTime, ref kinematics, out motion);
             
             // ReSharper disable once CompareOfFloatsByEqualityOperator
-            if (innerState is FallingState fallingState && fallingState.Gravity == parameters.FallGravity)
+            if (innerState is FallingState fallingState && fallingState.Gravity == parameters.FallGravity) // TODO - Should prob figure out the swinging math for the alternatives :((
                 return new SwingingState(parameters, player, anchor);
         }
 
