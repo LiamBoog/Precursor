@@ -80,6 +80,18 @@ public abstract partial class MovementState
     
     public abstract MovementState UpdateKinematics(ref float t, ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion);
 
+    public MovementState FullyUpdateKinematics(ref float t, ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion)
+    {
+        MovementState output = this;
+        motion = default;
+        while (t > 0f)
+        {
+            output = output.UpdateKinematics(ref t, ref kinematics, out motion);
+        }
+
+        return output;
+    }
+
     protected KinematicSegment<Vector2>[] ApplyMotionCurves(float t, ref KinematicState<Vector2> kinematics, MotionCurve horizontal = null, MotionCurve vertical = null)
     {
         KinematicState<float> xKinematics = new(kinematics.position.x, kinematics.velocity.x);

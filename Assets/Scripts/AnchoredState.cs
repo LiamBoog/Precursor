@@ -1,7 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
+
+public abstract partial class MovementState
+{
+    protected float GetAnchoredRadius(KinematicState<Vector2> kinematics, Vector2 anchor)
+    {
+        return Mathf.Max(parameters.MinRopeLengthFactor * parameters.RopeLength, (kinematics.position - anchor).magnitude);
+    }
+}
 
 public class AnchoredState : MovementState
 {
@@ -16,10 +25,9 @@ public class AnchoredState : MovementState
         onFirstUpdate = kinematics =>
         {
             onFirstUpdate = null;
-            radius = Mathf.Max(parameters.MinRopeLengthFactor * parameters.RopeLength, (kinematics.position - this.anchor).magnitude);
+            radius = GetAnchoredRadius(kinematics, this.anchor);
         };
 
-        Debug.Log(previousState);
         innerState = previousState is AnchoredState anchoredState ? anchoredState.innerState : previousState;
     }
 
@@ -39,36 +47,24 @@ public class AnchoredState : MovementState
         MovementState initialInnerState = innerState;
         KinematicState<Vector2> initialKinematics = kinematics;
 
-        motion = default;
-        while (t > 0f)
-        {
-            innerState = innerState.UpdateKinematics(ref t, ref kinematics, out motion);
-        }
-        Debug.DrawLine(Vector3.zero, initialKinematics.position, Color.green);
-        Debug.DrawLine(Vector3.zero, kinematics.position, Color.magenta);
-        Debug.DrawLine(initialKinematics.position, kinematics.position, Color.cyan);
+        innerState = innerState.FullyUpdateKinematics(ref t, ref kinematics, out motion);
         if (Vector2.Distance(kinematics.position, anchor) >= radius && Vector2.Distance(kinematics.position, anchor) - Vector2.Distance(initialKinematics.position, anchor) > 0f)
         {
-            innerState = initialInnerState; 
-            t = ComputeCircleIntersectionTime(initialKinematics, kinematics, motion);
-            kinematics = initialKinematics;
-            while (t > 0f)
-            {
-                innerState = innerState.UpdateKinematics(ref t, ref kinematics, out motion);
-            }
-
-            kinematics.velocity = Vector2.zero;
+            innerState = initialInnerState;
+            float moveTime = ComputeCircleIntersectionTime(initialKinematics, kinematics, motion);
+            t -= moveTime;
             
-            CustomDebug.DrawCircle2D(anchor, radius, Color.blue);
-
-            //EditorApplication.isPaused = true;
+            kinematics = initialKinematics;
+            innerState = innerState.FullyUpdateKinematics(ref moveTime, ref kinematics, out motion);
+            
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
+            if (innerState is FallingState fallingState && fallingState.Gravity == parameters.FallGravity)
+            {
+                return new SwingingState(parameters, player, anchor);
+            }
         }
+        CustomDebug.DrawCircle2D(anchor, radius, Color.magenta, 0.1f);
 
-        if (innerState is FallingState)
-        {
-            // Start swinging
-        }
-        
         Debug.DrawLine(anchor, kinematics.position, Color.blue);
 
         return this;
@@ -87,17 +83,6 @@ public class AnchoredState : MovementState
 
             if (intersectionTimes.Length > 0)
             {
-                Vector3 Curve(float t) => segment.initialState.position + segment.initialState.velocity * t + 0.5f * segment.acceleration * t * t;
-
-                CustomDebug.DrawCurve(
-                    Enumerable
-                    .Range(-100, 200)
-                    .Select(i => i * 0.001f)
-                    .Select(Curve)
-                    .ToArray(),
-                    Color.yellow,
-                    0.5f);
-                Debug.DrawLine(Vector3.zero, Curve(intersectionTimes[0] - elapsedTime), Color.yellow);
                 Debug.Log("Quartic");
                 return intersectionTimes[0];
             }

@@ -39,6 +39,11 @@ public class MovementParameters
     [field: SerializeField] public float AngleSnapIncrement { get; private set; } = 22.5f;
     [field: SerializeField] public float MinRopeLengthFactor { get; private set; } = 0.75f;
 
+    [field: Header("Swing Parameters")]
+    [field: SerializeField] public float AngularAcceleration { get; private set; } = 180f;
+    [field: SerializeField] public float MaxSwingAngle { get; private set; } = 45f;
+    [field: SerializeField] public int DeadSwingCount { get; private set; } = 40;
+
     public float Acceleration => 0.5f * TopSpeed * TopSpeed / AccelerationDistance;
     public float Deceleration => 0.5f * TopSpeed * TopSpeed / DecelerationDistance;
     public float RiseGravity => 2f * MaxJumpHeight * TopSpeed * TopSpeed / (RiseDistance * RiseDistance);
@@ -174,6 +179,9 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
         KinematicState<Vector2> kinematics = new (transform.position, velocity);
         movementController.Update(Time.deltaTime, ref kinematics, interrupts);
         
+        Debug.DrawLine(transform.position, kinematics.position, Color.red, 0.1f);
+        Debug.DrawRay(kinematics.position, velocity / 10f, Color.cyan, 0.1f);
+
         // Check for collisions
         Vector2 displacement = kinematics.position - (Vector2) transform.position;
         if (collisionResolver.Collide(displacement, out ICollision collision) && collision.Normal != default)

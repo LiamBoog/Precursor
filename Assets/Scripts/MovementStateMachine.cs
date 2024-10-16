@@ -16,9 +16,6 @@ public class MovementStateMachine
     {
         state = state.ProcessInterrupts(ref kinematics, interrupts);
         interrupts.Clear();
-        while (t > 0f)
-        {
-            state = state.UpdateKinematics(ref t, ref kinematics, out _);
-        }
+        state = state.FullyUpdateKinematics(ref t, ref kinematics, out _);
     }
 }

@@ -49,11 +49,11 @@ public abstract partial class MovementState
 
 public class FallingState : MovementState
 {
-    private float gravity;
+    public float Gravity { get; }
     
     public FallingState(MovementParameters movementParameters, IPlayerInfo playerInfo, float gravity) : base(movementParameters, playerInfo)
     {
-        this.gravity = gravity;
+        Gravity = gravity;
     }
 
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
@@ -70,7 +70,7 @@ public class FallingState : MovementState
     public override MovementState UpdateKinematics(ref float t, ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion)
     {
         motion = ApplyMotionCurves(t, ref kinematics, WalkingCurve, 
-            (float t, ref KinematicState<float> kinematics) => FallingCurve(t, -parameters.TerminalVelocity, gravity, ref kinematics));
+            (float t, ref KinematicState<float> kinematics) => FallingCurve(t, -parameters.TerminalVelocity, Gravity, ref kinematics));
         t = 0f;
 
         return this;
