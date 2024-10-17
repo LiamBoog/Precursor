@@ -45,14 +45,15 @@ public class SwingingState : MovementState
                     
         float c1 = Mathf.Deg2Rad * angle;
         float c2 = (Mathf.Deg2Rad * angularVelocity + b * c1) / alpha;
-        
+
         float previousAngle = angle;
-        UnderdampedPendulumCurve(Time.deltaTime, ref angle, ref angularVelocity);
+        //UnderdampedPendulumCurve(Time.deltaTime, ref angle, ref angularVelocity);
 
         float swing = parameters.AngularAcceleration * player.Aim.x;
         if (swing != 0f && (angle >= 0f && angularVelocity >= 0f || angle <= 0f && angularVelocity <= 0f || angle >= 0f && angularVelocity <= 0f && swing < 0f || angle <= 0f && angularVelocity >= 0f && swing > 0f))
         {
-            (float v1, float v2) = MaxAngularVelocity(angle);
+            DrivenUnderdampedPendulumCurve(ref t, ref angle, ref angularVelocity);
+            /*(float v1, float v2) = MaxAngularVelocity(angle);
             if (swing > 0f && angularVelocity < Mathf.Max(v1, v2))
             {
                 angularVelocity = Mathf.Min(angularVelocity + swing * Time.deltaTime, Mathf.Max(v1, v2));
@@ -60,9 +61,13 @@ public class SwingingState : MovementState
             else if (swing < 0f && angularVelocity > Mathf.Min(v1, v2))
             {
                 angularVelocity = Mathf.Max(angularVelocity + swing * Time.deltaTime, Mathf.Min(v1, v2));
-            }
+            }*/
         }
-        
+        else
+        {
+            UnderdampedPendulumCurve(t, ref angle, ref angularVelocity);
+        }
+
         Vector2 rope = radius * (Quaternion.Euler(0f, 0f, angle - previousAngle) * ropeDirection);
         kinematics.position = anchor + rope;
         kinematics.velocity = Mathf.Deg2Rad * angularVelocity * radius * new Vector2(-rope.y, rope.x).normalized;
@@ -97,6 +102,43 @@ public class SwingingState : MovementState
             {
                 return alpha * c3 * (c2 * Mathf.Cos(alpha * t) - c1 * Mathf.Sin(alpha * t));
             }
+        }
+        
+        void DrivenUnderdampedPendulumCurve(ref float t, ref float angle, ref float angularVelocity)
+        {
+            float swing = Mathf.Deg2Rad * parameters.AngularAcceleration * player.Aim.x;
+            
+            float c3 = c1 - swing / (omega * omega);
+            float c4 = (Mathf.Deg2Rad * angularVelocity + b * c3) / alpha;
+            float c5 = Mathf.Deg2Rad * parameters.MaxSwingAngle / Mathf.Sqrt(c1 * c1 + c2 * c2);
+
+            double maxMoveTime;
+            double upperBound = Math.PI / alpha;
+            int i = 10;
+            while (!Bisection.TryFindRoot(IntersectionCurve, 0d, upperBound, 1e-14d, 100, out maxMoveTime) && i-- > 0)
+            {
+                upperBound /= 2d;
+            }
+
+            float moveTime = Mathf.Min(t, (float) maxMoveTime);
+
+            angle = Mathf.Rad2Deg * (Mathf.Exp(-b * moveTime) * (c3 * Mathf.Cos(alpha * moveTime) + c4 * Mathf.Sin(alpha * moveTime)) + swing / (omega * omega));
+            angularVelocity = Mathf.Rad2Deg * Mathf.Exp(-b * moveTime) * ((c4 * alpha - b * c3) * Mathf.Cos(alpha * moveTime) - (b * c4 + c3 * alpha) * Mathf.Sin(alpha * moveTime));
+            t -= moveTime;
+
+            if (t > 0f)
+            {
+                c1 = Mathf.Deg2Rad * angle;
+                c2 = (Mathf.Deg2Rad * angularVelocity + b * c1) / alpha;
+                c5 = Mathf.Deg2Rad * parameters.MaxSwingAngle / Mathf.Sqrt(c1 * c1 + c2 * c2);
+                
+                angle = Mathf.Rad2Deg * (c1 * Mathf.Cos(alpha * t) + c2 * Mathf.Sin(alpha * t));
+                angularVelocity = Mathf.Rad2Deg * alpha * c5 * (c2 * Mathf.Cos(alpha * t) - c1 * Mathf.Sin(alpha * t));
+                t = 0f;
+            }
+            
+            double IntersectionCurve(double t) => Math.Exp(-b * t) * ((c4 * alpha - b * c3) * Math.Cos(alpha * t) - (b * c4 + c3 * alpha) * Math.Sin(alpha * t)) -
+                                                  alpha * c5 * (c2 * Math.Cos(alpha * t) - c1 * Math.Sin(alpha * t));
         }
     }
 }
