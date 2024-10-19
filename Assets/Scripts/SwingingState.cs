@@ -1,8 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
+using MathNet.Numerics.Optimization;
 using MathNet.Numerics.RootFinding;
+using UnityEditor;
 using UnityEngine;
+using Quaternion = UnityEngine.Quaternion;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 public class SwingingState : MovementState
 {
@@ -73,12 +80,13 @@ public class SwingingState : MovementState
         kinematics.velocity = Mathf.Deg2Rad * angularVelocity * radius * new Vector2(-rope.y, rope.x).normalized;
         
         Debug.DrawLine(anchor, kinematics.position, Color.blue);
+        Debug.DrawRay(anchor, radius * (Quaternion.Euler(0f, 0f, parameters.MaxSwingAngle) * Vector2.down), Color.yellow);
+        Debug.DrawRay(anchor, radius * (Quaternion.Euler(0f, 0f, -parameters.MaxSwingAngle) * Vector2.down), Color.yellow);
         
         motion = null;
         t = 0f;
         return this;
 
-        
         void UnderdampedPendulumCurve(float t, ref float angle, ref float angularVelocity)
         {
             angle = Mathf.Rad2Deg * Mathf.Exp(-b * t) * (c1 * Mathf.Cos(alpha * t) + c2 * Mathf.Sin(alpha * t));
@@ -106,39 +114,128 @@ public class SwingingState : MovementState
         
         void DrivenUnderdampedPendulumCurve(ref float t, ref float angle, ref float angularVelocity)
         {
-            float swing = Mathf.Deg2Rad * parameters.AngularAcceleration * player.Aim.x;
+            float swing = parameters.AngularAcceleration * player.Aim.x;
             
-            float c3 = c1 - swing / (omega * omega);
+            float c3 = c1 - Mathf.Deg2Rad * swing / (omega * omega);
             float c4 = (Mathf.Deg2Rad * angularVelocity + b * c3) / alpha;
-            float c5 = Mathf.Deg2Rad * parameters.MaxSwingAngle / Mathf.Sqrt(c1 * c1 + c2 * c2);
 
-            double maxMoveTime;
-            double upperBound = Math.PI / alpha;
-            int i = 10;
-            while (!Bisection.TryFindRoot(IntersectionCurve, 0d, upperBound, 1e-14d, 100, out maxMoveTime) && i-- > 0)
+            (int, float) peak = Enumerable.Range(0, 2)
+                .Select(i => (i, (i * Mathf.PI - Mathf.Atan(-(c4 * alpha - b * c3) / (b * c4 + c3 * alpha))) / alpha))
+                .OrderBy(pair => pair.Item2)
+                .First(pair => pair.Item2 >= 0f);
+
+            if (Mathf.Abs(Position(peak.Item2, angularVelocity, swing)) <= parameters.MaxSwingAngle)
             {
-                upperBound /= 2d;
+                angle = Position(t, angularVelocity, swing);
+                angularVelocity = Velocity(t, angularVelocity, swing);
+                t = 0f;
+                return;
             }
 
-            float moveTime = Mathf.Min(t, (float) maxMoveTime);
+            float discontinuity = omega * omega * (Mathf.Deg2Rad * angularVelocity / (b + alpha * alpha / b) + Mathf.Deg2Rad * angle);
+            float[] searchRangeA = new[] {0f, discontinuity}
+                .OrderBy(A => A)
+                .ToArray();
+            float[] searchRangeB = new[] {discontinuity, Mathf.Deg2Rad * swing}
+                .OrderBy(A => A)
+                .ToArray();
 
-            angle = Mathf.Rad2Deg * (Mathf.Exp(-b * moveTime) * (c3 * Mathf.Cos(alpha * moveTime) + c4 * Mathf.Sin(alpha * moveTime)) + swing / (omega * omega));
-            angularVelocity = Mathf.Rad2Deg * Mathf.Exp(-b * moveTime) * ((c4 * alpha - b * c3) * Mathf.Cos(alpha * moveTime) - (b * c4 + c3 * alpha) * Mathf.Sin(alpha * moveTime));
-            t -= moveTime;
-
-            if (t > 0f)
+            float v = angularVelocity;
+            if (!Bisection.TryFindRoot(A => AngularAccelerationOptimizer(A, v), searchRangeA[0] + 0.0001d, searchRangeA[1] - 0.0001d, 1e-14d, 100, out double optimalAngularAcceleration))
             {
-                c1 = Mathf.Deg2Rad * angle;
-                c2 = (Mathf.Deg2Rad * angularVelocity + b * c1) / alpha;
-                c5 = Mathf.Deg2Rad * parameters.MaxSwingAngle / Mathf.Sqrt(c1 * c1 + c2 * c2);
-                
-                angle = Mathf.Rad2Deg * (c1 * Mathf.Cos(alpha * t) + c2 * Mathf.Sin(alpha * t));
-                angularVelocity = Mathf.Rad2Deg * alpha * c5 * (c2 * Mathf.Cos(alpha * t) - c1 * Mathf.Sin(alpha * t));
-                t = 0f;
+                Bisection.TryFindRoot(A => AngularAccelerationOptimizer(A, v), searchRangeB[0] + 0.0001d, searchRangeB[1] - 0.0001d, 1e-14d, 100, out optimalAngularAcceleration);
+                optimalAngularAcceleration = Mathf.Abs(Mathf.Rad2Deg * (float) optimalAngularAcceleration) < parameters.MaxSwingAngle ? optimalAngularAcceleration : 0d;
+            }
+
+            angle = Position(t, angularVelocity, Mathf.Rad2Deg * (float) optimalAngularAcceleration);
+            angularVelocity = Velocity(t, angularVelocity, Mathf.Rad2Deg * (float) optimalAngularAcceleration);
+            t = 0f;
+            return;
+            
+            float Position(float t, float angularVelocity, float angularAcceleration)
+            {
+                float c3 = c1 - Mathf.Deg2Rad * angularAcceleration / (omega * omega);
+                float c4 = (Mathf.Deg2Rad * angularVelocity + b * c3) / alpha;
+
+                return Mathf.Rad2Deg * (Mathf.Exp(-b * t) * (c3 * Mathf.Cos(alpha * t) + c4 * Mathf.Sin(alpha * t)) + Mathf.Deg2Rad * angularAcceleration / (omega * omega));
+            }
+
+            float Velocity(float t, float angularVelocity, float angularAcceleration)
+            {
+                float c3 = c1 - Mathf.Deg2Rad * angularAcceleration / (omega * omega);
+                float c4 = (Mathf.Deg2Rad * angularVelocity + b * c3) / alpha;
+
+                return Mathf.Rad2Deg * (Mathf.Exp(-b * t) * ((c4 * alpha - b * c3) * Mathf.Cos(alpha * t) - (b * c4 + c3 * alpha) * Mathf.Sin(alpha * t)));
             }
             
-            double IntersectionCurve(double t) => Math.Exp(-b * t) * ((c4 * alpha - b * c3) * Math.Cos(alpha * t) - (b * c4 + c3 * alpha) * Math.Sin(alpha * t)) -
-                                                  alpha * c5 * (c2 * Math.Cos(alpha * t) - c1 * Math.Sin(alpha * t));
+            double AngularAccelerationOptimizer(double A, double angularVelocity)
+            {
+                double c3 = c1 - A / (omega * omega);
+                double c4 = (angularVelocity + b * c3) / alpha;
+                double t0 = (peak.Item1 * Math.PI - Math.Atan(-(c4 * alpha - b * c3) / (b * c4 + c3 * alpha))) / alpha;
+
+                return Math.Exp(-b * t0) * (c3 * Math.Cos(alpha * t0) + c4 * Math.Sin(alpha * t0)) + A / (omega * omega) - (double) Mathf.Sign((float) angularVelocity) * Mathf.Deg2Rad * parameters.MaxSwingAngle;
+            }
+        }
+    }
+
+    [MenuItem("TEST/Solve")]
+    public static void Solver()
+    {
+        float maxAngle = 5f;
+
+        float angle = 3.48f;
+        float angularVelocity = 2.79f;
+        float angularAcceleration = 1f;
+
+        float b = 0.22748585329f;
+        float omega = 0.75f;
+        float alpha = Mathf.Sqrt(omega * omega - b * b);
+        
+        float c1 = angle;
+        float c3 = C3(angularAcceleration);
+        float c4 = C4(angularAcceleration);
+        
+        int peak = Enumerable.Range(0, 2)
+            .Select(i => (i, (i * Mathf.PI - Mathf.Atan(-(c4 * alpha - b * c3) / (b * c4 + c3 * alpha))) / alpha))
+            .OrderBy(pair => pair.Item2)
+            .First(pair => pair.Item2 >= 0f)
+            .Item1;
+        
+        float discontinuity = omega * omega * (angularVelocity / (b + alpha * alpha / b) + angle);
+        float[] searchRange = new[] {0f, discontinuity}
+            .OrderBy(A => A)
+            .ToArray();
+
+        float optimalAngularAcceleration = (float) Bisection.FindRoot(Function, searchRange[0], searchRange[1]);
+        
+        c3 = C3(optimalAngularAcceleration);
+        c4 = C4(optimalAngularAcceleration);
+        float peakTime = Enumerable.Range(0, 2)
+            .Select(i => (i, (i * Mathf.PI - Mathf.Atan(-(c4 * alpha - b * c3) / (b * c4 + c3 * alpha))) / alpha))
+            .OrderBy(pair => pair.Item2)
+            .First(pair => pair.Item2 >= 0f)
+            .Item2;
+        Debug.Log(DrivenUnderdampedPendulumCurve(peakTime, optimalAngularAcceleration));
+
+        float DrivenUnderdampedPendulumCurve(float t, float A)
+        {
+            float c3 = C3(A);
+            float c4 = C4(A);
+
+            return Mathf.Exp(-b * t) * (c3 * Mathf.Cos(alpha * t) + c4 * Mathf.Sin(alpha * t)) + A / (omega * omega);
+        }
+
+        float C3(float A) => c1 - A / (omega * omega);
+        float C4(float A) => (angularVelocity + b * C3(A)) / alpha;
+
+        double Function(double A)
+        {
+            double c3 = c1 - A / (omega * omega);
+            double c4 = (angularVelocity + b * c3) / alpha;
+            double t0 = (peak * Math.PI - Math.Atan(-(c4 * alpha - b * c3) / (b * c4 + c3 * alpha))) / alpha;
+
+            return Math.Exp(-b * t0) * (c3 * Math.Cos(alpha * t0) + c4 * Math.Sin(alpha * t0)) + A / (omega * omega) - maxAngle;
         }
     }
 }
