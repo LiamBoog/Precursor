@@ -46,21 +46,30 @@ public class AnchoredState : MovementState
 
         MovementState initialInnerState = innerState;
         KinematicState<Vector2> initialKinematics = kinematics;
+        float initialT = t;
 
         innerState = innerState.FullyUpdateKinematics(ref t, ref kinematics, out motion);
-        if (Vector2.Distance(kinematics.position, anchor) >= radius && Vector2.Distance(kinematics.position, anchor) - Vector2.Distance(initialKinematics.position, anchor) > 0f)
+        if (Vector2.Distance(kinematics.position, anchor) >= radius && Vector2.Distance(kinematics.position, anchor) - Vector2.Distance(initialKinematics.position, anchor) > 0f) // outside of radius and moving away from anchor
         {
+            t = initialT;
             innerState = initialInnerState;
-            t = ComputeCircleIntersectionTime(initialKinematics, kinematics, motion);
+            float moveTime = ComputeCircleIntersectionTime(initialKinematics, kinematics, motion);
             
             kinematics = initialKinematics;
-            innerState = innerState.FullyUpdateKinematics(ref t, ref kinematics, out motion);
+            innerState = innerState.FullyUpdateKinematics(ref moveTime, ref kinematics, out motion);
+            t -= moveTime;
+
+            // TODO - Should prob figure out the swinging math for the various conditions where we're not swinging :((
             
             // ReSharper disable once CompareOfFloatsByEqualityOperator
-            if (innerState is FallingState fallingState && fallingState.Gravity == parameters.FallGravity) // TODO - Should prob figure out the swinging math for the alternatives :((
+            if (kinematics.velocity.y < 0f)
                 return new SwingingState(parameters, player, anchor);
+
+            if (kinematics.velocity.y > 0f)
+                return innerState;
             
             kinematics.velocity = Vector2.zero;
+            t = 0f;
         }
         
         Debug.DrawLine(anchor, kinematics.position, Color.blue);
@@ -80,16 +89,12 @@ public class AnchoredState : MovementState
                     .ToArray();
 
             if (intersectionTimes.Length > 0)
-            {
-                Debug.Log("Quartic");
                 return intersectionTimes[0];
-            }
 
             elapsedTime += segment.duration;
         }
 
         // Failsafe in case no quartic solution is found (can happen when moving in a straight line or when initial position is outside the circle for some reason) 
-        Debug.Log("Linear");
         return (float) GetQuadraticRoots(initialKinematics.position, finalKinematics.position)
             .Select(t => t * Time.deltaTime)
             .OrderBy(t => t)

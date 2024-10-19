@@ -28,7 +28,8 @@ public class WalkingState : MovementState
 
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
-        if (!player.GroundCheck())
+        // TODO - This transition is a little janky maybe this needs to be its own state or something??
+        if (!CanJump(kinematics))
             return new FallingState(parameters, player, parameters.FallGravity);
         
         if (TryWallSlide(interrupts, out MovementState wallSlideState))
@@ -51,9 +52,18 @@ public class WalkingState : MovementState
 
     public override MovementState UpdateKinematics(ref float t, ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion)
     {
-        motion = ApplyMotionCurves(t, ref kinematics, WalkingCurve, (float t, ref KinematicState<float> kinematics) => new[] { new KinematicSegment<float>(kinematics, 0f, t) });
+        MotionCurve verticalCurve = player.GroundCheck() ? 
+            (float t, ref KinematicState<float> kinematics) => new[] { new KinematicSegment<float>(kinematics, 0f, t) } : 
+            FreeFallingCurve;
+        motion = ApplyMotionCurves(t, ref kinematics, WalkingCurve,verticalCurve);
         t = 0f;
 
         return this;
+    }
+    
+    private bool CanJump(KinematicState<Vector2> kinematics)
+    {
+        float fallTime = -kinematics.velocity.y / parameters.FallGravity;
+        return fallTime < parameters.CoyoteTime || player.GroundCheck();
     }
 }
