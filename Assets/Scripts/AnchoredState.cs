@@ -51,17 +51,18 @@ public class AnchoredState : MovementState
         if (Vector2.Distance(kinematics.position, anchor) >= radius && Vector2.Distance(kinematics.position, anchor) - Vector2.Distance(initialKinematics.position, anchor) > 0f)
         {
             innerState = initialInnerState;
-            float moveTime = ComputeCircleIntersectionTime(initialKinematics, kinematics, motion);
-            t -= moveTime;
+            t = ComputeCircleIntersectionTime(initialKinematics, kinematics, motion);
             
             kinematics = initialKinematics;
-            innerState = innerState.FullyUpdateKinematics(ref moveTime, ref kinematics, out motion);
+            innerState = innerState.FullyUpdateKinematics(ref t, ref kinematics, out motion);
             
             // ReSharper disable once CompareOfFloatsByEqualityOperator
             if (innerState is FallingState fallingState && fallingState.Gravity == parameters.FallGravity) // TODO - Should prob figure out the swinging math for the alternatives :((
                 return new SwingingState(parameters, player, anchor);
+            
+            kinematics.velocity = Vector2.zero;
         }
-
+        
         Debug.DrawLine(anchor, kinematics.position, Color.blue);
 
         return this;

@@ -28,6 +28,9 @@ public class WalkingState : MovementState
 
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
+        if (!player.GroundCheck())
+            return new FallingState(parameters, player, parameters.FallGravity);
+        
         if (TryWallSlide(interrupts, out MovementState wallSlideState))
             return wallSlideState;
         
@@ -39,9 +42,7 @@ public class WalkingState : MovementState
                 case JumpInterrupt jumpInterrupt:
                     if (jumpInterrupt.type == JumpInterrupt.Type.Cancelled) 
                         break;
-                    if (CanJump(kinematics))
-                        return new JumpingState(parameters, player, kinematics);
-                    break;
+                    return new JumpingState(parameters, player, kinematics);
             }
         }
 
@@ -50,15 +51,9 @@ public class WalkingState : MovementState
 
     public override MovementState UpdateKinematics(ref float t, ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion)
     {
-        motion = ApplyMotionCurves(t, ref kinematics, WalkingCurve, FreeFallingCurve);
+        motion = ApplyMotionCurves(t, ref kinematics, WalkingCurve, (float t, ref KinematicState<float> kinematics) => new[] { new KinematicSegment<float>(kinematics, 0f, t) });
         t = 0f;
 
         return this;
-    }
-    
-    private bool CanJump(KinematicState<Vector2> kinematics)
-    {
-        float fallTime = -kinematics.velocity.y / parameters.FallGravity;
-        return fallTime < parameters.CoyoteTime || player.GroundCheck();
     }
 }

@@ -60,6 +60,20 @@ public class FallingState : MovementState
     {
         if (TryWallSlide(interrupts, out MovementState wallSlideState))
             return wallSlideState;
+        
+        // Process Jump
+        if (interrupts.LastOrDefault(i => i is not ICollision) is { } interrupt)
+        {
+            switch (interrupt)
+            {
+                case JumpInterrupt jumpInterrupt:
+                    if (jumpInterrupt.type == JumpInterrupt.Type.Cancelled) 
+                        break;
+                    if (CanJump(kinematics))
+                        return new JumpingState(parameters, player, kinematics);
+                    break;
+            }
+        }
             
         if (TryWallJump(kinematics, interrupts, out MovementState wallJumpState))
             return wallJumpState;
@@ -74,5 +88,11 @@ public class FallingState : MovementState
         t = 0f;
 
         return this;
+    }
+    
+    private bool CanJump(KinematicState<Vector2> kinematics)
+    {
+        float fallTime = -kinematics.velocity.y / parameters.FallGravity;
+        return fallTime < parameters.CoyoteTime || player.GroundCheck();
     }
 }
