@@ -144,7 +144,6 @@ public class SwingingState : MovementState
             if (!Bisection.TryFindRoot(A => AngularAccelerationOptimizer(A, v), searchRangeA[0] + 0.0001d, searchRangeA[1] - 0.0001d, 1e-14d, 100, out double optimalAngularAcceleration))
             {
                 Bisection.TryFindRoot(A => AngularAccelerationOptimizer(A, v), searchRangeB[0] + 0.0001d, searchRangeB[1] - 0.0001d, 1e-14d, 100, out optimalAngularAcceleration);
-                optimalAngularAcceleration = Mathf.Abs(Mathf.Rad2Deg * (float) optimalAngularAcceleration) < parameters.MaxSwingAngle ? optimalAngularAcceleration : 0d;
             }
 
             angle = Position(t, angularVelocity, Mathf.Rad2Deg * (float) optimalAngularAcceleration);
@@ -171,10 +170,10 @@ public class SwingingState : MovementState
             double AngularAccelerationOptimizer(double A, double angularVelocity)
             {
                 double c3 = c1 - A / (omega * omega);
-                double c4 = (angularVelocity + b * c3) / alpha;
+                double c4 = (Mathf.Deg2Rad * angularVelocity + b * c3) / alpha;
                 double t0 = (peak.Item1 * Math.PI - Math.Atan(-(c4 * alpha - b * c3) / (b * c4 + c3 * alpha))) / alpha;
 
-                return Math.Exp(-b * t0) * (c3 * Math.Cos(alpha * t0) + c4 * Math.Sin(alpha * t0)) + A / (omega * omega) - (double) Mathf.Sign((float) angularVelocity) * Mathf.Deg2Rad * parameters.MaxSwingAngle;
+                return Math.Exp(-b * t0) * (c3 * Math.Cos(alpha * t0) + c4 * Math.Sin(alpha * t0)) + A / (omega * omega) - (double) Mathf.Sign(Mathf.Deg2Rad * (float) angularVelocity) * Mathf.Deg2Rad * parameters.MaxSwingAngle;
             }
         }
     }
