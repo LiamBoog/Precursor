@@ -17,6 +17,7 @@ public class WallJumpState : JumpingState
             onFirstUpdate = null;
             kinematics.velocity.x = direction * parameters.TopSpeed;
         };
+        player.JumpBuffer.Flush();
     }
     
     public override MovementState UpdateKinematics(ref float t, ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion)

@@ -31,6 +31,7 @@ public class JumpingState : MovementState
             onFirstUpdate = null;
             kinematics.velocity.y = parameters.JumpVelocity;
         };
+        player.JumpBuffer.Flush();
     }
 
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)

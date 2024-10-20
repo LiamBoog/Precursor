@@ -21,7 +21,12 @@ public class WallSlideState : MovementState
             return new FallingState(parameters, player, parameters.FallGravity);
 
         if (interrupts.Any(i => i is JumpInterrupt { type: JumpInterrupt.Type.Started }))
+        {
+            if (player.GroundCheck())
+                return new JumpingState(parameters, player, kinematics);
+            
             return new WallJumpState(parameters, player, -Math.Sign(player.Aim.x), kinematics);
+        }
 
         return base.ProcessInterrupts(ref kinematics, interrupts);
     }

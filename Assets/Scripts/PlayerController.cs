@@ -95,7 +95,7 @@ public interface IInputBuffer
 
 public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
 {
-    private struct InputBuffer : IInputBuffer
+    private class InputBuffer : IInputBuffer
     {
         private readonly Func<float> bufferDuration;
     
@@ -110,7 +110,7 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
         public bool Flush()
         {
             bool output = Time.time - LastInputTime <= bufferDuration();
-            LastInputTime = float.MaxValue;
+            LastInputTime = float.MinValue;
             return output;
         }
     }
