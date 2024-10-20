@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -58,13 +56,16 @@ public class FallingState : MovementState
 
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
-        if (TryWallSlide(interrupts, out MovementState wallSlideState))
-            return wallSlideState;
-            
+        if (base.ProcessInterrupts(ref kinematics, interrupts) is MovementState newState && newState != this)
+            return newState;
+        
         if (TryWallJump(kinematics, interrupts, out MovementState wallJumpState))
             return wallJumpState;
+        
+        if (TryWallSlide(interrupts, out MovementState wallSlideState))
+            return wallSlideState;
 
-        return base.ProcessInterrupts(ref kinematics, interrupts);
+        return this;
     }
 
     public override MovementState UpdateKinematics(ref float t, ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion)
