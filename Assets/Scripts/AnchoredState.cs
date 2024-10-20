@@ -60,7 +60,6 @@ public class AnchoredState : MovementState
             t -= moveTime;
 
             // TODO - Should prob figure out the swinging math for the various conditions where we're not swinging :((
-            
             // ReSharper disable once CompareOfFloatsByEqualityOperator
             if (kinematics.velocity.y < 0f)
                 return new SwingingState(parameters, player, anchor);

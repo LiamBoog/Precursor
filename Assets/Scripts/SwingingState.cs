@@ -54,26 +54,8 @@ public class SwingingState : MovementState
         float c2 = (Mathf.Deg2Rad * angularVelocity + b * c1) / alpha;
 
         float previousAngle = angle;
-        //UnderdampedPendulumCurve(Time.deltaTime, ref angle, ref angularVelocity);
 
-        float swing = parameters.AngularAcceleration * player.Aim.x;
-        if (swing != 0f && (angle >= 0f && angularVelocity >= 0f || angle <= 0f && angularVelocity <= 0f || angle >= 0f && angularVelocity <= 0f && swing < 0f || angle <= 0f && angularVelocity >= 0f && swing > 0f))
-        {
-            DrivenUnderdampedPendulumCurve(ref t, ref angle, ref angularVelocity);
-            /*(float v1, float v2) = MaxAngularVelocity(angle);
-            if (swing > 0f && angularVelocity < Mathf.Max(v1, v2))
-            {
-                angularVelocity = Mathf.Min(angularVelocity + swing * Time.deltaTime, Mathf.Max(v1, v2));
-            }
-            else if (swing < 0f && angularVelocity > Mathf.Min(v1, v2))
-            {
-                angularVelocity = Mathf.Max(angularVelocity + swing * Time.deltaTime, Mathf.Min(v1, v2));
-            }*/
-        }
-        else
-        {
-            UnderdampedPendulumCurve(t, ref angle, ref angularVelocity);
-        }
+        DrivenUnderdampedPendulumCurve(ref t, ref angle, ref angularVelocity);
 
         Vector2 rope = radius * (Quaternion.Euler(0f, 0f, angle - previousAngle) * ropeDirection);
         kinematics.position = anchor + rope;
@@ -141,11 +123,13 @@ public class SwingingState : MovementState
                 .ToArray();
 
             float v = angularVelocity;
-            if (!Bisection.TryFindRoot(A => AngularAccelerationOptimizer(A, v), searchRangeA[0] + 0.0001d, searchRangeA[1] - 0.0001d, 1e-14d, 100, out double optimalAngularAcceleration))
+            double optimalAngularAcceleration = 0f;
+            if (Mathf.Abs(angle) < parameters.MaxSwingAngle && !Bisection.TryFindRoot(A => AngularAccelerationOptimizer(A, v), searchRangeA[0] + 0.0001d, searchRangeA[1] - 0.0001d, 1e-14d, 100, out optimalAngularAcceleration))
             {
                 Bisection.TryFindRoot(A => AngularAccelerationOptimizer(A, v), searchRangeB[0] + 0.0001d, searchRangeB[1] - 0.0001d, 1e-14d, 100, out optimalAngularAcceleration);
             }
 
+            optimalAngularAcceleration = Mathf.Clamp((float) optimalAngularAcceleration, Mathf.Min(0f, Mathf.Deg2Rad * swing), Mathf.Max(0f, Mathf.Deg2Rad * swing));
             angle = Position(t, angularVelocity, Mathf.Rad2Deg * (float) optimalAngularAcceleration);
             angularVelocity = Velocity(t, angularVelocity, Mathf.Rad2Deg * (float) optimalAngularAcceleration);
             t = 0f;
