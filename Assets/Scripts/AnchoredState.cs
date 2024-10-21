@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 public abstract partial class MovementState
@@ -33,7 +32,7 @@ public class AnchoredState : MovementState
 
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
-        if (interrupts.Any(i => i is AnchorInterrupt { type: AnchorInterrupt.Type.Cancelled }))
+        if (interrupts.Any(i => i is AnchorInterrupt))
             return innerState;
         
         innerState = innerState.ProcessInterrupts(ref kinematics, interrupts.Where(i => i is not AnchorInterrupt));

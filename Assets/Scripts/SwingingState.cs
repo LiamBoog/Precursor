@@ -58,7 +58,6 @@ public class SwingingState : MovementState
         Debug.DrawRay(anchor, radius * (Quaternion.Euler(0f, 0f, -parameters.MaxSwingAngle) * Vector2.down), Color.yellow);
         
         motion = null;
-        t = 0f;
         return this;
 
         void DrivenUnderdampedPendulumCurve(ref float t, ref float angle, ref float angularVelocity)

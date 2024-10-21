@@ -77,16 +77,7 @@ public struct JumpInterrupt : IInterrupt
     public Type type;
 }
 
-public struct AnchorInterrupt : IInterrupt
-{
-    public enum Type
-    {
-        Started,
-        Cancelled
-    }
-
-    public Type type;
-}
+public struct AnchorInterrupt : IInterrupt { }
 
 public interface IInputBuffer
 {
@@ -210,7 +201,14 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
 
     public bool GrappleRaycast(out Vector2 anchor)
     {
-        float aimAngle = Vector2.SignedAngle(Vector2.right, aim.action.ReadValue<Vector2>());
+        Vector2 aimDirection = aim.action.ReadValue<Vector2>();
+        if (aimDirection == Vector2.zero)
+        {
+            anchor = default;
+            return false;
+        }
+        
+        float aimAngle = Vector2.SignedAngle(Vector2.right, aimDirection);
         float snappedAngle = Mathf.Round(aimAngle / movementParameters.AngleSnapIncrement) * movementParameters.AngleSnapIncrement;
         Vector2 direction = Quaternion.Euler(0f, 0f, snappedAngle) * Vector3.right;
         
@@ -239,9 +237,6 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
 
     private void OnAnchor(InputAction.CallbackContext _)
     {
-        interrupts.Add(new AnchorInterrupt
-        {
-            type = aim.action.ReadValue<Vector2>() == default ? AnchorInterrupt.Type.Cancelled : AnchorInterrupt.Type.Started
-        });
+        interrupts.Add(new AnchorInterrupt());
     }
 }
