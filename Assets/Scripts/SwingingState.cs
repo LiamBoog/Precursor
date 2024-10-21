@@ -9,6 +9,10 @@ using Vector3 = UnityEngine.Vector3;
 
 public class SwingingState : MovementState
 {
+    private const double BISECTION_RANGE_OFFSET = 0.0001d;
+    private const double BISECTION_PRECISION = 1e-14d;
+    private const int BISECTION_MAX_ITERATIONS = 100;
+
     private Vector2 anchor;
     private float radius;
     private Action<KinematicState<Vector2>> onFirstUpdate;
@@ -93,7 +97,7 @@ public class SwingingState : MovementState
                 double c4 = (Mathf.Deg2Rad * velocity + b * c3) / alpha;
                 double t0 = NextPeak((float) angularAcceleration).Item1;
 
-                return Math.Exp(-b * t0) * (c3 * Math.Cos(alpha * t0) + c4 * Math.Sin(alpha * t0)) + angularAcceleration / (omega * omega) - (double) Mathf.Sign(Mathf.Deg2Rad * velocity) * Mathf.Deg2Rad * parameters.MaxSwingAngle;
+                return Position((float) t0, (float) c3, (float) c4) - (double) Mathf.Sign(Mathf.Deg2Rad * velocity) * Mathf.Deg2Rad * parameters.MaxSwingAngle;
             }
 
             (float, float) NextPeak(float angularAcceleration)
@@ -125,10 +129,10 @@ public class SwingingState : MovementState
 
                 if (Bisection.TryFindRoot(
                         AngularAccelerationOptimizer, 
-                        searchRange[0] + 0.0001d, 
-                        searchRange[1] - 0.0001d, 
-                        1e-14d, 
-                        100, 
+                        searchRange[0] + BISECTION_RANGE_OFFSET, 
+                        searchRange[1] - BISECTION_RANGE_OFFSET, 
+                        BISECTION_PRECISION, 
+                        BISECTION_MAX_ITERATIONS, 
                         out double output))
                     return Mathf.Rad2Deg * (float) output;
 
