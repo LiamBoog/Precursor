@@ -55,7 +55,17 @@ public class SwingingState : MovementState
 
         float previousAngle = angle;
 
-        DrivenUnderdampedPendulumCurve(ref t, ref angle, ref angularVelocity);
+        float swing = parameters.AngularAcceleration * player.Aim.x;
+        // This ensures swings pass zero degrees
+        if (swing != 0f && (angle >= 0f && angularVelocity >= 0f || angle <= 0f && angularVelocity <= 0f || angle >= 0f && angularVelocity <= 0f && swing < 0f || angle <= 0f && angularVelocity >= 0f && swing > 0f))
+        {
+            DrivenUnderdampedPendulumCurve(ref t, ref angle, ref angularVelocity);
+        }
+        else
+        {
+            UnderdampedPendulumCurve(t, ref angle, ref angularVelocity);
+        }
+
 
         Vector2 rope = radius * (Quaternion.Euler(0f, 0f, angle - previousAngle) * ropeDirection);
         kinematics.position = anchor + rope;
@@ -101,12 +111,7 @@ public class SwingingState : MovementState
             float c3 = c1 - Mathf.Deg2Rad * swing / (omega * omega);
             float c4 = (Mathf.Deg2Rad * angularVelocity + b * c3) / alpha;
 
-            (int, float) peak = Enumerable.Range(0, 2)
-                .Select(i => (i, (i * Mathf.PI - Mathf.Atan(-(c4 * alpha - b * c3) / (b * c4 + c3 * alpha))) / alpha))
-                .OrderBy(pair => pair.Item2)
-                .First(pair => pair.Item2 >= 0f);
-
-            if (Mathf.Abs(Position(peak.Item2, angularVelocity, swing)) <= parameters.MaxSwingAngle)
+            if (Mathf.Abs(Position(NextPeak(c3, c4), angularVelocity, swing)) <= parameters.MaxSwingAngle)
             {
                 angle = Position(t, angularVelocity, swing);
                 angularVelocity = Velocity(t, angularVelocity, swing);
@@ -115,18 +120,15 @@ public class SwingingState : MovementState
             }
 
             float discontinuity = omega * omega * (Mathf.Deg2Rad * angularVelocity / (b + alpha * alpha / b) + Mathf.Deg2Rad * angle);
-            float[] searchRangeA = new[] {0f, discontinuity}
-                .OrderBy(A => A)
-                .ToArray();
-            float[] searchRangeB = new[] {discontinuity, Mathf.Deg2Rad * swing}
+            float[] searchRange = new[] {0f, discontinuity}
                 .OrderBy(A => A)
                 .ToArray();
 
             float v = angularVelocity;
             double optimalAngularAcceleration = 0f;
-            if (Mathf.Abs(angle) < parameters.MaxSwingAngle && !Bisection.TryFindRoot(A => AngularAccelerationOptimizer(A, v), searchRangeA[0] + 0.0001d, searchRangeA[1] - 0.0001d, 1e-14d, 100, out optimalAngularAcceleration))
+            if (Mathf.Abs(angle) < parameters.MaxSwingAngle)
             {
-                Bisection.TryFindRoot(A => AngularAccelerationOptimizer(A, v), searchRangeB[0] + 0.0001d, searchRangeB[1] - 0.0001d, 1e-14d, 100, out optimalAngularAcceleration);
+                Bisection.TryFindRoot(A => AngularAccelerationOptimizer(A, v), searchRange[0] + 0.0001d, searchRange[1] - 0.0001d, 1e-14d, 100, out optimalAngularAcceleration);
             }
 
             optimalAngularAcceleration = Mathf.Clamp((float) optimalAngularAcceleration, Mathf.Min(0f, Mathf.Deg2Rad * swing), Mathf.Max(0f, Mathf.Deg2Rad * swing));
@@ -155,9 +157,17 @@ public class SwingingState : MovementState
             {
                 double c3 = c1 - A / (omega * omega);
                 double c4 = (Mathf.Deg2Rad * angularVelocity + b * c3) / alpha;
-                double t0 = (peak.Item1 * Math.PI - Math.Atan(-(c4 * alpha - b * c3) / (b * c4 + c3 * alpha))) / alpha;
+                double t0 = NextPeak((float) c3, (float) c4);
 
                 return Math.Exp(-b * t0) * (c3 * Math.Cos(alpha * t0) + c4 * Math.Sin(alpha * t0)) + A / (omega * omega) - (double) Mathf.Sign(Mathf.Deg2Rad * (float) angularVelocity) * Mathf.Deg2Rad * parameters.MaxSwingAngle;
+            }
+
+            float NextPeak(float c3, float c4)
+            {
+                float y = c4 * alpha - b * c3;
+                float x = b * c4 + c3 * alpha;
+                float tangent = y / x;
+                return (Mathf.Atan(tangent) + (tangent < 0f ? Mathf.PI : 0f)) / alpha;
             }
         }
     }
