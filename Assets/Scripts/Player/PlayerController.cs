@@ -44,6 +44,9 @@ public class MovementParameters
     [field: SerializeField] public float MaxSwingAngle { get; private set; } = 45f;
     [field: SerializeField] public int DeadSwingCount { get; private set; } = 40;
 
+    [field: Header("Grapple Parameters")]
+    [field: SerializeField] public float GrappleSpeed { get; private set; } = 10f;
+
     public float Acceleration => 0.5f * TopSpeed * TopSpeed / AccelerationDistance;
     public float Deceleration => 0.5f * TopSpeed * TopSpeed / DecelerationDistance;
     public float RiseGravity => 2f * MaxJumpHeight * TopSpeed * TopSpeed / (RiseDistance * RiseDistance);
@@ -78,6 +81,8 @@ public struct JumpInterrupt : IInterrupt
 }
 
 public struct AnchorInterrupt : IInterrupt { }
+
+public struct GrappleInterrupt : IInterrupt { }
 
 public interface IInputBuffer
 {
@@ -150,6 +155,7 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
         jump.action.performed += OnJump;
         jump.action.canceled += OnJumpCancelled;
         anchor.action.performed += OnAnchor;
+        grapple.action.performed += OnGrapple;
     }
 
     private void OnDisable()
@@ -162,6 +168,7 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
         jump.action.performed -= OnJump;
         jump.action.canceled -= OnJumpCancelled;
         anchor.action.performed -= OnAnchor;
+        grapple.action.performed -= OnGrapple;
     }
 
     private void Update()
@@ -238,5 +245,10 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
     private void OnAnchor(InputAction.CallbackContext _)
     {
         interrupts.Add(new AnchorInterrupt());
+    }
+
+    private void OnGrapple(InputAction.CallbackContext _)
+    {
+        interrupts.Add(new GrappleInterrupt());
     }
 }

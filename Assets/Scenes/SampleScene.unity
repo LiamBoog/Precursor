@@ -175,6 +175,7 @@ MonoBehaviour:
     <AngularAcceleration>k__BackingField: 180
     <MaxSwingAngle>k__BackingField: 60
     <DeadSwingCount>k__BackingField: 40
+    <GrappleSpeed>k__BackingField: 30
   camera: {fileID: 519420031}
   aim: {fileID: 7593096924056170982, guid: cbac4485a791a924082cae6b593cb872, type: 3}
   jump: {fileID: 6384440746060477519, guid: cbac4485a791a924082cae6b593cb872, type: 3}
