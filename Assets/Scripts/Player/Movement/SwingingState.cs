@@ -29,6 +29,9 @@ public class SwingingState : MovementState
 
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
+        if (interrupts.Any(i => i is JumpInterrupt { type: JumpInterrupt.Type.Started }))
+            return new JumpingState(parameters, player, kinematics);
+        
         if (interrupts.Any(i => i is AnchorInterrupt))
             return new FallingState(parameters, player, parameters.FallGravity);
         
