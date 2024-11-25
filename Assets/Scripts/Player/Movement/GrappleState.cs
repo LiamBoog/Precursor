@@ -13,6 +13,15 @@ public class GrappleState : MovementState
 
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
+        if (interrupts.FirstOrDefault(i => i is ICollision) is ICollision collision)
+        {
+            if (collision.Normal != Vector2.down)
+            {
+                Vector2 impactDirection = Vector3.Cross(collision.Normal, Vector3.Cross(anchor - kinematics.position, collision.Normal)).normalized;
+                return new ImpactState(parameters, player, impactDirection);
+            }
+        }
+        
         if (base.ProcessInterrupts(ref kinematics, interrupts) is { } newState && newState != this)
             return newState;
         
@@ -37,7 +46,7 @@ public class GrappleState : MovementState
             (float t, ref KinematicState<float> kinematics) => new[] { LinearMotionCurve(t, ref kinematics) }
         );
         t -= moveTime;
-        
+
         if (t > 0f)
             return new FallingState(parameters, player, parameters.FallGravity);
 

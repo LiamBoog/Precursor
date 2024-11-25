@@ -46,6 +46,9 @@ public class MovementParameters
 
     [field: Header("Grapple Parameters")]
     [field: SerializeField] public float GrappleSpeed { get; private set; } = 10f;
+    [field: SerializeField] public float ImpactDelay { get; private set; } = 0.1f;
+    [SerializeField] private float impactDistance = 0.6f;
+    [field: SerializeField] public float ImpactPause { get; private set; } = 0.1f;
 
     public float Acceleration => 0.5f * TopSpeed * TopSpeed / AccelerationDistance;
     public float Deceleration => 0.5f * TopSpeed * TopSpeed / DecelerationDistance;
@@ -57,6 +60,8 @@ public class MovementParameters
     public float CoyoteTime => coyoteFrames / REFERENCE_FRAMERATE;
 
     public float WallSlideVelocity => wallSlideVelocityFactor * TerminalVelocity;
+    
+    public float ImpactDuration => impactDistance / GrappleSpeed;
 }
 
 public interface IPlayerInfo
@@ -67,6 +72,7 @@ public interface IPlayerInfo
     bool GroundCheck();
     int WallCheck();
     bool GrappleRaycast(out Vector2 anchor);
+    IEnumerable<Vector2> Touching(IEnumerable<Vector2> directions);
 }
 
 public struct JumpInterrupt : IInterrupt
@@ -223,6 +229,11 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, movementParameters.RopeLength, grappleLayer);
         anchor = hit.point;
         return hit;
+    }
+
+    public IEnumerable<Vector2> Touching(IEnumerable<Vector2> directions)
+    {
+        return directions.Where(d => collisionResolver.Touching(d));
     }
 
     private void OnJump(InputAction.CallbackContext _)
