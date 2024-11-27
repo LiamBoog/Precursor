@@ -17,12 +17,9 @@ public class GrappleState : MovementState
         {
             if (collision.Normal != Vector2.down)
             {
-                if (player.JumpBuffer.Flush())
-                    return player.GroundCheck() ? new JumpingState(parameters, player, kinematics) : new WallJumpState(parameters, player, player.WallCheck(), kinematics);
-
                 Vector2 incomingDirection = (anchor - kinematics.position).normalized;
                 Vector2 slideDirection = Vector3.Cross(collision.Normal, Vector3.Cross(incomingDirection, collision.Normal)).normalized;
-                return new ImpactState(parameters, player, slideDirection, incomingDirection);
+                return new ImpactState(parameters, player, slideDirection);
             }
         }
         

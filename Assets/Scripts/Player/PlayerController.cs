@@ -46,9 +46,7 @@ public class MovementParameters
 
     [field: Header("Grapple Parameters")]
     [field: SerializeField] public float GrappleSpeed { get; private set; } = 10f;
-    [field: SerializeField] public float ImpactDelay { get; private set; } = 0.1f;
     [SerializeField] private float impactDistance = 0.6f;
-    [field: SerializeField] public float ImpactPause { get; private set; } = 0.1f;
 
     public float Acceleration => 0.5f * TopSpeed * TopSpeed / AccelerationDistance;
     public float Deceleration => 0.5f * TopSpeed * TopSpeed / DecelerationDistance;
@@ -62,6 +60,7 @@ public class MovementParameters
     public float WallSlideVelocity => wallSlideVelocityFactor * TerminalVelocity;
     
     public float ImpactDuration => 2f * impactDistance / (GrappleSpeed + TopSpeed);
+    public float ImpactAcceleration => (TopSpeed - GrappleSpeed) / ImpactDuration;
 }
 
 public interface IPlayerInfo

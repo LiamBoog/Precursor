@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,28 +6,24 @@ public class ImpactState : MovementState
 {
     private delegate void ImpactInitializer(ref KinematicState<Vector2> kinematics);
     
-    private Vector2 slideDirection;
+    private Vector2 direction;
     private float elapsedTime;
-    private float acceleration;
     private ImpactInitializer onFirstUpdate;
 
-    public ImpactState(MovementParameters movementParameters, IPlayerInfo playerInfo, Vector2 slideDirection, Vector2 incomingDirection) : base(movementParameters, playerInfo)
+    public ImpactState(MovementParameters movementParameters, IPlayerInfo playerInfo, Vector2 direction) : base(movementParameters, playerInfo)
     {
-        this.slideDirection = slideDirection;
-        float initialSpeed = /*Vector2.Dot(slideDirection, incomingDirection) * */parameters.GrappleSpeed;
-        acceleration = (parameters.TopSpeed - initialSpeed) / parameters.ImpactDuration;
+        this.direction = direction;
         onFirstUpdate = (ref KinematicState<Vector2> kinematics) =>
         {
-            kinematics.velocity = initialSpeed * slideDirection;
+            kinematics.velocity = parameters.GrappleSpeed * direction;
             onFirstUpdate = null;
         };
     }
 
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
-        if (elapsedTime < parameters.ImpactDelay && interrupts.FirstOrDefault(i => i is JumpInterrupt) is JumpInterrupt { type: JumpInterrupt.Type.Started })
+        if (interrupts.FirstOrDefault(i => i is JumpInterrupt) is JumpInterrupt { type: JumpInterrupt.Type.Started })
         {
-            Debug.Log("zuba jump");
             return player.GroundCheck() ? new JumpingState(parameters, player, kinematics) : new WallJumpState(parameters, player, player.WallCheck(), kinematics);
         }
         
@@ -51,8 +46,8 @@ public class ImpactState : MovementState
 
     private KinematicSegment<Vector2>[] ImpactCurve(ref float t, ref KinematicState<Vector2> kinematics)
     {
-        Vector2 acceleration = this.acceleration * slideDirection;
-        Vector2 targetVelocity = parameters.TopSpeed * slideDirection;
+        Vector2 acceleration = parameters.ImpactAcceleration * direction;
+        Vector2 targetVelocity = parameters.TopSpeed * direction;
 
         KinematicState<float> xKinematics = new(kinematics.position.x, kinematics.velocity.x);
         KinematicState<float> yKinematics = new(kinematics.position.y, kinematics.velocity.y);
