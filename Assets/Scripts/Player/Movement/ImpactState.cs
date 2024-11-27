@@ -34,6 +34,12 @@ public class ImpactState : MovementState
     {
         onFirstUpdate?.Invoke(ref kinematics);
 
+        if (player.JumpBuffer.Flush())
+        {
+            motion = default;
+            return player.GroundCheck() ? new JumpingState(parameters, player, kinematics) : new WallJumpState(parameters, player, player.WallCheck(), kinematics);
+        }
+
         motion = ImpactCurve(ref t, ref kinematics);
         if (t > 0f)
         {
@@ -52,13 +58,12 @@ public class ImpactState : MovementState
         KinematicState<float> xKinematics = new(kinematics.position.x, kinematics.velocity.x);
         KinematicState<float> yKinematics = new(kinematics.position.y, kinematics.velocity.y);
 
-        float temp = t;
-        KinematicSegment<float> xMotion = AccelerateTowardTargetVelocity(ref temp, targetVelocity.x, Mathf.Abs(acceleration.x), ref xKinematics);
+        float t1 = t;
+        KinematicSegment<float> xMotion = AccelerateTowardTargetVelocity(ref t1, targetVelocity.x, Mathf.Abs(acceleration.x), ref xKinematics);
         KinematicSegment<float> yMotion = AccelerateTowardTargetVelocity(ref t, targetVelocity.y, Mathf.Abs(acceleration.y), ref yKinematics);
         kinematics = new KinematicState<Vector2>(new(xKinematics.position, yKinematics.position), new(xKinematics.velocity, yKinematics.velocity));
         
-        t = Mathf.Min(temp, t);
-
+        t = Mathf.Min(t1, t);
         return MergeKinematicSegments(new[] { xMotion }, new[] { yMotion });
     }
 }
