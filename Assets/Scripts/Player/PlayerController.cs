@@ -61,7 +61,7 @@ public class MovementParameters
 
     public float WallSlideVelocity => wallSlideVelocityFactor * TerminalVelocity;
     
-    public float ImpactDuration => impactDistance / GrappleSpeed;
+    public float ImpactDuration => 2f * impactDistance / (GrappleSpeed + TopSpeed);
 }
 
 public interface IPlayerInfo
