@@ -36,7 +36,7 @@ public class MovementParameters
     [field: Header("Rope Dart Parameters")] 
     [field: SerializeField] public float RopeLength { get; private set; } = 7.5f;
 
-    [field: SerializeField] public float AngleSnapIncrement { get; private set; } = 22.5f;
+    [SerializeField] public int angleSubdivisions = 8;
     [field: SerializeField] public float MinRopeLengthFactor { get; private set; } = 0.75f;
 
     [field: Header("Swing Parameters")]
@@ -58,6 +58,8 @@ public class MovementParameters
     public float CoyoteTime => coyoteFrames / REFERENCE_FRAMERATE;
 
     public float WallSlideVelocity => wallSlideVelocityFactor * TerminalVelocity;
+
+    public float AngleSnapIncrement => 360f / angleSubdivisions;
     
     public float ImpactDuration => 2f * impactDistance / (GrappleSpeed + TopSpeed);
     public float ImpactAcceleration => (TopSpeed - GrappleSpeed) / ImpactDuration;
@@ -220,9 +222,9 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
             return false;
         }
         
-        float aimAngle = Vector2.SignedAngle(Vector2.right, aimDirection);
+        float aimAngle = Vector2.SignedAngle(Vector2.up, aimDirection);
         float snappedAngle = Mathf.Round(aimAngle / movementParameters.AngleSnapIncrement) * movementParameters.AngleSnapIncrement;
-        Vector2 direction = Quaternion.Euler(0f, 0f, snappedAngle) * Vector3.right;
+        Vector2 direction = Quaternion.Euler(0f, 0f, snappedAngle) * Vector3.up;
         
         Debug.DrawRay(transform.position, movementParameters.RopeLength * direction, Color.magenta, 0.5f);
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, movementParameters.RopeLength, grappleLayer);
