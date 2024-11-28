@@ -35,7 +35,7 @@ public abstract partial class MovementState
 {
     protected delegate KinematicSegment<float>[] MotionCurve(float t, ref KinematicState<float> kinematics);
     
-    protected MovementParameters parameters;
+    public MovementParameters parameters { get; set; }
     protected IPlayerInfo player;
 
     protected MovementState(MovementParameters movementParameters, IPlayerInfo playerInfo)

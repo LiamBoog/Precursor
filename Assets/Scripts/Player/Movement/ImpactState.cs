@@ -24,7 +24,7 @@ public class ImpactState : MovementState
     {
         if (interrupts.FirstOrDefault(i => i is JumpInterrupt) is JumpInterrupt { type: JumpInterrupt.Type.Started })
         {
-            return player.GroundCheck() ? new JumpingState(parameters, player, kinematics) : new WallJumpState(parameters, player, player.WallCheck(), kinematics);
+            return GetJumpState(kinematics);
         }
         
         return base.ProcessInterrupts(ref kinematics, interrupts);
@@ -37,7 +37,7 @@ public class ImpactState : MovementState
         if (player.JumpBuffer.Flush())
         {
             motion = default;
-            return player.GroundCheck() ? new JumpingState(parameters, player, kinematics) : new WallJumpState(parameters, player, player.WallCheck(), kinematics);
+            return GetJumpState(kinematics);
         }
 
         motion = ImpactCurve(ref t, ref kinematics);
@@ -48,6 +48,11 @@ public class ImpactState : MovementState
         }
 
         return this;
+    }
+
+    private MovementState GetJumpState(KinematicState<Vector2> kinematics)
+    {
+        return player.GroundCheck() ? new GrappleJumpingState(parameters, player, kinematics) : new WallJumpState(parameters, player, player.WallCheck(), kinematics);
     }
 
     private KinematicSegment<Vector2>[] ImpactCurve(ref float t, ref KinematicState<Vector2> kinematics)

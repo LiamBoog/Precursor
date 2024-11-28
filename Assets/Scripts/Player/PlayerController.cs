@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -12,22 +11,23 @@ public class MovementParameters
 {
     public const float REFERENCE_FRAMERATE = 60f;
 
-    [field: FormerlySerializedAs("topSpeed")]
     [field: Header("Movement Parameters")]
-    [field: SerializeField] public float TopSpeed { get; private set; } = 10f;
+    [field: SerializeField] public virtual float TopSpeed { get; protected set; } = 10f;
     [field: SerializeField] public float AccelerationDistance { get; private set; } = 0.5f;
     [field: SerializeField] public float DecelerationDistance { get; private set; } = 0.5f;
 
     [field: Header("Jump Parameters")] 
-    [field: SerializeField] public float MaxJumpHeight {get; private set; } = 4f;
-    [field: SerializeField] public float MinJumpHeight {get; private set; } = 2f;
-    [field: SerializeField] public float RiseDistance {get; private set; } = 3.5f;
-    [field: SerializeField] public float FallDistance {get; private set; } = 2.5f;
+    [field: SerializeField] public virtual float MaxJumpHeight { get; private set; } = 4f;
+    [SerializeField] protected float grappleJumpMaxHeight = 5f;
+    [field: SerializeField] public float MinJumpHeight { get; private set; } = 2f;
+    [field: SerializeField] public virtual float MaxJumpDistance { get; private set; } = 6f;
+    [SerializeField] protected float grappleJumpMaxDistance = 7.5f;
+    [SerializeField, Range(0f, 1f)] private float riseRatio = 0.58333333333f;
+    
     [field: SerializeField] public float CancelledJumpRise { get; private set; } = 0.75f;
     [SerializeField] private int coyoteFrames = 4;
     [SerializeField] private int jumpBufferFrames = 3;
 
-    [field: FormerlySerializedAs("climbHeight")]
     [field: Header("Wall Jump Parameters")] 
     [field: SerializeField] public float ClimbHeight { get; private set; } = 0f;
     [field: SerializeField] public int GracePixels { get; private set; } = 2;
@@ -50,6 +50,8 @@ public class MovementParameters
 
     public float Acceleration => 0.5f * TopSpeed * TopSpeed / AccelerationDistance;
     public float Deceleration => 0.5f * TopSpeed * TopSpeed / DecelerationDistance;
+    public float RiseDistance => riseRatio * MaxJumpDistance;
+    public float FallDistance => (1f - riseRatio) * MaxJumpDistance;
     public float RiseGravity => 2f * MaxJumpHeight * TopSpeed * TopSpeed / (RiseDistance * RiseDistance);
     public float FallGravity => 2f * MaxJumpHeight * TopSpeed * TopSpeed / (FallDistance * FallDistance);
     public float JumpVelocity => 2f * MaxJumpHeight * TopSpeed / RiseDistance;

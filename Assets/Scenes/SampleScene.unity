@@ -160,9 +160,11 @@ MonoBehaviour:
     <AccelerationDistance>k__BackingField: 0.5
     <DecelerationDistance>k__BackingField: 0.5
     <MaxJumpHeight>k__BackingField: 4
+    grappleJumpMaxHeight: 4.5
     <MinJumpHeight>k__BackingField: 2
-    <RiseDistance>k__BackingField: 3.5
-    <FallDistance>k__BackingField: 2.5
+    <MaxJumpDistance>k__BackingField: 6
+    grappleJumpMaxDistance: 15
+    riseRatio: 0.5833333
     <CancelledJumpRise>k__BackingField: 0.75
     coyoteFrames: 4
     jumpBufferFrames: 3
