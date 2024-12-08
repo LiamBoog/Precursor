@@ -12,7 +12,7 @@ public class MovementParameters
     public const float REFERENCE_FRAMERATE = 60f;
 
     [field: Header("Movement Parameters")]
-    [field: SerializeField] public virtual float TopSpeed { get; protected set; } = 10f;
+    [field: SerializeField] public virtual float CurrentTopSpeed { get; protected set; } = 10f;
     [field: SerializeField] public float AccelerationDistance { get; private set; } = 0.5f;
     [field: SerializeField] public float DecelerationDistance { get; private set; } = 0.5f;
 
@@ -48,14 +48,16 @@ public class MovementParameters
     [field: SerializeField] public float GrappleSpeed { get; private set; } = 10f;
     [SerializeField] private float impactDistance = 0.6f;
 
-    public float Acceleration => 0.5f * TopSpeed * TopSpeed / AccelerationDistance;
-    public float Deceleration => 0.5f * TopSpeed * TopSpeed / DecelerationDistance;
+    protected virtual float MaxHorizontalJumpSpeed => CurrentTopSpeed;
+    
+    public virtual float Acceleration => GetAcceleration(CurrentTopSpeed, AccelerationDistance);
+    public virtual float Deceleration => GetAcceleration(CurrentTopSpeed, DecelerationDistance);
     public float RiseDistance => riseRatio * MaxJumpDistance;
     public float FallDistance => (1f - riseRatio) * MaxJumpDistance;
-    public float RiseGravity => 2f * MaxJumpHeight * TopSpeed * TopSpeed / (RiseDistance * RiseDistance);
-    public float FallGravity => 2f * MaxJumpHeight * TopSpeed * TopSpeed / (FallDistance * FallDistance);
-    public float JumpVelocity => 2f * MaxJumpHeight * TopSpeed / RiseDistance;
-    public float TerminalVelocity => 2f * MaxJumpHeight * TopSpeed / FallDistance;
+    public float RiseGravity => GetGravity(MaxJumpHeight, MaxHorizontalJumpSpeed, RiseDistance);
+    public float FallGravity => GetGravity(MaxJumpHeight, MaxHorizontalJumpSpeed, FallDistance);
+    public float JumpVelocity => GetJumpVelocity(MaxJumpHeight, MaxHorizontalJumpSpeed, RiseDistance);
+    public float TerminalVelocity => GetJumpVelocity(MaxJumpHeight, MaxHorizontalJumpSpeed, FallDistance);
     public float JumpBufferDuration => jumpBufferFrames / REFERENCE_FRAMERATE;
     public float CoyoteTime => coyoteFrames / REFERENCE_FRAMERATE;
 
@@ -63,8 +65,12 @@ public class MovementParameters
 
     public float AngleSnapIncrement => 360f / angleSubdivisions;
     
-    public float ImpactDuration => 2f * impactDistance / (GrappleSpeed + TopSpeed);
-    public float ImpactAcceleration => (TopSpeed - GrappleSpeed) / ImpactDuration;
+    public float ImpactDuration => 2f * impactDistance / (GrappleSpeed + CurrentTopSpeed);
+    public float ImpactAcceleration => (CurrentTopSpeed - GrappleSpeed) / ImpactDuration;
+    
+    protected float GetAcceleration(float topSpeed, float distance) => 0.5f * topSpeed * topSpeed / distance;
+    protected float GetGravity(float maxJumpHeight, float maxHorizontalJumpSpeed, float distance) => 2f * maxJumpHeight * maxHorizontalJumpSpeed * maxHorizontalJumpSpeed / (distance * distance);
+    protected float GetJumpVelocity(float maxJumpHeight, float maxHorizontalJumpSpeed, float distance) => 2f * maxJumpHeight * maxHorizontalJumpSpeed / distance;
 }
 
 public interface IPlayerInfo

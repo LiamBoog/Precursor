@@ -26,7 +26,6 @@ public class JumpingState : MovementState
     {
         initialHeight = initialKinematics.position.y;
         gravity = parameters.RiseGravity;
-        Debug.Log((parameters.RiseDistance, parameters.FallDistance, parameters.MaxJumpDistance, parameters.MaxJumpHeight));
         onFirstUpdate = (ref KinematicState<Vector2> kinematics) =>
         {
             onFirstUpdate = null;

@@ -8,7 +8,7 @@ public abstract partial class MovementState
     protected KinematicSegment<float>[] WalkingCurve(float t, ref KinematicState<float> kinematics)
     {
         List<KinematicSegment<float>> output = new();
-        float targetVelocity = parameters.TopSpeed * player.Aim.x;
+        float targetVelocity = parameters.CurrentTopSpeed * player.Aim.x;
 
         float decelerationTarget = kinematics.velocity * targetVelocity < 0f ? 0f : targetVelocity;
         if (Mathf.Abs(decelerationTarget) < Mathf.Abs(kinematics.velocity))
