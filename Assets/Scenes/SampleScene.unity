@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementParameters:
-    <TopSpeed>k__BackingField: 10
+    <CurrentTopSpeed>k__BackingField: 10
     <AccelerationDistance>k__BackingField: 0.5
     <DecelerationDistance>k__BackingField: 0.5
     <MaxJumpHeight>k__BackingField: 4
@@ -174,9 +174,9 @@ MonoBehaviour:
     <RopeLength>k__BackingField: 7.5
     angleSubdivisions: 9
     <MinRopeLengthFactor>k__BackingField: 0.75
-    <AngularAcceleration>k__BackingField: 180
+    <AngularAcceleration>k__BackingField: 270
     <MaxSwingAngle>k__BackingField: 60
-    <DeadSwingCount>k__BackingField: 40
+    <DeadSwingCount>k__BackingField: 30
     <GrappleSpeed>k__BackingField: 30
     impactDistance: 2
   camera: {fileID: 519420031}
