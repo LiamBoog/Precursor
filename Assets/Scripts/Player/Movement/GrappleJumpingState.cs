@@ -56,7 +56,7 @@ public class GrappleJumpingState : MovementState
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
         innerState = innerState.ProcessInterrupts(ref kinematics, interrupts);
-        if (innerState is not JumpingState && !(innerState is FallingState fallingState && fallingState.Gravity != initialParameters.FallGravity))
+        if (innerState is not JumpingState && innerState is not FallingState)
         {
             innerState.parameters = initialParameters;
             return innerState;
@@ -70,7 +70,7 @@ public class GrappleJumpingState : MovementState
         newParameters.SetTopSpeed(GetTopSpeed(kinematics.velocity.x));
         
         innerState = innerState.UpdateKinematics(ref t, ref kinematics, out motion);
-        if (innerState is not JumpingState && !(innerState is FallingState fallingState && fallingState.Gravity != initialParameters.FallGravity))
+        if (innerState is not JumpingState && innerState is not FallingState)
         {
             innerState.parameters = initialParameters;
             return innerState;
