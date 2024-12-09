@@ -13,7 +13,7 @@ public class GrappleJumpingState : MovementState
 
         public GrappleJumpMovementParameters(MovementParameters initialParameters, float topSpeed)
         {
-            previousTopSpeed = initialParameters.CurrentTopSpeed;
+            previousTopSpeed = initialParameters.TopSpeed;
             currentTopSpeed = Mathf.Abs(topSpeed);
             initialTopSpeed = currentTopSpeed;
             
@@ -28,12 +28,12 @@ public class GrappleJumpingState : MovementState
             }
         }
         
-        public override float CurrentTopSpeed => currentTopSpeed;
+        public override float TopSpeed => currentTopSpeed;
 
-        protected override float MaxHorizontalJumpSpeed => GrappleSpeed;
+        protected override float MaxHorizontalJumpSpeed => ImpactSpeed;
 
-        public override float Acceleration => GetAcceleration(GrappleSpeed, AccelerationDistance / previousTopSpeed * initialTopSpeed);
-        public override float Deceleration => GetAcceleration(GrappleSpeed, DecelerationDistance / previousTopSpeed * initialTopSpeed);
+        public override float Acceleration => GetAcceleration(ImpactSpeed, AccelerationDistance / previousTopSpeed * initialTopSpeed);
+        public override float Deceleration => GetAcceleration(ImpactSpeed, DecelerationDistance / previousTopSpeed * initialTopSpeed);
         public override float MaxJumpHeight => grappleJumpMaxHeight;
         public override float MaxJumpDistance => grappleJumpMaxDistance;
         
@@ -81,12 +81,12 @@ public class GrappleJumpingState : MovementState
 
     private float GetTopSpeed(float currentVelocity)
     {
-        currentVelocity /= player.Aim.x != 0f ? Mathf.Abs(player.Aim.x) : 1f;
-        if (Mathf.Abs(currentVelocity) > initialParameters.CurrentTopSpeed && currentVelocity * initialVelocity > 0f)
+        currentVelocity /= player.Aim.x != 0f ? Mathf.Abs(player.Aim.x) : 1f; // this is a little tricky, but it allows the play to move at top speed without aiming perfectly horizontal
+        if (Mathf.Abs(currentVelocity) > initialParameters.TopSpeed && currentVelocity * initialVelocity > 0f)
         {
             return Mathf.Abs(currentVelocity);
         }
 
-        return initialParameters.CurrentTopSpeed;
+        return initialParameters.TopSpeed;
     }
 }

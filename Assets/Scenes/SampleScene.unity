@@ -156,14 +156,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementParameters:
-    <CurrentTopSpeed>k__BackingField: 10
+    <TopSpeed>k__BackingField: 10
     <AccelerationDistance>k__BackingField: 0.5
     <DecelerationDistance>k__BackingField: 0.5
     <MaxJumpHeight>k__BackingField: 4
-    grappleJumpMaxHeight: 4.5
+    grappleJumpMaxHeight: 4.25
     <MinJumpHeight>k__BackingField: 2
     <MaxJumpDistance>k__BackingField: 6
-    grappleJumpMaxDistance: 15
+    grappleJumpMaxDistance: 13
     riseRatio: 0.5833333
     <CancelledJumpRise>k__BackingField: 0.75
     coyoteFrames: 4
@@ -179,6 +179,7 @@ MonoBehaviour:
     <DeadSwingCount>k__BackingField: 30
     <GrappleSpeed>k__BackingField: 30
     impactDistance: 2
+    <ImpactSpeed>k__BackingField: 20
   camera: {fileID: 519420031}
   aim: {fileID: 7593096924056170982, guid: cbac4485a791a924082cae6b593cb872, type: 3}
   jump: {fileID: 6384440746060477519, guid: cbac4485a791a924082cae6b593cb872, type: 3}

@@ -15,7 +15,7 @@ public class ImpactState : MovementState
         this.direction = direction;
         onFirstUpdate = (ref KinematicState<Vector2> kinematics) =>
         {
-            kinematics.velocity = parameters.GrappleSpeed * direction;
+            kinematics.velocity = parameters.ImpactSpeed * direction;
             onFirstUpdate = null;
         };
     }
@@ -58,7 +58,7 @@ public class ImpactState : MovementState
     private KinematicSegment<Vector2>[] ImpactCurve(ref float t, ref KinematicState<Vector2> kinematics)
     {
         Vector2 acceleration = parameters.ImpactAcceleration * direction;
-        Vector2 targetVelocity = parameters.CurrentTopSpeed * direction;
+        Vector2 targetVelocity = parameters.TopSpeed * direction;
 
         KinematicState<float> xKinematics = new(kinematics.position.x, kinematics.velocity.x);
         KinematicState<float> yKinematics = new(kinematics.position.y, kinematics.velocity.y);
