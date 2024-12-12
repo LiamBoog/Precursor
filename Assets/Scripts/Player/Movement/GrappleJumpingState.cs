@@ -8,21 +8,22 @@ public class GrappleJumpingState : MovementState
 {
     private class GrappleJumpMovementParameters : MovementParameters
     {
-        private float initialTopSpeed;
         private float currentTopSpeed;
         private readonly Func<float> getAcceleration;
         private readonly Func<float> getDeceleration;
 
         public GrappleJumpMovementParameters(MovementParameters baseParameters, float newTopSpeed)
         {
-            initialTopSpeed = currentTopSpeed = Mathf.Abs(newTopSpeed);
+            currentTopSpeed = Mathf.Abs(newTopSpeed);
 
-            CopyDataFromBase(baseParameters);
-            getAcceleration = () => GetAcceleration(ImpactSpeed, AccelerationDistance / baseParameters.TopSpeed * initialTopSpeed);
-            getDeceleration = () => GetAcceleration(ImpactSpeed, DecelerationDistance / baseParameters.TopSpeed * initialTopSpeed);
+            CopyDataFromBaseParameters(baseParameters);
+            float velocityScalingFactor = currentTopSpeed / baseParameters.TopSpeed;
+            getAcceleration = () => GetAcceleration(ImpactSpeed, velocityScalingFactor * AccelerationDistance);
+            getDeceleration = () => GetAcceleration(ImpactSpeed, velocityScalingFactor * DecelerationDistance);
         }
         
         public override float TopSpeed => currentTopSpeed;
+        public override float CancelledJumpRise => cancelledGrappleJumpRise;
 
         protected override float MaxHorizontalJumpSpeed => ImpactSpeed;
 
@@ -33,7 +34,7 @@ public class GrappleJumpingState : MovementState
         
         public void SetTopSpeed(float newTopSpeed) => currentTopSpeed = newTopSpeed;
         
-        private void CopyDataFromBase(MovementParameters baseParameters)
+        private void CopyDataFromBaseParameters(MovementParameters baseParameters)
         {
             IEnumerable<PropertyInfo> properties = typeof(MovementParameters)
                 .GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
