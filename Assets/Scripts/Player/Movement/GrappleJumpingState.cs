@@ -4,9 +4,29 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
+public abstract class ModifiedMovementParameters : MovementParameters
+{
+    protected void CopyDataFromBaseParameters(MovementParameters baseParameters)
+    {
+        IEnumerable<PropertyInfo> properties = typeof(MovementParameters)
+            .GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+            .Where(p => p.CanRead && p.CanWrite);
+        foreach (PropertyInfo property in properties)
+        {
+            property.SetValue(this, property.GetValue(baseParameters));
+        }
+
+        IEnumerable<FieldInfo> fields = typeof(MovementParameters).GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+        foreach (FieldInfo field in fields)
+        {
+            field.SetValue(this, field.GetValue(baseParameters));
+        }
+    }
+}
+
 public class GrappleJumpingState : MovementState
 {
-    private class GrappleJumpMovementParameters : MovementParameters
+    private class GrappleJumpMovementParameters : ModifiedMovementParameters
     {
         private float currentTopSpeed;
         private readonly Func<float> getAcceleration;
@@ -23,33 +43,17 @@ public class GrappleJumpingState : MovementState
         }
         
         public override float TopSpeed => currentTopSpeed;
-        public override float CancelledJumpRise => cancelledGrappleJumpRise;
 
         protected override float MaxHorizontalJumpSpeed => ImpactSpeed;
 
         public override float Acceleration => getAcceleration();
         public override float Deceleration => getDeceleration();
-        public override float MaxJumpHeight => grappleJumpMaxHeight;
-        public override float MaxJumpDistance => grappleJumpMaxDistance;
+        public override float MaxJumpHeight => grappleJump.MaxJumpHeight;
+        public override float MinJumpHeight => grappleJump.MinJumpHeight;
+        public override float MaxJumpDistance => grappleJump.MaxJumpDistance;
+        public override float CancelledJumpRise => grappleJump.CancelledJumpRise;
         
         public void SetTopSpeed(float newTopSpeed) => currentTopSpeed = newTopSpeed;
-        
-        private void CopyDataFromBaseParameters(MovementParameters baseParameters)
-        {
-            IEnumerable<PropertyInfo> properties = typeof(MovementParameters)
-                .GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
-                .Where(p => p.CanRead && p.CanWrite);
-            foreach (PropertyInfo property in properties)
-            {
-                property.SetValue(this, property.GetValue(baseParameters));
-            }
-
-            IEnumerable<FieldInfo> fields = typeof(MovementParameters).GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-            foreach (FieldInfo field in fields)
-            {
-                field.SetValue(this, field.GetValue(baseParameters));
-            }
-        }
     }
 
     private MovementParameters initialParameters;

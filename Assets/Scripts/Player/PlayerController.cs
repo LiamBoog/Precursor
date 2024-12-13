@@ -9,6 +9,15 @@ using UnityEngine.Serialization;
 [Serializable]
 public class MovementParameters
 {
+    [Serializable]
+    public class JumpParameters
+    {
+        [field: SerializeField] public float MaxJumpHeight { get; private set; } = 4f;
+        [field: SerializeField] public float MinJumpHeight { get; private set; } = 2f;
+        [field: SerializeField] public float MaxJumpDistance { get; private set; } = 6f;
+        [field: SerializeField] public float CancelledJumpRise { get; private set; } = 0.75f;
+    }
+    
     public const float REFERENCE_FRAMERATE = 60f;
 
     [field: Header("Movement Parameters")]
@@ -17,14 +26,10 @@ public class MovementParameters
     [field: SerializeField] public float DecelerationDistance { get; private set; } = 0.5f;
 
     [field: Header("Jump Parameters")] 
-    [field: SerializeField] public virtual float MaxJumpHeight { get; private set; } = 4f;
-    [SerializeField] protected float grappleJumpMaxHeight = 5f;
-    [field: SerializeField] public float MinJumpHeight { get; private set; } = 2f;
-    [field: SerializeField] public virtual float MaxJumpDistance { get; private set; } = 6f;
-    [SerializeField] protected float grappleJumpMaxDistance = 7.5f;
+    [SerializeField] protected JumpParameters defaultJump;
+    [SerializeField] protected JumpParameters grappleJump;
+    [SerializeField] protected JumpParameters grappleWallJump;
     [SerializeField, Range(0f, 1f)] private float riseRatio = 0.58333333333f;
-    
-    [field: SerializeField] public float CancelledJumpRise { get; private set; } = 0.75f;
     [SerializeField] private int coyoteFrames = 4;
     [SerializeField] private int jumpBufferFrames = 3;
 
@@ -53,6 +58,11 @@ public class MovementParameters
     
     public virtual float Acceleration => GetAcceleration(TopSpeed, AccelerationDistance);
     public virtual float Deceleration => GetAcceleration(TopSpeed, DecelerationDistance);
+    
+    public virtual float MaxJumpHeight => defaultJump.MaxJumpHeight;
+    public virtual float MinJumpHeight => defaultJump.MinJumpHeight;
+    public virtual float MaxJumpDistance => defaultJump.MaxJumpDistance;
+    public virtual float CancelledJumpRise => defaultJump.CancelledJumpRise;
     public float RiseDistance => riseRatio * MaxJumpDistance;
     public float FallDistance => (1f - riseRatio) * MaxJumpDistance;
     public float RiseGravity => GetGravity(MaxJumpHeight, MaxHorizontalJumpSpeed, RiseDistance);
