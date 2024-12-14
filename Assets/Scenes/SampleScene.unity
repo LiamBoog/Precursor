@@ -159,13 +159,22 @@ MonoBehaviour:
     <TopSpeed>k__BackingField: 10
     <AccelerationDistance>k__BackingField: 0.5
     <DecelerationDistance>k__BackingField: 0.5
-    <MaxJumpHeight>k__BackingField: 4
-    grappleJumpMaxHeight: 4.25
-    <MinJumpHeight>k__BackingField: 2
-    <MaxJumpDistance>k__BackingField: 6
-    grappleJumpMaxDistance: 13
+    defaultJump:
+      <MaxJumpHeight>k__BackingField: 4
+      <MinJumpHeight>k__BackingField: 2
+      <MaxJumpDistance>k__BackingField: 6
+      <CancelledJumpRise>k__BackingField: 0.75
+    grappleJump:
+      <MaxJumpHeight>k__BackingField: 4.125
+      <MinJumpHeight>k__BackingField: 2
+      <MaxJumpDistance>k__BackingField: 9
+      <CancelledJumpRise>k__BackingField: 0.75
+    grappleWallJump:
+      <MaxJumpHeight>k__BackingField: 5
+      <MinJumpHeight>k__BackingField: 2
+      <MaxJumpDistance>k__BackingField: 8
+      <CancelledJumpRise>k__BackingField: 0.9375
     riseRatio: 0.5833333
-    <CancelledJumpRise>k__BackingField: 0.75
     coyoteFrames: 4
     jumpBufferFrames: 3
     <ClimbHeight>k__BackingField: 0
@@ -177,9 +186,9 @@ MonoBehaviour:
     <AngularAcceleration>k__BackingField: 270
     <MaxSwingAngle>k__BackingField: 60
     <DeadSwingCount>k__BackingField: 30
-    <GrappleSpeed>k__BackingField: 30
+    <GrappleSpeed>k__BackingField: 25
     impactDistance: 2
-    <ImpactSpeed>k__BackingField: 20
+    <ImpactSpeed>k__BackingField: 16
   camera: {fileID: 519420031}
   aim: {fileID: 7593096924056170982, guid: cbac4485a791a924082cae6b593cb872, type: 3}
   jump: {fileID: 6384440746060477519, guid: cbac4485a791a924082cae6b593cb872, type: 3}
@@ -663,7 +672,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.31439126, g: 0.36092722, b: 0.4245283, a: 0}
+  m_BackGroundColor: {r: 0.31439126, g: 0.36092722, b: 0.4245283, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

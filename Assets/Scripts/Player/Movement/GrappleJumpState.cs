@@ -24,7 +24,7 @@ public abstract class ModifiedMovementParameters : MovementParameters
     }
 }
 
-public class GrappleJumpingState : MovementState
+public class GrappleJumpState : MovementState
 {
     private class GrappleJumpMovementParameters : ModifiedMovementParameters
     {
@@ -61,7 +61,7 @@ public class GrappleJumpingState : MovementState
     private MovementState innerState;
     private float initialVelocity;
 
-    public GrappleJumpingState(MovementParameters movementParameters, IPlayerInfo playerInfo, KinematicState<Vector2> initialKinematics) : base(movementParameters, playerInfo)
+    public GrappleJumpState(MovementParameters movementParameters, IPlayerInfo playerInfo, KinematicState<Vector2> initialKinematics) : base(movementParameters, playerInfo)
     {
         initialParameters = parameters;
         initialVelocity = initialKinematics.velocity.x;

@@ -50,7 +50,7 @@ public class ImpactState : MovementState
 
     private MovementState GetJumpState(KinematicState<Vector2> kinematics)
     {
-        return player.GroundCheck() ? new GrappleJumpingState(parameters, player, kinematics) : new WallJumpState(parameters, player, player.WallCheck(), kinematics);
+        return player.GroundCheck() ? new GrappleJumpState(parameters, player, kinematics) : new GrappleWallJumpState(parameters, player, kinematics);
     }
 
     private KinematicSegment<Vector2>[] ImpactCurve(ref float t, ref KinematicState<Vector2> kinematics)
