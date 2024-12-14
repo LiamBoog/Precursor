@@ -7,7 +7,6 @@ public class ImpactState : MovementState
     private delegate void ImpactInitializer(ref KinematicState<Vector2> kinematics);
     
     private Vector2 direction;
-    private float elapsedTime;
     private ImpactInitializer onFirstUpdate;
 
     public ImpactState(MovementParameters movementParameters, IPlayerInfo playerInfo, Vector2 direction) : base(movementParameters, playerInfo)
@@ -23,7 +22,7 @@ public class ImpactState : MovementState
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
         if (interrupts.FirstOrDefault(i => i is JumpInterrupt) is JumpInterrupt { type: JumpInterrupt.Type.Started })
-            return GetJumpState(kinematics);
+                return GetJumpState(kinematics);
         
         return base.ProcessInterrupts(ref kinematics, interrupts);
     }
@@ -32,6 +31,7 @@ public class ImpactState : MovementState
     {
         onFirstUpdate?.Invoke(ref kinematics);
 
+        // TODO This isn't great, processing interrupts shouldn't be done here
         if (player.JumpBuffer.Flush())
         {
             motion = default;
@@ -50,7 +50,9 @@ public class ImpactState : MovementState
 
     private MovementState GetJumpState(KinematicState<Vector2> kinematics)
     {
-        return player.GroundCheck() ? new GrappleJumpState(parameters, player, kinematics) : new GrappleWallJumpState(parameters, player, kinematics);
+        return player.GroundCheck() ? 
+            new GrappleJumpState(parameters, player, kinematics) :
+            new GrappleWallJumpState(parameters, player, kinematics, boost);
     }
 
     private KinematicSegment<Vector2>[] ImpactCurve(ref float t, ref KinematicState<Vector2> kinematics)

@@ -48,24 +48,19 @@ public class GrappleJumpState : MovementState
 
         public override float Acceleration => getAcceleration();
         public override float Deceleration => getDeceleration();
-        public override float MaxJumpHeight => grappleJump.MaxJumpHeight;
-        public override float MinJumpHeight => grappleJump.MinJumpHeight;
         public override float MaxJumpDistance => grappleJump.MaxJumpDistance;
-        public override float CancelledJumpRise => grappleJump.CancelledJumpRise;
         
         public void SetTopSpeed(float newTopSpeed) => currentTopSpeed = newTopSpeed;
     }
 
-    private MovementParameters initialParameters;
     private GrappleJumpMovementParameters newParameters;
     private MovementState innerState;
     private float initialVelocity;
 
     public GrappleJumpState(MovementParameters movementParameters, IPlayerInfo playerInfo, KinematicState<Vector2> initialKinematics) : base(movementParameters, playerInfo)
     {
-        initialParameters = parameters;
         initialVelocity = initialKinematics.velocity.x;
-        newParameters = new GrappleJumpMovementParameters(initialParameters, Mathf.Abs(initialVelocity));
+        newParameters = new GrappleJumpMovementParameters(parameters, Mathf.Abs(initialVelocity));
         innerState = new JumpingState(newParameters, playerInfo, initialKinematics);
     }
     
@@ -74,7 +69,7 @@ public class GrappleJumpState : MovementState
         innerState = innerState.ProcessInterrupts(ref kinematics, interrupts);
         if (innerState is not JumpingState && innerState is not FallingState)
         {
-            innerState.parameters = initialParameters;
+            innerState.parameters = parameters;
             return innerState;
         }
         
@@ -88,7 +83,7 @@ public class GrappleJumpState : MovementState
         innerState = innerState.UpdateKinematics(ref t, ref kinematics, out motion);
         if (innerState is not JumpingState && innerState is not FallingState)
         {
-            innerState.parameters = initialParameters;
+            innerState.parameters = parameters;
             return innerState;
         }
         
@@ -98,9 +93,9 @@ public class GrappleJumpState : MovementState
     private float GetTopSpeed(float currentVelocity)
     {
         currentVelocity /= player.Aim.x != 0f ? Mathf.Abs(player.Aim.x) : 1f; // this is a little tricky, but it allows the player to move at top speed without aiming perfectly horizontal
-        if (Mathf.Abs(currentVelocity) > initialParameters.TopSpeed && currentVelocity * initialVelocity > 0f)
+        if (Mathf.Abs(currentVelocity) > parameters.TopSpeed && currentVelocity * initialVelocity > 0f)
             return Mathf.Abs(currentVelocity);
 
-        return initialParameters.TopSpeed;
+        return parameters.TopSpeed;
     }
 }

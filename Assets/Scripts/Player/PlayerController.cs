@@ -28,7 +28,9 @@ public class MovementParameters
     [field: Header("Jump Parameters")] 
     [SerializeField] protected JumpParameters defaultJump;
     [SerializeField] protected JumpParameters grappleJump;
+    [field: SerializeField] protected float MaxGrappleJumpDistance;
     [SerializeField] protected JumpParameters grappleWallJump;
+    [field: SerializeField] protected float MaxGrappleWallJumpHeight;
     [SerializeField, Range(0f, 1f)] private float riseRatio = 0.58333333333f;
     [SerializeField] private int coyoteFrames = 4;
     [SerializeField] private int jumpBufferFrames = 3;
@@ -55,7 +57,8 @@ public class MovementParameters
     [field: SerializeField] public float ImpactSpeed { get; private set; } = 20f;
 
     protected virtual float MaxHorizontalJumpSpeed => TopSpeed;
-    
+    private float ImpactDuration => 2f * impactDistance / (ImpactSpeed + TopSpeed);
+
     public virtual float Acceleration => GetAcceleration(TopSpeed, AccelerationDistance);
     public virtual float Deceleration => GetAcceleration(TopSpeed, DecelerationDistance);
     
@@ -76,7 +79,6 @@ public class MovementParameters
 
     public float AngleSnapIncrement => 360f / angleSubdivisions;
     
-    public float ImpactDuration => 2f * impactDistance / (ImpactSpeed + TopSpeed);
     public float ImpactAcceleration => (TopSpeed - ImpactSpeed) / ImpactDuration;
     
     protected float GetAcceleration(float topSpeed, float distance) => 0.5f * topSpeed * topSpeed / distance;
