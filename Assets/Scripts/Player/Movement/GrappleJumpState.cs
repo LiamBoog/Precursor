@@ -60,7 +60,7 @@ public class GrappleJumpState : MovementState
     public GrappleJumpState(MovementParameters movementParameters, IPlayerInfo playerInfo, KinematicState<Vector2> initialKinematics) : base(movementParameters, playerInfo)
     {
         initialVelocity = initialKinematics.velocity.x;
-        newParameters = new GrappleJumpMovementParameters(parameters, Mathf.Abs(initialVelocity));
+        newParameters = new GrappleJumpMovementParameters(movementParameters, Mathf.Abs(initialVelocity));
         innerState = new JumpingState(newParameters, playerInfo, initialKinematics);
     }
     

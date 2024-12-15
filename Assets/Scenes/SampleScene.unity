@@ -169,11 +169,14 @@ MonoBehaviour:
       <MinJumpHeight>k__BackingField: 2
       <MaxJumpDistance>k__BackingField: 9
       <CancelledJumpRise>k__BackingField: 0.75
+    MaxGrappleJumpDistance: 0
+    MaxGrappleWallJumpDistance: 4
     grappleWallJump:
       <MaxJumpHeight>k__BackingField: 5
       <MinJumpHeight>k__BackingField: 2
       <MaxJumpDistance>k__BackingField: 8
       <CancelledJumpRise>k__BackingField: 0.9375
+    MaxGrappleWallJumpHeight: 6
     riseRatio: 0.5833333
     coyoteFrames: 4
     jumpBufferFrames: 3
@@ -188,7 +191,7 @@ MonoBehaviour:
     <DeadSwingCount>k__BackingField: 30
     <GrappleSpeed>k__BackingField: 25
     impactDistance: 2
-    <ImpactSpeed>k__BackingField: 16
+    <ImpactSpeed>k__BackingField: 15
   camera: {fileID: 519420031}
   aim: {fileID: 7593096924056170982, guid: cbac4485a791a924082cae6b593cb872, type: 3}
   jump: {fileID: 6384440746060477519, guid: cbac4485a791a924082cae6b593cb872, type: 3}
@@ -259,7 +262,7 @@ Transform:
   m_GameObject: {fileID: 19663142}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 49.9, y: 0.35, z: 0}
+  m_LocalPosition: {x: -11.57, y: 0.76, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

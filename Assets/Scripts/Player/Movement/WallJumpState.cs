@@ -67,14 +67,14 @@ public class WallJumpState : JumpingState
     
     private float GetWallJumpControlTime()
     {
-        float controlTime = 0.5f * (parameters.RiseDistance + parameters.FallDistance - 3f * parameters.DecelerationDistance - parameters.AccelerationDistance) / parameters.TopSpeed;
+        // TODO fix this for grapple wall jump
+        float controlTime = 0.5f * (parameters.MaxJumpDistance - 3f * parameters.DecelerationDistance - parameters.AccelerationDistance) / parameters.TopSpeed;
         
         if (parameters.ClimbHeight < 0f)
             return controlTime - 0.5f * parameters.ClimbHeight / parameters.TerminalVelocity;
         
         float terminalVelocity = parameters.TerminalVelocity;
-        float fallTime = parameters.FallDistance / parameters.TopSpeed;
-        float climbOffset = (-terminalVelocity + Mathf.Sqrt(terminalVelocity * (terminalVelocity - 2f * parameters.ClimbHeight / fallTime))) / -parameters.FallGravity;
+        float climbOffset = (-terminalVelocity + Mathf.Sqrt(terminalVelocity * (terminalVelocity - 2f * parameters.ClimbHeight / parameters.FallTime))) / -parameters.FallGravity;
         
         return controlTime - 0.5f * climbOffset;
     }

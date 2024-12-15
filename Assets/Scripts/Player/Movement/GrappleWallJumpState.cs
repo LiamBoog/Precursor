@@ -4,26 +4,34 @@ using UnityEngine;
 
 public class GrappleWallJumpState : MovementState
 {
-    private class GrappleWallJumpMovementParameters : ModifiedMovementParameters
+    private sealed class GrappleWallJumpMovementParameters : ModifiedMovementParameters
     {
-        public GrappleWallJumpMovementParameters(MovementParameters baseParameters)
+        public GrappleWallJumpMovementParameters(MovementParameters baseParameters, float boost)
         {
+            MaxJumpHeight = Mathf.Lerp(baseParameters.MaxJumpHeight, baseParameters.MaxGrappleWallJumpHeight, boost);
+            JumpVelocity = Mathf.Sqrt(2f * baseParameters.RiseGravity * MaxJumpHeight);
+            TerminalVelocity = Mathf.Sqrt(2f * baseParameters.FallGravity * MaxJumpHeight);
+            RiseTime = JumpVelocity / baseParameters.RiseGravity;
+            FallTime = TerminalVelocity / baseParameters.FallGravity;
+            TopSpeed = baseParameters.MaxJumpDistance / (RiseTime + FallTime);
             CopyDataFromBaseParameters(baseParameters);
         }
 
-        public override float MaxJumpHeight => grappleWallJump.MaxJumpHeight;
-        public override float MinJumpHeight => grappleWallJump.MinJumpHeight;
-        public override float MaxJumpDistance => grappleWallJump.MaxJumpDistance;
-        public override float CancelledJumpRise => grappleWallJump.CancelledJumpRise;
+        public override float TopSpeed { get; protected set; }
+        public override float JumpVelocity { get; }
+        public override float TerminalVelocity { get; }
+        public override float MaxJumpHeight { get; }
+        public override float MaxJumpDistance => MaxGrappleWallJumpDistance;
+        public override float RiseTime { get; }
+        public override float FallTime { get; }
     }
     
-    private MovementParameters initialParameters;
     private MovementState innerState;
     
     public GrappleWallJumpState(MovementParameters movementParameters, IPlayerInfo playerInfo, KinematicState<Vector2> initialKinematics) : base(movementParameters, playerInfo)
     {
-        initialParameters = movementParameters;
-        innerState = new WallJumpState(new GrappleWallJumpMovementParameters(movementParameters), playerInfo, player.WallCheck(), initialKinematics);
+        float boost = (initialKinematics.velocity.magnitude - movementParameters.TopSpeed) / (movementParameters.ImpactSpeed - movementParameters.TopSpeed);
+        innerState = new WallJumpState(new GrappleWallJumpMovementParameters(movementParameters, boost), playerInfo, player.WallCheck(), initialKinematics);
     }
 
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
@@ -31,7 +39,7 @@ public class GrappleWallJumpState : MovementState
         innerState = innerState.ProcessInterrupts(ref kinematics, interrupts);
         if (innerState is not WallJumpState && innerState is not FallingState)
         {
-            innerState.parameters = initialParameters;
+            innerState.parameters = parameters;
             return innerState;
         }
 
@@ -43,7 +51,7 @@ public class GrappleWallJumpState : MovementState
         innerState = innerState.UpdateKinematics(ref t, ref kinematics, out motion);
         if (innerState is not WallJumpState && innerState is not FallingState)
         {
-            innerState.parameters = initialParameters;
+            innerState.parameters = parameters;
             return innerState;
         }
 
