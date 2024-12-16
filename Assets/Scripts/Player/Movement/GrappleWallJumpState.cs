@@ -36,8 +36,9 @@ public class GrappleWallJumpState : MovementState
 
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
+        MovementState previousState = innerState;
         innerState = innerState.ProcessInterrupts(ref kinematics, interrupts);
-        if (innerState is not WallJumpState && innerState is not FallingState)
+        if (innerState != previousState && innerState is not FallingState)
         {
             innerState.parameters = parameters;
             return innerState;
@@ -48,8 +49,9 @@ public class GrappleWallJumpState : MovementState
 
     public override MovementState UpdateKinematics(ref float t, ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion)
     {
+        MovementState previousState = innerState;
         innerState = innerState.UpdateKinematics(ref t, ref kinematics, out motion);
-        if (innerState is not WallJumpState && innerState is not FallingState)
+        if (innerState != previousState && innerState is not FallingState)
         {
             innerState.parameters = parameters;
             return innerState;
