@@ -22,8 +22,8 @@ public class MovementParameters
 
     [field: Header("Movement Parameters")]
     [field: SerializeField] public virtual float TopSpeed { get; protected set; } = 10f;
-    [field: SerializeField] public float AccelerationDistance { get; private set; } = 0.5f;
-    [field: SerializeField] public float DecelerationDistance { get; private set; } = 0.5f;
+    [field: SerializeField] public float AccelerationDistance { get; protected set; } = 0.5f;
+    [field: SerializeField] public float DecelerationDistance { get; protected set; } = 0.5f;
 
     [field: Header("Jump Parameters")] 
     [SerializeField] protected JumpParameters defaultJump;
@@ -215,6 +215,7 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
             interrupts.Add(collision);
             movementController.Update(0f, ref kinematics, interrupts);
         }
+        Debug.DrawRay(transform.position, displacement, Color.blue, 2f);
         
         // Apply motion
         transform.position += (Vector3) displacement;
