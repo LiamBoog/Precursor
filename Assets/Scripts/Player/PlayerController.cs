@@ -27,11 +27,6 @@ public class MovementParameters
 
     [field: Header("Jump Parameters")] 
     [SerializeField] protected JumpParameters defaultJump;
-    [SerializeField] protected JumpParameters grappleJump;
-    [field: SerializeField] protected float MaxGrappleJumpDistance;
-    [field: SerializeField] protected float MaxGrappleWallJumpDistance;
-    [SerializeField] protected JumpParameters grappleWallJump;
-    [field: SerializeField] public float MaxGrappleWallJumpHeight;
     [SerializeField, Range(0f, 1f)] private float riseRatio = 0.58333333333f;
     [SerializeField] private int coyoteFrames = 4;
     [SerializeField] private int jumpBufferFrames = 3;
@@ -56,18 +51,19 @@ public class MovementParameters
     [field: SerializeField] public float GrappleSpeed { get; private set; } = 10f;
     [SerializeField] private float impactDistance = 0.6f;
     [field: SerializeField] public float ImpactSpeed { get; private set; } = 20f;
+    [field: SerializeField] public float MaxGrappleWallJumpHeight { get; private set; } = 6f;
 
     protected virtual float MaxHorizontalJumpSpeed => TopSpeed;
     private float ImpactDuration => 2f * impactDistance / (ImpactSpeed + TopSpeed);
-    protected virtual float JumpDuration => MaxJumpDistance / MaxHorizontalJumpSpeed;
+    protected float JumpDuration => MaxJumpDistance / MaxHorizontalJumpSpeed;
 
     public virtual float Acceleration => GetAcceleration(TopSpeed, AccelerationDistance);
     public virtual float Deceleration => GetAcceleration(TopSpeed, DecelerationDistance);
     
     public virtual float MaxJumpHeight => defaultJump.MaxJumpHeight;
-    public virtual float MinJumpHeight => defaultJump.MinJumpHeight;
+    public float MinJumpHeight => defaultJump.MinJumpHeight;
     public virtual float MaxJumpDistance => defaultJump.MaxJumpDistance;
-    public virtual float CancelledJumpRise => defaultJump.CancelledJumpRise;
+    public float CancelledJumpRise => defaultJump.CancelledJumpRise;
     public virtual float RiseTime => riseRatio * JumpDuration;
     public virtual float FallTime => (1f - riseRatio) * JumpDuration;
     public float RiseGravity => GetGravity(MaxJumpHeight, RiseTime);

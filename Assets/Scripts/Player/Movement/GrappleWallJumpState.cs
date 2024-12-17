@@ -28,11 +28,10 @@ public class GrappleWallJumpState : MovementState
         public override float JumpVelocity { get; }
         public override float TerminalVelocity { get; }
         public override float MaxJumpHeight { get; }
-        //public override float MaxJumpDistance => MaxGrappleWallJumpDistance;
         public override float RiseTime { get; }
         public override float FallTime { get; }
         
-        private float GetJumpVelocity(float gravity, float height) => Mathf.Sqrt(2f * gravity * height);
+        private new float GetJumpVelocity(float gravity, float height) => Mathf.Sqrt(2f * gravity * height);
     }
     
     private MovementState innerState;

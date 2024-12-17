@@ -164,12 +164,10 @@ MonoBehaviour:
       <MaxJumpDistance>k__BackingField: 6
       <CancelledJumpRise>k__BackingField: 0.75
     grappleJump:
-      <MaxJumpHeight>k__BackingField: 4.125
+      <MaxJumpHeight>k__BackingField: 4
       <MinJumpHeight>k__BackingField: 2
-      <MaxJumpDistance>k__BackingField: 9
+      <MaxJumpDistance>k__BackingField: 6
       <CancelledJumpRise>k__BackingField: 0.75
-    MaxGrappleJumpDistance: 0
-    MaxGrappleWallJumpDistance: 6
     grappleWallJump:
       <MaxJumpHeight>k__BackingField: 5
       <MinJumpHeight>k__BackingField: 2
@@ -261,7 +259,7 @@ Transform:
   m_GameObject: {fileID: 19663142}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.57, y: 0.76, z: 0}
+  m_LocalPosition: {x: 9.53, y: 0.76, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
