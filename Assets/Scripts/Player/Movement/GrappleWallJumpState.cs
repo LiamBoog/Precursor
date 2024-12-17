@@ -48,10 +48,14 @@ public class GrappleWallJumpState : MovementState
         MovementParameters previousParameters = innerState.parameters;
         MovementState previousState = innerState;
         
-        innerState.parameters = parameters;
         innerState = innerState.ProcessInterrupts(ref kinematics, interrupts);
         if (innerState != previousState && innerState is not FallingState)
         {
+            // TODO - Very yucky hack >:((
+            if (innerState is WallJumpState)
+                return new WallJumpState(parameters, player, player.WallCheck(), kinematics);
+            
+            innerState.parameters = parameters;
             return innerState;
         }
 
