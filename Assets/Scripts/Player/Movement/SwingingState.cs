@@ -13,9 +13,11 @@ public class SwingingState : MovementState
     private const double BISECTION_PRECISION = 1e-14d;
     private const int BISECTION_MAX_ITERATIONS = 100;
 
-    private Vector2 anchor;
-    private float radius;
+    protected Vector2 anchor;
+    protected float radius;
     private Action<KinematicState<Vector2>> onFirstUpdate;
+
+    protected float Omega => Mathf.Sqrt(parameters.FallGravity / radius);
 
     public SwingingState(MovementParameters movementParameters, IPlayerInfo playerInfo, Vector2 anchor) : base(movementParameters, playerInfo)
     {
@@ -30,7 +32,12 @@ public class SwingingState : MovementState
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
         if (interrupts.Any(i => i is JumpInterrupt { type: JumpInterrupt.Type.Started }))
+        {
+            if (player.WallCheck() != 0)
+                return new WallSwingState(parameters, player, anchor);
+            
             return new JumpingState(parameters, player, kinematics);
+        }
         
         if (interrupts.Any(i => i is AnchorInterrupt))
             return new FallingState(parameters, player, parameters.FallGravity);
@@ -65,9 +72,9 @@ public class SwingingState : MovementState
 
         void DrivenUnderdampedPendulumCurve(ref float t, ref float angle, ref float angularVelocity)
         {
-            float omega = Mathf.Sqrt(parameters.FallGravity / radius);
-            float b = 5f * omega / Mathf.Sqrt(Mathf.PI * Mathf.PI * parameters.DeadSwingCount * parameters.DeadSwingCount + 25f);
-            float alpha = Mathf.Sqrt(omega * omega - b * b);
+            float omega = Omega;
+            float b = B(omega);
+            float alpha = Alpha(omega, b);
 
             float position = angle;
             float velocity = angularVelocity;
@@ -142,4 +149,9 @@ public class SwingingState : MovementState
             }
         }
     }
+    
+    
+    protected float B(float omega) => 5f * omega / Mathf.Sqrt(Mathf.PI * Mathf.PI * parameters.DeadSwingCount * parameters.DeadSwingCount + 25f);
+    
+    protected float Alpha(float omega, float b) => Mathf.Sqrt(omega * omega - b * b);
 }

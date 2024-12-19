@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
 
@@ -6,9 +7,7 @@ public static class CustomMath
 {
     public const double EPSILON = 0.001d;
     
-#pragma warning disable CS0660, CS0661
     private readonly struct Interval
-#pragma warning restore CS0660, CS0661
     {
         public readonly double value;
         private readonly double min;
@@ -148,7 +147,7 @@ public static class CustomMath
         Interval B = GetB();
         double C = -3d * b * b * b * b / (256d * a * a * a * a) + c * b * b / (16d * a * a * a) - b * d / (4d * a * a) + e / a;
 
-        if (B == 0d) // Biquadratic case
+        if (B == 0d) // biquadratic case
         {
             double term1 = -b / (4d * a);
             Complex term2 = Complex.Sqrt(A * A - 4d *  C);
