@@ -40,6 +40,9 @@ public class SwingingState : MovementState
         if (interrupts.Any(i => i is AnchorInterrupt))
             return new FallingState(parameters, player, parameters.FallGravity);
         
+        if (interrupts.Any(i => i is GrappleInterrupt) && player.WallCheck() != 0)
+            return new VerticalGrappleState(parameters, player, anchor);
+        
         return base.ProcessInterrupts(ref kinematics, interrupts);
     }
 

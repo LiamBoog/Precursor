@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GrappleState : MovementState
 {
-    private Vector2 anchor;
+    protected Vector2 anchor;
     
     public GrappleState(MovementParameters movementParameters, IPlayerInfo playerInfo, Vector2 anchor) : base(movementParameters, playerInfo)
     {
