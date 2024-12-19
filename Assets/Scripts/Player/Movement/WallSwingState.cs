@@ -20,7 +20,9 @@ public class WallSwingState : SwingingState
             Vector2 velocityDirection = new Vector2(-ropeDirection.y, ropeDirection.x);
             
             float angle = Vector2.SignedAngle(Vector2.down, ropeDirection);
-            float initialAngularVelocity = GetMaximalAngularVelocity(angle);
+            float initialAngularVelocity = Math.Sign(angle);
+            float t = 0;
+            IdealPendulumCurve(ref t, ref angle, ref initialAngularVelocity);
             Vector2 initialVelocity = initialAngularVelocity * radius * velocityDirection;
 
             kinematics.velocity = initialVelocity;
@@ -58,44 +60,29 @@ public class WallSwingState : SwingingState
  
         motion = null;
         return t > 0f ? new SwingingState(parameters, player, anchor) : this;
-
-        void IdealPendulumCurve(ref float t, ref float angle, ref float angularVelocity)
-        {
-            float maxAngle = Mathf.Deg2Rad * 80f;
-            
-            float omega = Omega(parameters.RiseGravity);
-            float b = B(omega);
-            float alpha = Alpha(omega, b);
-
-            float c5 = Mathf.Clamp(Mathf.Deg2Rad * angle, -maxAngle, maxAngle);
-            float c6 = Math.Sign(angularVelocity / alpha) * Mathf.Sqrt(maxAngle * maxAngle - c5 * c5);
-
-            if (Mathf.Abs(t) >= Mathf.Abs(Mathf.Atan(c6 / c5) / alpha))
-            {
-                angle = Mathf.Rad2Deg * Math.Sign(angle) * maxAngle;
-                angularVelocity = 0f;
-                t -= Mathf.Atan(c6 / c5) / alpha;
-                return;
-            }
-            
-            angle = Mathf.Rad2Deg * (c5 * Mathf.Cos(alpha * t) + c6 * Mathf.Sin(alpha * t));
-            angularVelocity = Mathf.Rad2Deg * (alpha * (c6 * Mathf.Cos(alpha * t) - c5 * Mathf.Sin(alpha * t)));
-            t = 0f;
-        }
     }
-
-    private float GetMaximalAngularVelocity(float angle)
+    
+    private void IdealPendulumCurve(ref float t, ref float angle, ref float angularVelocity)
     {
-        float maxAngle = Mathf.Deg2Rad * 80f;
-        
+        float maxAngle = Mathf.Deg2Rad * parameters.WallSwingMaxAngle;
+            
         float omega = Omega(parameters.RiseGravity);
         float b = B(omega);
         float alpha = Alpha(omega, b);
 
-        float c5 = Mathf.Deg2Rad * angle;
-        float c6 = Math.Sign(angle / alpha) * Mathf.Sqrt(maxAngle * maxAngle - c5 * c5);
+        float c5 = Mathf.Clamp(Mathf.Deg2Rad * angle, -maxAngle, maxAngle);
+        float c6 = Math.Sign(angularVelocity / alpha) * Mathf.Sqrt(maxAngle * maxAngle - c5 * c5);
 
-        return Math.Sign(alpha * c6) * Mathf.Rad2Deg * parameters.JumpVelocity / radius;
-        return Mathf.Rad2Deg * alpha * c6;
+        if (Mathf.Abs(t) >= Mathf.Abs(Mathf.Atan(c6 / c5) / alpha))
+        {
+            angle = Mathf.Rad2Deg * Math.Sign(angle) * maxAngle;
+            angularVelocity = 0f;
+            t -= Mathf.Atan(c6 / c5) / alpha;
+            return;
+        }
+            
+        angle = Mathf.Rad2Deg * (c5 * Mathf.Cos(alpha * t) + c6 * Mathf.Sin(alpha * t));
+        angularVelocity = Mathf.Rad2Deg * (alpha * (c6 * Mathf.Cos(alpha * t) - c5 * Mathf.Sin(alpha * t)));
+        t = 0f;
     }
 }
