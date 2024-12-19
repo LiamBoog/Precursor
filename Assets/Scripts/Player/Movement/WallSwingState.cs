@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class WallSwingState : SwingingState
 {
@@ -30,9 +29,9 @@ public class WallSwingState : SwingingState
 
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
-        if (interrupts.Any(i => i is ICollision))
+        if (interrupts.Any(i => i is ICollision || i is JumpInterrupt { type: JumpInterrupt.Type.Cancelled }))
             return new SwingingState(parameters, player, anchor);
-
+        
         return base.ProcessInterrupts(ref kinematics, interrupts);
     }
 
@@ -58,18 +57,26 @@ public class WallSwingState : SwingingState
         Debug.DrawRay(anchor, radius * (Quaternion.Euler(0f, 0f, 90f * Math.Sign(angle)) * Vector2.down), Color.yellow);
  
         motion = null;
-        return this;
+        return t > 0f ? new SwingingState(parameters, player, anchor) : this;
 
         void IdealPendulumCurve(ref float t, ref float angle, ref float angularVelocity)
         {
             float maxAngle = Mathf.Deg2Rad * 80f;
             
-            float omega = Omega;
+            float omega = Omega(parameters.RiseGravity);
             float b = B(omega);
             float alpha = Alpha(omega, b);
 
             float c5 = Mathf.Clamp(Mathf.Deg2Rad * angle, -maxAngle, maxAngle);
             float c6 = Math.Sign(angularVelocity / alpha) * Mathf.Sqrt(maxAngle * maxAngle - c5 * c5);
+
+            if (Mathf.Abs(t) >= Mathf.Abs(Mathf.Atan(c6 / c5) / alpha))
+            {
+                angle = Mathf.Rad2Deg * Math.Sign(angle) * maxAngle;
+                angularVelocity = 0f;
+                t -= Mathf.Atan(c6 / c5) / alpha;
+                return;
+            }
             
             angle = Mathf.Rad2Deg * (c5 * Mathf.Cos(alpha * t) + c6 * Mathf.Sin(alpha * t));
             angularVelocity = Mathf.Rad2Deg * (alpha * (c6 * Mathf.Cos(alpha * t) - c5 * Mathf.Sin(alpha * t)));
@@ -81,7 +88,7 @@ public class WallSwingState : SwingingState
     {
         float maxAngle = Mathf.Deg2Rad * 80f;
         
-        float omega = Omega;
+        float omega = Omega(parameters.RiseGravity);
         float b = B(omega);
         float alpha = Alpha(omega, b);
 

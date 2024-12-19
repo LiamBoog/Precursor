@@ -17,8 +17,6 @@ public class SwingingState : MovementState
     protected float radius;
     private Action<KinematicState<Vector2>> onFirstUpdate;
 
-    protected float Omega => Mathf.Sqrt(parameters.FallGravity / radius);
-
     public SwingingState(MovementParameters movementParameters, IPlayerInfo playerInfo, Vector2 anchor) : base(movementParameters, playerInfo)
     {
         this.anchor = anchor;
@@ -72,7 +70,7 @@ public class SwingingState : MovementState
 
         void DrivenUnderdampedPendulumCurve(ref float t, ref float angle, ref float angularVelocity)
         {
-            float omega = Omega;
+            float omega = Omega(parameters.FallGravity);
             float b = B(omega);
             float alpha = Alpha(omega, b);
 
@@ -150,6 +148,7 @@ public class SwingingState : MovementState
         }
     }
     
+    protected float Omega(float gravity) => Mathf.Sqrt(gravity / radius);
     
     protected float B(float omega) => 5f * omega / Mathf.Sqrt(Mathf.PI * Mathf.PI * parameters.DeadSwingCount * parameters.DeadSwingCount + 25f);
     
