@@ -16,15 +16,14 @@ public class GrappleState : MovementState
             onFirstUpdate = null;
 
             float speed = parameters.RopeLength / parameters.MaxGrappleDuration + parameters.FallGravity * parameters.MaxGrappleDuration;
-            float angle = Mathf.Atan((float) CustomMath.SolveQuadratic(
-                -parameters.FallGravity * (anchor.x - kinematics.position.x) / (speed * speed),
-                1d,
-                -((anchor.y - kinematics.position.y) / (anchor.x - kinematics.position.x) + parameters.FallGravity * (anchor.x - kinematics.position.x) / (speed * speed))
-            )[0]);
+            float deltaX = anchor.x - kinematics.position.x;
+            float A = (anchor.y - kinematics.position.y) / deltaX;
+            float B = parameters.FallGravity * deltaX / (speed * speed);
+            float angle = Mathf.Atan((float) CustomMath.SolveQuadratic(-B, 1f, -(A + B))[0]);
             Vector2 initialVelocity = speed * new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
 
             int n = 101;
-            Vector3[] curve = Enumerable.Range(-n, 2 * n)
+            Vector3[] curve = Enumerable.Range(0, n)
                 .Select(i => (float) i / n * parameters.MaxGrappleDuration)
                 .Select(Curve)
                 .ToArray();
@@ -32,10 +31,14 @@ public class GrappleState : MovementState
             Debug.DrawLine(kinematics.position, anchor, Color.green, 2f);
             Debug.Log((Mathf.Rad2Deg * angle, speed, initialVelocity, initialVelocity.magnitude));
             
-            Vector3 Curve(float t) => new(
+            Vector3 Curve(float t)
+            {
+                t *= Mathf.Sign(deltaX);
+                return new Vector3(
                     kinematics.position.x + initialVelocity.x * t,
                     kinematics.position.y + initialVelocity.y * t - parameters.FallGravity * t * t
                 );
+            }
         };
     }
 
