@@ -51,6 +51,7 @@ public class MovementParameters
     [field: SerializeField] public float GrappleSpeed { get; private set; } = 10f;
     [SerializeField] private float impactDistance = 0.6f;
     [field: SerializeField] public float ImpactSpeed { get; private set; } = 20f;
+    [field: SerializeField] public float MaxGrappleDuration { get; private set; } = 0.5f;
     
     [field: Header("Jump Variant Parameters")]
     [field: SerializeField] public float MaxGrappleWallJumpHeight { get; private set; } = 6f;

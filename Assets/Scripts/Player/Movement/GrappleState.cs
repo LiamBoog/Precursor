@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -5,10 +6,37 @@ using UnityEngine;
 public class GrappleState : MovementState
 {
     protected Vector2 anchor;
+    private Action<KinematicState<Vector2>> onFirstUpdate;
     
     public GrappleState(MovementParameters movementParameters, IPlayerInfo playerInfo, Vector2 anchor) : base(movementParameters, playerInfo)
     {
         this.anchor = anchor;
+        onFirstUpdate = kinematics =>
+        {
+            onFirstUpdate = null;
+
+            float speed = parameters.RopeLength / parameters.MaxGrappleDuration + parameters.FallGravity * parameters.MaxGrappleDuration;
+            float angle = Mathf.Atan((float) CustomMath.SolveQuadratic(
+                -parameters.FallGravity * (anchor.x - kinematics.position.x) / (speed * speed),
+                1d,
+                -((anchor.y - kinematics.position.y) / (anchor.x - kinematics.position.x) + parameters.FallGravity * (anchor.x - kinematics.position.x) / (speed * speed))
+            )[0]);
+            Vector2 initialVelocity = speed * new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+
+            int n = 101;
+            Vector3[] curve = Enumerable.Range(-n, 2 * n)
+                .Select(i => (float) i / n * parameters.MaxGrappleDuration)
+                .Select(Curve)
+                .ToArray();
+            CustomDebug.DrawCurve(curve, Color.yellow, 2f);
+            Debug.DrawLine(kinematics.position, anchor, Color.green, 2f);
+            Debug.Log((Mathf.Rad2Deg * angle, speed, initialVelocity, initialVelocity.magnitude));
+            
+            Vector3 Curve(float t) => new(
+                    kinematics.position.x + initialVelocity.x * t,
+                    kinematics.position.y + initialVelocity.y * t - parameters.FallGravity * t * t
+                );
+        };
     }
 
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
@@ -34,6 +62,8 @@ public class GrappleState : MovementState
 
     public override MovementState UpdateKinematics(ref float t, ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion)
     {
+        onFirstUpdate?.Invoke(kinematics);
+        
         Vector2 direction = anchor - kinematics.position;
         float distance = direction.magnitude;
 
