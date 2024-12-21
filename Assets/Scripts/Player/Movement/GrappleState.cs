@@ -5,38 +5,43 @@ using UnityEngine;
 
 public class GrappleState : MovementState
 {
+    private delegate void GrappleInitializer(ref KinematicState<Vector2> kinematics);
+    
     protected Vector2 anchor;
-    private Action<KinematicState<Vector2>> onFirstUpdate;
+    private GrappleInitializer onFirstUpdate;
     
     public GrappleState(MovementParameters movementParameters, IPlayerInfo playerInfo, Vector2 anchor) : base(movementParameters, playerInfo)
     {
         this.anchor = anchor;
-        onFirstUpdate = kinematics =>
+        onFirstUpdate = (ref KinematicState<Vector2> kinematics) =>
         {
             onFirstUpdate = null;
-
-            float speed = parameters.RopeLength / parameters.MaxGrappleDuration + parameters.FallGravity * parameters.MaxGrappleDuration;
+            
+            float speed = parameters.RopeLength / parameters.MaxGrappleDuration + 0.5f * parameters.FallGravity * parameters.MaxGrappleDuration;
             float deltaX = anchor.x - kinematics.position.x;
             float A = (anchor.y - kinematics.position.y) / deltaX;
-            float B = parameters.FallGravity * deltaX / (speed * speed);
-            float angle = Mathf.Atan((float) CustomMath.SolveQuadratic(-B, 1f, -(A + B))[0]);
+            float B = parameters.FallGravity * deltaX / (2f * speed * speed);
+            float angle = deltaX == 0f ? Mathf.PI / 2f : Mathf.Atan2(-1f + Mathf.Sqrt(1f - 4f * B * (A + B)), -2f * B) + Mathf.PI;
             Vector2 initialVelocity = speed * new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+
+            kinematics.velocity = initialVelocity;
+            KinematicState<Vector2> initialKinematics = kinematics;
 
             int n = 101;
             Vector3[] curve = Enumerable.Range(0, n)
                 .Select(i => (float) i / n * parameters.MaxGrappleDuration)
                 .Select(Curve)
                 .ToArray();
-            CustomDebug.DrawCurve(curve, Color.yellow, 2f);
-            Debug.DrawLine(kinematics.position, anchor, Color.green, 2f);
-            Debug.Log((Mathf.Rad2Deg * angle, speed, initialVelocity, initialVelocity.magnitude));
+            //CustomDebug.DrawCurve(curve, Color.yellow, 2f);
+            //Debug.DrawLine(kinematics.position, anchor, Color.green, 2f);
+            Debug.Log((speed, parameters.FallGravity));
             
             Vector3 Curve(float t)
             {
-                t *= Mathf.Sign(deltaX);
+                //t *= Mathf.Sign(deltaX);
                 return new Vector3(
-                    kinematics.position.x + initialVelocity.x * t,
-                    kinematics.position.y + initialVelocity.y * t - parameters.FallGravity * t * t
+                    initialKinematics.position.x + initialKinematics.velocity.x * t,
+                    initialKinematics.position.y + initialKinematics.velocity.y * t - 0.5f * parameters.FallGravity * t * t
                 );
             }
         };
@@ -65,21 +70,21 @@ public class GrappleState : MovementState
 
     public override MovementState UpdateKinematics(ref float t, ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion)
     {
-        onFirstUpdate?.Invoke(kinematics);
+        onFirstUpdate?.Invoke(ref kinematics);
         
-        Vector2 direction = anchor - kinematics.position;
+        /*Vector2 direction = anchor - kinematics.position;
         float distance = direction.magnitude;
 
         kinematics.velocity = parameters.GrappleSpeed / distance * direction;
-        float moveTime = Mathf.Min(t, distance / parameters.GrappleSpeed);
+        float moveTime = Mathf.Min(t, distance / parameters.GrappleSpeed);*/
 
         motion = ApplyMotionCurves(
-            moveTime,
+            t,
             ref kinematics,
             (float t, ref KinematicState<float> kinematics) => new[] { LinearMotionCurve(t, ref kinematics) },
-            (float t, ref KinematicState<float> kinematics) => new[] { LinearMotionCurve(t, ref kinematics) }
+            (float t, ref KinematicState<float> kinematics) => FallingCurve(t, -parameters.TerminalVelocity, parameters.FallGravity, ref kinematics)
         );
-        t -= moveTime;
+        t -= t;
 
         if (t > 0f)
             return new FallingState(parameters, player, parameters.FallGravity);

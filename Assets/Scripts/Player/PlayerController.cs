@@ -240,6 +240,10 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
     public bool GrappleRaycast(out Vector2 anchor)
     {
         Vector2 aimDirection = aim.action.ReadValue<Vector2>();
+
+        anchor = (Vector2) transform.position + movementParameters.RopeLength * aimDirection;
+        Debug.DrawLine(transform.position, anchor, Color.magenta, 0.5f);
+        return true;
         if (aimDirection == Vector2.zero)
         {
             anchor = default;
