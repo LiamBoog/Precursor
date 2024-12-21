@@ -51,7 +51,6 @@ public class MovementParameters
     [field: SerializeField] public float GrappleSpeed { get; private set; } = 10f;
     [SerializeField] private float impactDistance = 0.6f;
     [field: SerializeField] public float ImpactSpeed { get; private set; } = 20f;
-    [field: SerializeField] public float MaxGrappleDuration { get; private set; } = 0.5f;
     
     [field: Header("Jump Variant Parameters")]
     [field: SerializeField] public float MaxGrappleWallJumpHeight { get; private set; } = 6f;
@@ -240,10 +239,6 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
     public bool GrappleRaycast(out Vector2 anchor)
     {
         Vector2 aimDirection = aim.action.ReadValue<Vector2>();
-
-        /*anchor = (Vector2) transform.position + movementParameters.RopeLength * aimDirection;
-        Debug.DrawLine(transform.position, anchor, Color.magenta, 0.5f);
-        return true;*/
         if (aimDirection == Vector2.zero)
         {
             anchor = default;
