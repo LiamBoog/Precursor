@@ -14,20 +14,26 @@ public class VerticalGrappleState : MovementState
     }
     
     private Action<KinematicState<Vector2>> onFirstUpdate;
+    private MovementState innerState;
     
-    public VerticalGrappleState(MovementParameters movementParameters, IPlayerInfo playerInfo, Vector2 anchor) : base(movementParameters, playerInfo, anchor)
+    public VerticalGrappleState(MovementParameters movementParameters, IPlayerInfo playerInfo, Vector2 anchor) : base(movementParameters, playerInfo)
     {
         onFirstUpdate = kinematics =>
         {
             onFirstUpdate = null;
             Vector2 rope = anchor - kinematics.position;
-            this.anchor = kinematics.position + (Vector2) Vector3.Project(rope, Vector2.up);
+            float jumpHeight = Vector2.Dot(rope, Vector2.up);
+
+            VerticalGrappleMovementParameters newParameters = new VerticalGrappleMovementParameters(jumpHeight, parameters);
+            innerState = new JumpingState(newParameters, player, kinematics);
         };
     }
 
     public override MovementState UpdateKinematics(ref float t, ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion)
     {
         onFirstUpdate?.Invoke(kinematics);
-        return base.UpdateKinematics(ref t, ref kinematics, out motion);
+        innerState = innerState.UpdateKinematics(ref t, ref kinematics, out motion);
+        
+        return this;
     }
 }
