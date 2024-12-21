@@ -6,6 +6,11 @@ using UnityEngine;
 
 public abstract class ModifiedMovementParameters : MovementParameters
 {
+    protected ModifiedMovementParameters(MovementParameters baseParameters)
+    {
+        CopyDataFromBaseParameters(baseParameters);
+    }
+    
     protected void CopyDataFromBaseParameters(MovementParameters baseParameters)
     {
         IEnumerable<PropertyInfo> properties = typeof(MovementParameters)
@@ -32,11 +37,10 @@ public class GrappleJumpState : MovementState
         private readonly Func<float> getAcceleration;
         private readonly Func<float> getDeceleration;
 
-        public GrappleJumpMovementParameters(MovementParameters baseParameters, float newTopSpeed)
+        public GrappleJumpMovementParameters(MovementParameters baseParameters, float newTopSpeed) : base(baseParameters)
         {
             currentTopSpeed = Mathf.Abs(newTopSpeed);
 
-            CopyDataFromBaseParameters(baseParameters);
             float velocityScalingFactor = currentTopSpeed / baseParameters.TopSpeed;
             getAcceleration = () => GetAcceleration(ImpactSpeed, velocityScalingFactor * AccelerationDistance);
             getDeceleration = () => GetAcceleration(ImpactSpeed, velocityScalingFactor * DecelerationDistance);

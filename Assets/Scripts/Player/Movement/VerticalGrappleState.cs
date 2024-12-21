@@ -1,8 +1,18 @@
 using System;
 using UnityEngine;
 
-public class VerticalGrappleState : GrappleState
+public class VerticalGrappleState : MovementState
 {
+    private class VerticalGrappleMovementParameters : ModifiedMovementParameters
+    {
+        public VerticalGrappleMovementParameters(float jumpHeight, MovementParameters baseParameters) : base(baseParameters)
+        {
+            MaxJumpHeight = jumpHeight;
+        }
+
+        public override float MaxJumpHeight { get; }
+    }
+    
     private Action<KinematicState<Vector2>> onFirstUpdate;
     
     public VerticalGrappleState(MovementParameters movementParameters, IPlayerInfo playerInfo, Vector2 anchor) : base(movementParameters, playerInfo, anchor)

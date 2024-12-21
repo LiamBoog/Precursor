@@ -7,14 +7,13 @@ public class GrappleWallJumpState : MovementState
 {
     private sealed class GrappleWallJumpMovementParameters : ModifiedMovementParameters
     {
-        public GrappleWallJumpMovementParameters(MovementParameters baseParameters, float boost)
+        public GrappleWallJumpMovementParameters(MovementParameters baseParameters, float boost) : base(baseParameters)
         {
             MaxJumpHeight = Mathf.Lerp(baseParameters.MaxJumpHeight, baseParameters.MaxGrappleWallJumpHeight, boost);
             JumpVelocity = GetJumpVelocity(baseParameters.RiseGravity, MaxJumpHeight);
             TerminalVelocity = GetJumpVelocity(baseParameters.FallGravity, MaxJumpHeight);
             RiseTime = JumpVelocity / baseParameters.RiseGravity;
             FallTime = TerminalVelocity / baseParameters.FallGravity;
-            CopyDataFromBaseParameters(baseParameters);
             
             float maxRiseTime = GetJumpVelocity(RiseGravity, MaxGrappleWallJumpHeight) / RiseGravity;
             float maxFallTime = GetJumpVelocity(FallGravity, MaxGrappleWallJumpHeight) / FallGravity;
