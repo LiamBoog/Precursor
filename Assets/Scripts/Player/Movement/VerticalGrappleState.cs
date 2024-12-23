@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class VerticalGrappleState : MovementState
@@ -13,12 +14,14 @@ public class VerticalGrappleState : MovementState
         public override float MaxJumpHeight { get; }
     }
     
-    private Action<KinematicState<Vector2>> onFirstUpdate;
+    private delegate void VerticalGrappleInitializer(ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion);
+    
+    private VerticalGrappleInitializer onFirstUpdate;
     private MovementState innerState;
     
     public VerticalGrappleState(MovementParameters movementParameters, IPlayerInfo playerInfo, Vector2 anchor) : base(movementParameters, playerInfo)
     {
-        onFirstUpdate = kinematics =>
+        onFirstUpdate = (ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion) =>
         {
             onFirstUpdate = null;
             Vector2 rope = anchor - kinematics.position;
@@ -26,14 +29,34 @@ public class VerticalGrappleState : MovementState
 
             VerticalGrappleMovementParameters newParameters = new VerticalGrappleMovementParameters(jumpHeight, parameters);
             innerState = new JumpingState(newParameters, player, kinematics);
+            
+            float t = 0f;
+            innerState = innerState.UpdateKinematics(ref t, ref kinematics, out motion);
         };
+    }
+
+    public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
+    {
+        return this;
     }
 
     public override MovementState UpdateKinematics(ref float t, ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion)
     {
-        onFirstUpdate?.Invoke(kinematics);
-        innerState = innerState.UpdateKinematics(ref t, ref kinematics, out motion);
+        onFirstUpdate?.Invoke(ref kinematics, out motion);
         
-        return this;
+        float remainingRiseTime = kinematics.velocity.y / innerState.parameters.RiseGravity;
+        if (remainingRiseTime > t)
+        {
+            innerState = innerState.UpdateKinematics(ref t, ref kinematics, out motion);
+            return this;
+        }
+        
+        t -= remainingRiseTime;
+        innerState.UpdateKinematics(ref remainingRiseTime, ref kinematics, out motion);
+        
+        if (player.JumpBuffer.Flush())
+            return new JumpingState(parameters, player, kinematics);
+        
+        return new FallingState(parameters, player, parameters.FallGravity);
     }
 }
