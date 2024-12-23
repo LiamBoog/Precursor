@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VerticalGrappleState : MovementState
+public class VerticalGrappleState : GrappleState
 {
     private class VerticalGrappleMovementParameters : ModifiedMovementParameters
     {
@@ -12,6 +11,7 @@ public class VerticalGrappleState : MovementState
         }
 
         public override float MaxJumpHeight { get; }
+
     }
     
     private delegate void VerticalGrappleInitializer(ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion);
@@ -19,7 +19,7 @@ public class VerticalGrappleState : MovementState
     private VerticalGrappleInitializer onFirstUpdate;
     private MovementState innerState;
     
-    public VerticalGrappleState(MovementParameters movementParameters, IPlayerInfo playerInfo, Vector2 anchor) : base(movementParameters, playerInfo)
+    public VerticalGrappleState(MovementParameters movementParameters, IPlayerInfo playerInfo, Vector2 anchor) : base(movementParameters, playerInfo, default)
     {
         onFirstUpdate = (ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion) =>
         {
@@ -33,11 +33,6 @@ public class VerticalGrappleState : MovementState
             float t = 0f;
             innerState = innerState.UpdateKinematics(ref t, ref kinematics, out motion);
         };
-    }
-
-    public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
-    {
-        return this;
     }
 
     public override MovementState UpdateKinematics(ref float t, ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion)
@@ -55,7 +50,7 @@ public class VerticalGrappleState : MovementState
         innerState.UpdateKinematics(ref remainingRiseTime, ref kinematics, out motion);
         
         if (player.JumpBuffer.Flush())
-            return new JumpingState(parameters, player, kinematics);
+            return new VerticalGrappleJump(parameters, player, kinematics);
         
         return new FallingState(parameters, player, parameters.FallGravity);
     }
