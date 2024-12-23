@@ -21,13 +21,9 @@ public class GrappleState : MovementState
                 Vector2 slideDirection = Vector3.Cross(collision.Normal, Vector3.Cross(incomingDirection, collision.Normal)).normalized;
                 return new ImpactState(parameters, player, slideDirection);
             }
-        }
-        
-        if (base.ProcessInterrupts(ref kinematics, interrupts) is { } newState && newState != this)
-            return newState;
-        
-        if (interrupts.Any(i => i is ICollision))
+            
             return new FallingState(parameters, player, parameters.FallGravity);
+        }
         
         return this;
     }
