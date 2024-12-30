@@ -76,6 +76,7 @@ namespace skner.DualGrid
                 UnityEditor.Undo.RecordObject(RenderTilemap, $"Updated {tileChanges.Length} render tile(s)");
 #endif
 
+                RenderTilemap.ClearAllEditorPreviewTiles();
                 foreach (Tilemap.SyncTile tileChange in tileChanges)
                 {
                     UpdateRenderTilemapFromDataTile(tileChange.position);
@@ -101,6 +102,31 @@ namespace skner.DualGrid
             foreach (var position in DataTilemap.cellBounds.allPositionsWithin)
             {
                 if (DataTilemap.HasTile(position)) UpdateRenderTilemapFromDataTile(position);
+            }
+        }
+        
+        internal void SetEditorPreviewTiles()
+        {
+            if (Tile == null)
+            {
+                Debug.LogError($"Cannot refresh render tilemap, because tile is not set in dual grid module.", RenderTilemap);
+                return;
+            }
+            
+#if UNITY_EDITOR
+            UnityEditor.Undo.RecordObject(RenderTilemap, "Refreshed editor preview render tiles");
+#endif
+            
+            RenderTilemap.ClearAllEditorPreviewTiles();
+            foreach (var position in DataTilemap.cellBounds.allPositionsWithin)
+            {
+                if (DataTilemap.HasTile(position))
+                {
+                    foreach (Vector3Int renderTilePosition in DualGridUtils.GetRenderTilePositions(position))
+                    {
+                        RenderTilemap.SetEditorPreviewTile(renderTilePosition, Tile);
+                    }
+                }
             }
         }
 
