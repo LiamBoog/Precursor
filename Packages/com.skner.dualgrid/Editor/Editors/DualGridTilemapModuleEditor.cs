@@ -55,7 +55,7 @@ namespace skner.DualGrid.Editor
         private void OnSceneGUI()
         {
             EventType currentEventType = Event.current.type;
-            if (currentEventType != EventType.MouseDrag && currentEventType != EventType.MouseDown)
+            if (currentEventType != EventType.MouseDrag && currentEventType != EventType.Layout)
                 return;
             
             _targetComponent.SetEditorPreviewTiles();
