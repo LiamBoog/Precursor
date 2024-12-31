@@ -68,22 +68,6 @@ namespace skner.DualGrid
                 return false;
 
             Vector3Int[] dataTilemapPositions = DualGridUtils.GetDataTilePositions(renderTilePosition);
-
-            /*Debug.Log(string.Join(',', ruleToValidate.GetNeighbors()));
-            Debug.Log(string.Join(',', dataTilemapPositions.Select(dataTilePosition =>
-            {
-                Vector3Int dataTileOffset = dataTilePosition - renderTilePosition;
-                int neighborIndex = ruleToValidate.GetNeighborIndex(dataTileOffset);
-                return new KeyValuePair<Vector3Int, int>(DualGridUtils.ConvertDataTileOffsetToNeighborOffset(dataTileOffset), ruleToValidate.m_Neighbors[neighborIndex]);
-            })));
-            Debug.Log(string.Join(',', ruleToValidate.m_NeighborPositions));
-            Debug.Log(new HashSet<KeyValuePair<Vector3Int, int>>(dataTilemapPositions.Select(dataTilePosition =>
-            {
-                Vector3Int dataTileOffset = dataTilePosition - renderTilePosition;
-                int neighborIndex = ruleToValidate.GetNeighborIndex(dataTileOffset);
-                return new KeyValuePair<Vector3Int, int>(DualGridUtils.ConvertDataTileOffsetToNeighborOffset(dataTileOffset), ruleToValidate.m_Neighbors[neighborIndex]);
-            })).SetEquals(ruleToValidate.GetNeighbors()));
-            Debug.Log("-----------");*/
             Dictionary<Vector3Int, int> neighbours = ruleToValidate.GetNeighborsCached();
             foreach (Vector3Int dataTilePosition in dataTilemapPositions)
             {
@@ -94,32 +78,9 @@ namespace skner.DualGrid
                 {
                     return false;
                 }
-
-                /*if(!DoesRuleMatchWithDataTile(ruleToValidate, dataTilePosition, renderTilePosition))
-                {
-                    return false;
-                }*/
             }
 
             return true;
-        }
-
-        /// <summary>
-        /// Checks if the <paramref name="dataTilePosition"/> is filled in accordance with the defined <paramref name="rule"/>.
-        /// </summary>
-        /// <param name="rule"></param>
-        /// <param name="dataTilePosition"></param>
-        /// <param name="renderTilePosition"></param>
-        /// <returns></returns>
-        private bool DoesRuleMatchWithDataTile(TilingRule rule, Vector3Int dataTilePosition, Vector3Int renderTilePosition)
-        {
-            Vector3Int dataTileOffset = dataTilePosition - renderTilePosition;
-            
-            int neighborIndex = rule.GetNeighborIndex(dataTileOffset);
-            var neighborDataTile = _dataTilemap.GetTile(dataTilePosition);
-
-            return RuleMatch(rule.GetNeighbors()[DualGridUtils.ConvertDataTileOffsetToNeighborOffset(dataTileOffset)], neighborDataTile);
-            return RuleMatch(rule.m_Neighbors[neighborIndex], neighborDataTile);
         }
 
         /// <inheritdoc/>

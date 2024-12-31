@@ -23,11 +23,7 @@ namespace skner.DualGrid.Utils
                 new (x, y),
                 new (x + 1, y),
                 new (x, y + 1),
-                new (x + 1, y + 1)/*,
-                dataTilePosition + new Vector3Int(0, 0, 0),
-                dataTilePosition + new Vector3Int(1, 0, 0),
-                dataTilePosition + new Vector3Int(0, 1, 0),
-                dataTilePosition + new Vector3Int(1, 1, 0)*/
+                new (x + 1, y + 1)
             };
         }
 
@@ -49,11 +45,7 @@ namespace skner.DualGrid.Utils
                 new (x, y),
                 new (x - 1, y),
                 new (x, y - 1),
-                new (x - 1, y - 1)/*,
-                renderTilePosition - new Vector3Int(0, 0, 0),
-                renderTilePosition - new Vector3Int(1, 0, 0),
-                renderTilePosition - new Vector3Int(0, 1, 0),
-                renderTilePosition - new Vector3Int(1, 1, 0)*/
+                new (x - 1, y - 1)
             };
         }
 
