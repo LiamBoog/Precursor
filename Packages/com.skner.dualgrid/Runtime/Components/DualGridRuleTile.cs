@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using skner.DualGrid.Extensions;
 using skner.DualGrid.Utils;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Tilemaps;
 using static skner.DualGrid.DualGridRuleTile;
 
@@ -17,7 +18,12 @@ namespace skner.DualGrid
     [CreateAssetMenu(fileName = "DualGridRuleTile", menuName = "Scriptable Objects/DualGridRuleTile")]
     public class DualGridRuleTile : RuleTile<DualGridNeighbor>
     {
-
+        [Serializable]
+        public class DualGridTilingRule : TilingRule
+        {
+            [field: SerializeField, HideInInspector] public SerializedDictionary<Vector3Int, int> Neighbours { get; private set; }
+        }
+        
         private DualGridTilemapModule _dualGridTilemapModule;
 
         private Tilemap _dataTilemap;
@@ -64,11 +70,11 @@ namespace skner.DualGrid
         public override bool RuleMatches(TilingRule ruleToValidate, Vector3Int renderTilePosition, ITilemap tilemap, ref Matrix4x4 transform)
         {
             // Skip custom rule validation in cases where this DualGridRuleTile is not within a valid tilemap
-            if (_dualGridTilemapModule == null)
+            if (_dualGridTilemapModule == null || ruleToValidate is not DualGridTilingRule rule)
                 return false;
-
+            
             Vector3Int[] dataTilemapPositions = DualGridUtils.GetDataTilePositions(renderTilePosition);
-            Dictionary<Vector3Int, int> neighbours = ruleToValidate.GetNeighborsCached();
+            Dictionary<Vector3Int, int> neighbours = rule.Neighbours;
             foreach (Vector3Int dataTilePosition in dataTilemapPositions)
             {
                 Vector3Int dataTileOffset = dataTilePosition - renderTilePosition;

@@ -1,11 +1,25 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using skner.DualGrid.Extensions;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.VirtualTexturing;
 
 namespace skner.DualGrid.Editor
 {
     [CustomEditor(typeof(DualGridRuleTile), true)]
     public class DualGridRuleTileEditor : RuleTileEditor
     {
+        private SerializedProperty m_TilingRules;
+
+        public override void OnEnable()
+        {
+            base.OnEnable();
+            m_TilingRules = serializedObject.FindProperty(nameof(m_TilingRules));
+        }
 
         public override BoundsInt GetRuleGUIBounds(BoundsInt bounds, RuleTile.TilingRule rule)
         {
@@ -32,11 +46,13 @@ namespace skner.DualGrid.Editor
                 float top = rect.yMin + y * h;
                 Handles.DrawLine(new Vector3(rect.xMin, top), new Vector3(rect.xMax, top));
             }
+
             for (int x = 0; x <= bounds.size.x; x++)
             {
                 float left = rect.xMin + x * w;
                 Handles.DrawLine(new Vector3(left, rect.yMin), new Vector3(left, rect.yMax));
             }
+
             Handles.color = Color.white;
 
             var neighbors = tilingRule.GetNeighbors();
@@ -55,7 +71,203 @@ namespace skner.DualGrid.Editor
             }
         }
 
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+            InjectDualGridTilingRules();
+            SaveTile();
+
+            /*if (m_TilingRules.arraySize == 0)
+                return;
+
+            IEnumerable<RuleTile.TilingRule> rules = (List<RuleTile.TilingRule>) typeof(RuleTile)
+                .GetField(nameof(m_TilingRules), BindingFlags.Public | BindingFlags.Instance)
+                .GetValue(serializedObject.targetObject);
+            foreach (RuleTile.TilingRule rule in rules)
+            {
+                if (rule is DualGridRuleTile.DualGridTilingRule dualGridRule)
+                {
+                    Debug.Log(string.Join(',', dualGridRule.Neighbours));
+                }
+            }
+
+            Debug.Log("---------------");*/
+        }
+
+        private void InjectDualGridTilingRules()
+        {
+            Undo.RecordObject(serializedObject.targetObject, "Inject DualGridTilingRules");
+            
+            FieldInfo tilingRulesField = typeof(RuleTile).GetField(nameof(m_TilingRules), BindingFlags.Public | BindingFlags.Instance);
+            List<RuleTile.TilingRule> tilingRules = tilingRulesField.GetValue(serializedObject.targetObject) as List<RuleTile.TilingRule>;
+            tilingRules = tilingRules.Select(rule =>
+            {
+                DualGridRuleTile.DualGridTilingRule output = rule.CloneToDualGridTilingRule();
+                SerializedDictionary<Vector3Int, int> neighbours = new();
+                foreach (var (key, value) in rule.GetNeighbors())
+                {
+                    neighbours.Add(key, value);
+                }
+                output.GetType().GetProperty(nameof(DualGridRuleTile.DualGridTilingRule.Neighbours))!.SetValue(output, neighbours);
+                return (RuleTile.TilingRule) output;
+            })
+            .ToList();
+            
+            tilingRulesField.SetValue(serializedObject.targetObject, tilingRules);
+        }
+    }
+    
+    public static class SerializedPropertyExtensions
+    {
+        private delegate FieldInfo GetFieldInfoAndStaticTypeFromProperty(SerializedProperty aProperty, out Type aType);
+        private static GetFieldInfoAndStaticTypeFromProperty m_GetFieldInfoAndStaticTypeFromProperty;
+
+        public static FieldInfo GetFieldInfoAndStaticType(this SerializedProperty prop, out Type type)
+        {
+            if (m_GetFieldInfoAndStaticTypeFromProperty == null)
+            {
+                foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                {
+                    foreach (var t in assembly.GetTypes())
+                    {
+                        if (t.Name == "ScriptAttributeUtility")
+                        {
+                            MethodInfo mi = t.GetMethod("GetFieldInfoAndStaticTypeFromProperty", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+                            m_GetFieldInfoAndStaticTypeFromProperty = (GetFieldInfoAndStaticTypeFromProperty)Delegate.CreateDelegate(typeof(GetFieldInfoAndStaticTypeFromProperty), mi);
+                            break;
+                        }
+                    }
+                    if (m_GetFieldInfoAndStaticTypeFromProperty != null) break;
+                }
+                if (m_GetFieldInfoAndStaticTypeFromProperty == null)
+                {
+                    UnityEngine.Debug.LogError("GetFieldInfoAndStaticType::Reflection failed!");
+                    type = null;
+                    return null;
+                }
+            }
+            return m_GetFieldInfoAndStaticTypeFromProperty(prop, out type);
+        }
+
+        public static T GetCustomAttributeFromProperty<T>(this SerializedProperty prop) where T : System.Attribute
+        {
+            var info = prop.GetFieldInfoAndStaticType(out _);
+            return info.GetCustomAttribute<T>();
+        }
+        
+        /// <summary>
+    /// Gets the target value of a SerializedProperty.
+    /// </summary>
+    /// <typeparam name="T">The type of the target value.</typeparam>
+    /// <param name="property">The SerializedProperty.</param>
+    /// <returns>The target value.</returns>
+    public static T GetTargetValue<T>(this SerializedProperty property)
+    {
+        object targetObject = GetTargetObjectOfProperty(property);
+        return (T)targetObject;
     }
 
+    /// <summary>
+    /// Sets the target value of a SerializedProperty.
+    /// </summary>
+    /// <typeparam name="T">The type of the target value.</typeparam>
+    /// <param name="property">The SerializedProperty.</param>
+    /// <param name="value">The value to set.</param>
+    public static void SetTargetValue<T>(this SerializedProperty property, T value)
+    {
+        object targetObject = GetTargetObjectOfProperty(property);
+        if (targetObject == null) return;
+
+        var path = property.propertyPath.Replace(".Array.data[", "[");
+        var elements = path.Split('.');
+
+        foreach (var element in elements)
+        {
+            if (element.Contains("["))
+            {
+                var elementName = element.Substring(0, element.IndexOf("["));
+                var index = Convert.ToInt32(element.Substring(element.IndexOf("[")).Replace("[", "").Replace("]", ""));
+                targetObject = GetValue(targetObject, elementName, index);
+            }
+            else
+            {
+                targetObject = GetValue(targetObject, element);
+            }
+        }
+
+        if (targetObject == null) return;
+
+        var fieldName = elements[^1];
+        var field = targetObject.GetType().GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+        if (field != null)
+        {
+            field.SetValue(targetObject, value);
+        }
+        else
+        {
+            var propertyInfo = targetObject.GetType().GetProperty(fieldName, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+            if (propertyInfo != null)
+            {
+                propertyInfo.SetValue(targetObject, value);
+            }
+        }
+    }
+
+    private static object GetTargetObjectOfProperty(SerializedProperty prop)
+    {
+        if (prop == null) return null;
+
+        var path = prop.propertyPath.Replace(".Array.data[", "[");
+        object obj = prop.serializedObject.targetObject;
+        var elements = path.Split('.');
+
+        foreach (var element in elements)
+        {
+            if (element.Contains("["))
+            {
+                var elementName = element.Substring(0, element.IndexOf("["));
+                var index = Convert.ToInt32(element.Substring(element.IndexOf("[")).Replace("[", "").Replace("]", ""));
+                obj = GetValue(obj, elementName, index);
+            }
+            else
+            {
+                obj = GetValue(obj, element);
+            }
+        }
+
+        return obj;
+    }
+
+    private static object GetValue(object source, string name)
+    {
+        if (source == null)
+            return null;
+
+        var type = source.GetType();
+        var field = type.GetField(name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+        if (field == null)
+        {
+            var property = type.GetProperty(name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+            if (property == null)
+                return null;
+
+            return property.GetValue(source, null);
+        }
+
+        return field.GetValue(source);
+    }
+
+    private static object GetValue(object source, string name, int index)
+    {
+        var enumerable = GetValue(source, name) as System.Collections.IEnumerable;
+        if (enumerable == null) return null;
+
+        var enm = enumerable.GetEnumerator();
+        while (index-- >= 0)
+            if (!enm.MoveNext()) return null;
+
+        return enm.Current;
+    }
+    }
 }
 
