@@ -5,7 +5,6 @@ namespace skner.DualGrid.Utils
 {
     public static class DualGridUtils
     {
-
         /// <summary>
         /// Gets the 4 render tile positions from a <paramref name="dataTilePosition"/>.
         /// </summary>
@@ -16,12 +15,19 @@ namespace skner.DualGrid.Utils
         /// <returns></returns>
         public static Vector3Int[] GetRenderTilePositions(Vector3Int dataTilePosition)
         {
+            int x, y;
+            x = dataTilePosition.x;
+            y = dataTilePosition.y;
             return new Vector3Int[]
             {
+                new (x, y),
+                new (x + 1, y),
+                new (x, y + 1),
+                new (x + 1, y + 1)/*,
                 dataTilePosition + new Vector3Int(0, 0, 0),
                 dataTilePosition + new Vector3Int(1, 0, 0),
                 dataTilePosition + new Vector3Int(0, 1, 0),
-                dataTilePosition + new Vector3Int(1, 1, 0)
+                dataTilePosition + new Vector3Int(1, 1, 0)*/
             };
         }
 
@@ -35,12 +41,19 @@ namespace skner.DualGrid.Utils
         /// <returns></returns>
         public static Vector3Int[] GetDataTilePositions(Vector3Int renderTilePosition)
         {
+            int x, y;
+            x = renderTilePosition.x;
+            y = renderTilePosition.y;
             return new Vector3Int[]
             {
+                new (x, y),
+                new (x - 1, y),
+                new (x, y - 1),
+                new (x - 1, y - 1)/*,
                 renderTilePosition - new Vector3Int(0, 0, 0),
                 renderTilePosition - new Vector3Int(1, 0, 0),
                 renderTilePosition - new Vector3Int(0, 1, 0),
-                renderTilePosition - new Vector3Int(1, 1, 0)
+                renderTilePosition - new Vector3Int(1, 1, 0)*/
             };
         }
 

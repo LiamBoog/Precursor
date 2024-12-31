@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using skner.DualGrid.Extensions;
 using skner.DualGrid.Utils;
 using UnityEngine;
@@ -67,12 +69,36 @@ namespace skner.DualGrid
 
             Vector3Int[] dataTilemapPositions = DualGridUtils.GetDataTilePositions(renderTilePosition);
 
+            /*Debug.Log(string.Join(',', ruleToValidate.GetNeighbors()));
+            Debug.Log(string.Join(',', dataTilemapPositions.Select(dataTilePosition =>
+            {
+                Vector3Int dataTileOffset = dataTilePosition - renderTilePosition;
+                int neighborIndex = ruleToValidate.GetNeighborIndex(dataTileOffset);
+                return new KeyValuePair<Vector3Int, int>(DualGridUtils.ConvertDataTileOffsetToNeighborOffset(dataTileOffset), ruleToValidate.m_Neighbors[neighborIndex]);
+            })));
+            Debug.Log(string.Join(',', ruleToValidate.m_NeighborPositions));
+            Debug.Log(new HashSet<KeyValuePair<Vector3Int, int>>(dataTilemapPositions.Select(dataTilePosition =>
+            {
+                Vector3Int dataTileOffset = dataTilePosition - renderTilePosition;
+                int neighborIndex = ruleToValidate.GetNeighborIndex(dataTileOffset);
+                return new KeyValuePair<Vector3Int, int>(DualGridUtils.ConvertDataTileOffsetToNeighborOffset(dataTileOffset), ruleToValidate.m_Neighbors[neighborIndex]);
+            })).SetEquals(ruleToValidate.GetNeighbors()));
+            Debug.Log("-----------");*/
+            Dictionary<Vector3Int, int> neighbours = ruleToValidate.GetNeighborsCached();
             foreach (Vector3Int dataTilePosition in dataTilemapPositions)
             {
-                if(!DoesRuleMatchWithDataTile(ruleToValidate, dataTilePosition, renderTilePosition))
+                Vector3Int dataTileOffset = dataTilePosition - renderTilePosition;
+                Vector3Int neighborOffsetPosition = DualGridUtils.ConvertDataTileOffsetToNeighborOffset(dataTileOffset);
+                var neighborDataTile = _dataTilemap.GetTile(dataTilePosition);
+                if (!RuleMatch(neighbours[neighborOffsetPosition], neighborDataTile))
                 {
                     return false;
                 }
+
+                /*if(!DoesRuleMatchWithDataTile(ruleToValidate, dataTilePosition, renderTilePosition))
+                {
+                    return false;
+                }*/
             }
 
             return true;
@@ -91,7 +117,8 @@ namespace skner.DualGrid
             
             int neighborIndex = rule.GetNeighborIndex(dataTileOffset);
             var neighborDataTile = _dataTilemap.GetTile(dataTilePosition);
-            
+
+            return RuleMatch(rule.GetNeighbors()[DualGridUtils.ConvertDataTileOffsetToNeighborOffset(dataTileOffset)], neighborDataTile);
             return RuleMatch(rule.m_Neighbors[neighborIndex], neighborDataTile);
         }
 
