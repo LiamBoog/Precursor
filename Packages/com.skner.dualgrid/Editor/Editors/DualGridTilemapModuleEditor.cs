@@ -52,15 +52,6 @@ namespace skner.DualGrid.Editor
             }
         }
 
-        /*private void OnSceneGUI()
-        {
-            EventType currentEventType = Event.current.type;
-            if (currentEventType != EventType.MouseDrag && currentEventType != EventType.Layout)
-                return;
-            
-            _targetComponent.SetEditorPreviewTiles();
-        }*/
-
         public override void OnInspectorGUI()
         {
             // Additional custom inspector options could go here if needed
