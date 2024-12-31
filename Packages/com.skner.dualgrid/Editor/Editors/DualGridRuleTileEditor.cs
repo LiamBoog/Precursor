@@ -74,24 +74,13 @@ namespace skner.DualGrid.Editor
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
+            
+            EditorGUI.BeginChangeCheck();
             InjectDualGridTilingRules();
-            SaveTile();
-
-            /*if (m_TilingRules.arraySize == 0)
+            if (!EditorGUI.EndChangeCheck())
                 return;
-
-            IEnumerable<RuleTile.TilingRule> rules = (List<RuleTile.TilingRule>) typeof(RuleTile)
-                .GetField(nameof(m_TilingRules), BindingFlags.Public | BindingFlags.Instance)
-                .GetValue(serializedObject.targetObject);
-            foreach (RuleTile.TilingRule rule in rules)
-            {
-                if (rule is DualGridRuleTile.DualGridTilingRule dualGridRule)
-                {
-                    Debug.Log(string.Join(',', dualGridRule.Neighbours));
-                }
-            }
-
-            Debug.Log("---------------");*/
+            
+            SaveTile();
         }
 
         private void InjectDualGridTilingRules()
