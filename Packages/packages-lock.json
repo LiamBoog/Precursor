@@ -8,7 +8,7 @@
       "hash": "a011c51ed65c9abc3151a7a408bc70d408352933"
     },
     "com.skner.dualgrid": {
-      "version": "file:com.skner.dualgrid",
+      "version": "file:DualGrid",
       "depth": 0,
       "source": "embedded",
       "dependencies": {
