@@ -1883,11 +1883,11 @@ PrefabInstance:
       objectReference: {fileID: 1745096951}
     - target: {fileID: 2093549089998307079, guid: 68a5c64be62cc684aaa626288890b837, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.918367
+      value: 1.83
       objectReference: {fileID: 0}
     - target: {fileID: 2093549089998307079, guid: 68a5c64be62cc684aaa626288890b837, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.8874137
+      value: 2.07
       objectReference: {fileID: 0}
     - target: {fileID: 2093549089998307079, guid: 68a5c64be62cc684aaa626288890b837, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1924,6 +1924,18 @@ PrefabInstance:
     - target: {fileID: 5127175880758180961, guid: 68a5c64be62cc684aaa626288890b837, type: 3}
       propertyPath: m_Name
       value: Circle
+      objectReference: {fileID: 0}
+    - target: {fileID: 6445150169837867797, guid: 68a5c64be62cc684aaa626288890b837, type: 3}
+      propertyPath: m_Color.b
+      value: 0.49250892
+      objectReference: {fileID: 0}
+    - target: {fileID: 6445150169837867797, guid: 68a5c64be62cc684aaa626288890b837, type: 3}
+      propertyPath: m_Color.g
+      value: 0.6792453
+      objectReference: {fileID: 0}
+    - target: {fileID: 6445150169837867797, guid: 68a5c64be62cc684aaa626288890b837, type: 3}
+      propertyPath: m_Color.r
+      value: 0.1954432
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4452,6 +4464,8 @@ GameObject:
   - component: {fileID: 1745096951}
   - component: {fileID: 1745096950}
   - component: {fileID: 1745096953}
+  - component: {fileID: 1745096954}
+  - component: {fileID: 1745096955}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -4477,7 +4491,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.2990833, g: 0.4081735, b: 0.4433962, a: 1}
+  m_BackGroundColor: {r: 0.43734422, g: 0.49056602, b: 0.45863295, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -4502,7 +4516,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 10.84
+  orthographic size: 14.833333
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -4577,6 +4591,45 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &1745096954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1745096949}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 395c42507c057b04eb6baf2087d8624c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camera: {fileID: 1745096951}
+  resolution: {x: 427, y: 240}
+  texelsPerWorldUnit: 10
+--- !u!114 &1745096955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1745096949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c88f5cead0c0b2a4eb05b5900433f8d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ComponentVersion: 1
+  m_AssetsPPU: 10
+  m_RefResolutionX: 427
+  m_RefResolutionY: 240
+  m_CropFrame: 0
+  m_GridSnapping: 0
+  m_FilterMode: 0
+  m_UpscaleRT: 0
+  m_PixelSnapping: 0
+  m_CropFrameX: 0
+  m_CropFrameY: 0
+  m_StretchFill: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
