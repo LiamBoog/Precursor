@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 public readonly struct KinematicSegment<T> where T : struct, IEquatable<T>, IFormattable
@@ -42,6 +40,8 @@ public abstract partial class MovementState
     {
         parameters = movementParameters;
         player = playerInfo;
+        
+        player.NotifyStateChange(PlayerAnimator.AnimationState.Idle);
     }
 
     public virtual MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)

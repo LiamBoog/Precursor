@@ -58,6 +58,15 @@ public class WalkingState : MovementState
         motion = ApplyMotionCurves(t, ref kinematics, WalkingCurve,verticalCurve);
         t = 0f;
 
+        if (Mathf.Abs(kinematics.velocity.x) < 0.1f)
+        {
+            player.NotifyStateChange(PlayerAnimator.AnimationState.Idle);
+        }
+        else
+        {
+            player.NotifyStateChange(PlayerAnimator.AnimationState.Walk);
+        }
+
         return this;
     }
     

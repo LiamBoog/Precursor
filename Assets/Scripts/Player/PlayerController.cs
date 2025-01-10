@@ -88,7 +88,7 @@ public class MovementParameters
     protected float GetJumpVelocity(float maxJumpHeight, float duration) => 2f * maxJumpHeight / duration;
 }
 
-public interface IPlayerInfo
+public interface IPlayerInfo : PlayerAnimator.IAnimationNotifier
 {
     Vector2 Aim { get; }
     IInputBuffer JumpBuffer { get; }
@@ -158,6 +158,8 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
     private List<IInterrupt> interrupts = new();
     private InputBuffer jumpBuffer;
 
+    public event PlayerAnimator.IAnimationNotifier.AnimationStateChangeHandler StateChanged;
+    
     public Vector2 Aim => aim.action.ReadValue<Vector2>();
     private float WallCheckOverlapDistance
     {
@@ -186,6 +188,8 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
         jump.action.canceled += OnJumpCancelled;
         anchor.action.performed += OnAnchor;
         grapple.action.performed += OnGrapple;
+        
+        StateChanged?.Invoke(PlayerAnimator.AnimationState.Idle);
     }
 
     private void OnDisable()
@@ -286,5 +290,10 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
     private void OnGrapple(InputAction.CallbackContext _)
     {
         interrupts.Add(new GrappleInterrupt());
+    }
+    
+    public void NotifyStateChange(PlayerAnimator.AnimationState newState)
+    {
+        StateChanged?.Invoke(newState);
     }
 }
