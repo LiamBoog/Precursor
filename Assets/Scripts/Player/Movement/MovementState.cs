@@ -40,8 +40,6 @@ public abstract partial class MovementState
     {
         parameters = movementParameters;
         player = playerInfo;
-        
-        player.NotifyStateChange(PlayerAnimator.AnimationState.Idle);
     }
 
     public virtual MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
