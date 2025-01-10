@@ -30,6 +30,7 @@ public class PlayerAnimator : MonoBehaviour
     
     [SerializeField] private PlayerController playerController;
     [SerializeField] private Animator animator;
+    [SerializeField] private ExpMovingAverageFloat horizontalVelocity;
     
     private AnimationState currentState;
 
@@ -45,11 +46,16 @@ public class PlayerAnimator : MonoBehaviour
 
     private void Update()
     {
-        transform.localScale = Mathf.Abs(playerController.Velocity.x) < 0.1f ? transform.localScale : new Vector3(Math.Sign(playerController.Velocity.x), 1f, 1f);
+        horizontalVelocity.AddSample(playerController.Velocity.x, Time.deltaTime);
+        if (Mathf.Abs(horizontalVelocity) < 0.01f)
+            return;
+        
+        animator.SetFloat("HorizontalVelocity", horizontalVelocity);
     }
 
     private void OnStateChange(AnimationState newState)
     {
+        return;
         switch (newState)
         {
             case AnimationState.Idle:
