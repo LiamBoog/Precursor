@@ -20303,7 +20303,7 @@ MonoBehaviour:
   playerController: {fileID: 226080162}
   animator: {fileID: 1632814256}
   horizontalVelocity:
-    timeConstant: 0.1
+    timeConstant: 0.01
 --- !u!1001 &1681545694
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20460,7 +20460,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 14.566667
+  orthographic size: 14.6
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
