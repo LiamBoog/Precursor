@@ -25,7 +25,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 100}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 5439
+  controlID: 6698
   draggingID: 0
 --- !u!114 &2
 MonoBehaviour:
@@ -71,7 +71,7 @@ MonoBehaviour:
   m_TextureFilterMode: 0
   m_TextureHideFlags: 61
   m_RenderIMGUI: 1
-  m_EnterPlayModeBehavior: 1
+  m_EnterPlayModeBehavior: 0
   m_UseMipMap: 0
   m_VSyncEnabled: 0
   m_Gizmos: 1
@@ -267,8 +267,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 64750000d2720000da360000de360000c0360000e2360000
-    m_LastClickedInstanceID: 30052
+    m_SelectedInstanceIDs: 08730000
+    m_LastClickedInstanceID: 29448
     m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c6230000eca6fefffc770000fe7700000276000040750000
     m_RenameOverlay:
@@ -322,7 +322,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 0
-  controlID: 5417
+  controlID: 6699
   draggingID: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -348,7 +348,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 5381
+  controlID: 6700
   draggingID: 0
 --- !u!114 &7
 MonoBehaviour:
@@ -369,8 +369,8 @@ MonoBehaviour:
     y: 0
     width: 1650
     height: 918
-  m_MinSize: {x: 201, y: 221}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 202, y: 221}
+  m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 2}
   m_Panes:
   - {fileID: 8}
@@ -888,7 +888,7 @@ MonoBehaviour:
     x: 668
     y: 73
     width: 1648
-    height: 895
+    height: 897
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -1115,7 +1115,7 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 64750000d2720000da360000de360000c0360000e2360000
+      m_SelectedIDs: 08730000
       m_LastClickedID: 0
       m_ExpandedIDs: acfaffff
       m_RenameOverlay:
@@ -1204,7 +1204,7 @@ MonoBehaviour:
   m_ObjectsLockedBeforeSerialization: []
   m_InstanceIDsLockedBeforeSerialization: 
   m_PreviewResizer:
-    m_CachedPref: 348
+    m_CachedPref: 349
     m_ControlHash: -371814159
     m_PrefName: Preview_InspectorPreview
   m_LastInspectedObjectInstanceID: -1

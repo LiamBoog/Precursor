@@ -34,7 +34,7 @@ public abstract partial class MovementState
 
     protected bool TryWallSlide(IEnumerable<IInterrupt> interrupts, out MovementState newState)
     {
-        if (interrupts.FirstOrDefault(i => i is ICollision) is ICollision collision && collision.Normal.x != 0f && player.WallCheck() * player.Aim.x < 0f)
+        if (!player.GroundCheck() && interrupts.FirstOrDefault(i => i is ICollision) is ICollision collision && collision.Normal.x != 0f && player.WallCheck() * player.Aim.x < 0f)
         {
             newState = new WallSlideState(parameters, player);
             return true;
