@@ -20384,6 +20384,22 @@ PrefabInstance:
       propertyPath: movementParameters.defaultJump.<CancelledJumpRise>k__BackingField
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 7227300469577057271, guid: cfaed687db67d81459399607058d2c75, type: 3}
+      propertyPath: m_Size.x
+      value: 1.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7227300469577057271, guid: cfaed687db67d81459399607058d2c75, type: 3}
+      propertyPath: m_Size.y
+      value: 1.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7227300469577057271, guid: cfaed687db67d81459399607058d2c75, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1592959102, guid: 3738d800b2a874f44827e9e39740c5e9, type: 3}
+    - target: {fileID: 7227300469577057271, guid: cfaed687db67d81459399607058d2c75, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8798382060370734211, guid: cfaed687db67d81459399607058d2c75, type: 3}
       propertyPath: m_Name
       value: Cowboy
