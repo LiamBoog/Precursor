@@ -29,6 +29,7 @@ public class JumpingState : MovementState
         onFirstUpdate = (ref KinematicState<Vector2> kinematics) =>
         {
             onFirstUpdate = null;
+            Debug.Log(parameters.JumpVelocity);
             kinematics.velocity.y = parameters.JumpVelocity;
         };
         player.JumpBuffer.Flush();

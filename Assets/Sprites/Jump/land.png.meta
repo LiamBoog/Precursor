@@ -97,106 +97,85 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: land_right_0
+      name: land_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 16.2
+        width: 16.25
         height: 21
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.4923077, y: 0.47619048}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d5484b2732ce3234482bd433ec2f3189
-      internalID: 1863882512
+      spriteID: 3d873c197558a534daa3515c71f9aa58
+      internalID: -2125464450
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: land_right_1
+      name: land_1
       rect:
         serializedVersion: 2
         x: 16
         y: 0
-        width: 16.2
+        width: 16.25
         height: 21
       alignment: 9
-      pivot: {x: 0.5555555, y: 0.47619048}
+      pivot: {x: 0.5538462, y: 0.5714286}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 002d3ebb239d9824ba6532b6adac6c26
-      internalID: 394377207
+      spriteID: e249910b1ef249144bcb7ed407c73e0e
+      internalID: 379733891
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: land_right_2
+      name: land_2
       rect:
         serializedVersion: 2
         x: 32
         y: 0
-        width: 16.2
+        width: 16.25
         height: 21
       alignment: 9
-      pivot: {x: 0.5555555, y: 0.5714286}
+      pivot: {x: 0.5538462, y: 0.5714286}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5bff26afa7a8b0f4190a624a058a42da
-      internalID: -798104426
+      spriteID: cf3713a3a80dfee4199e17ddd7fecaae
+      internalID: -1032678546
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: land_right_3
+      name: land_3
       rect:
         serializedVersion: 2
         x: 48
         y: 0
-        width: 16
+        width: 16.25
         height: 21
       alignment: 9
-      pivot: {x: 0.5625, y: 0.5714286}
+      pivot: {x: 0.5538462, y: 0.52380955}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e38bb22d4d654944a89e5bdcf8bf2551
-      internalID: 1606272591
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: land_right_4
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 0
-        width: 16.2
-        height: 21
-      alignment: 9
-      pivot: {x: 0.5555555, y: 0.52380955}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 77a88ddb0807cb94ba878b7540b21537
-      internalID: 2031322704
+      spriteID: 94a32058a4ba09c47af1b398ebac1962
+      internalID: 2024248314
       vertices: []
       indices: 
       edges: []
@@ -212,11 +191,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      land_right_0: 1863882512
-      land_right_1: 394377207
-      land_right_2: -798104426
-      land_right_3: 1606272591
-      land_right_4: 2031322704
+      land_0: -2125464450
+      land_1: 379733891
+      land_2: -1032678546
+      land_3: 2024248314
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
