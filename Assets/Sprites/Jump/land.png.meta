@@ -102,10 +102,10 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 16.25
-        height: 21
+        width: 16
+        height: 20
       alignment: 9
-      pivot: {x: 0.4923077, y: 0.47619048}
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -123,10 +123,10 @@ TextureImporter:
         serializedVersion: 2
         x: 16
         y: 0
-        width: 16.25
-        height: 21
+        width: 16
+        height: 20
       alignment: 9
-      pivot: {x: 0.5538462, y: 0.5714286}
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -144,10 +144,10 @@ TextureImporter:
         serializedVersion: 2
         x: 32
         y: 0
-        width: 16.25
-        height: 21
+        width: 16
+        height: 20
       alignment: 9
-      pivot: {x: 0.5538462, y: 0.5714286}
+      pivot: {x: 0.5, y: 0.15}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -155,27 +155,6 @@ TextureImporter:
       bones: []
       spriteID: cf3713a3a80dfee4199e17ddd7fecaae
       internalID: -1032678546
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: land_3
-      rect:
-        serializedVersion: 2
-        x: 48
-        y: 0
-        width: 16.25
-        height: 21
-      alignment: 9
-      pivot: {x: 0.5538462, y: 0.52380955}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 94a32058a4ba09c47af1b398ebac1962
-      internalID: 2024248314
       vertices: []
       indices: 
       edges: []
@@ -194,7 +173,6 @@ TextureImporter:
       land_0: -2125464450
       land_1: 379733891
       land_2: -1032678546
-      land_3: 2024248314
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

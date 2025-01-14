@@ -97,169 +97,169 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: cowboy_run_right_0
+      name: run_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 15
-        height: 19
+        width: 17
+        height: 21
       alignment: 9
-      pivot: {x: 0.53333336, y: 0.47368422}
+      pivot: {x: 0.5294118, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 68e7a24eb0d9224498b9190124b8d354
-      internalID: -549368534
+      spriteID: 9cacca8d46390c74d8eaab65bf8e5b49
+      internalID: -409587797
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_run_right_1
+      name: run_1
       rect:
         serializedVersion: 2
-        x: 15
+        x: 17
         y: 0
-        width: 15
-        height: 19
+        width: 17
+        height: 21
       alignment: 9
-      pivot: {x: 0.53333336, y: 0.47368422}
+      pivot: {x: 0.5294118, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 19c986686a63ff3408a0d9ee01561c74
-      internalID: 129300131
+      spriteID: 2d8cbfee977a59d4a87095b1bdcd75d6
+      internalID: -1438480446
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_run_right_2
+      name: run_2
       rect:
         serializedVersion: 2
-        x: 30
+        x: 34
         y: 0
-        width: 15
-        height: 19
+        width: 17
+        height: 21
       alignment: 9
-      pivot: {x: 0.53333336, y: 0.47368422}
+      pivot: {x: 0.5294118, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 52e3e698c3b112141bc190d2fa60974e
-      internalID: -1624568761
+      spriteID: e498ee78f1704e14d97d96dcf2074505
+      internalID: -837398009
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_run_right_3
+      name: run_3
       rect:
         serializedVersion: 2
-        x: 45
+        x: 51
         y: 0
-        width: 15
-        height: 19
+        width: 17
+        height: 21
       alignment: 9
-      pivot: {x: 0.53333336, y: 0.47368422}
+      pivot: {x: 0.5294118, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 05bff7d09f2c79b4192622a0aeae683d
-      internalID: -2088484578
+      spriteID: 08c3099dbd05d5b468691ea65d2de45c
+      internalID: 113031312
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_run_right_4
+      name: run_4
       rect:
         serializedVersion: 2
-        x: 60
+        x: 68
         y: 0
-        width: 15
-        height: 19
+        width: 17
+        height: 21
       alignment: 9
-      pivot: {x: 0.53333336, y: 0.47368422}
+      pivot: {x: 0.5294118, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bbba7050c818a8c49a8a63ef81becb9b
-      internalID: 209891326
+      spriteID: 3601cef8a527aff4dbb4b14363fcdc14
+      internalID: 114926338
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_run_right_5
+      name: run_5
       rect:
         serializedVersion: 2
-        x: 75
+        x: 85
         y: 0
-        width: 15
-        height: 19
+        width: 17
+        height: 21
       alignment: 9
-      pivot: {x: 0.53333336, y: 0.47368422}
+      pivot: {x: 0.5294118, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f7723485cc9ea7a4496bcb5a98d68142
-      internalID: 2058542322
+      spriteID: e5c7f0d7468f2cc4d86929540cdc99af
+      internalID: 1414696971
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_run_right_6
+      name: run_6
       rect:
         serializedVersion: 2
-        x: 90
+        x: 102
         y: 0
-        width: 15
-        height: 19
+        width: 17
+        height: 21
       alignment: 9
-      pivot: {x: 0.53333336, y: 0.47368422}
+      pivot: {x: 0.5294118, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9e1b78910c446f44b951e433287cb968
-      internalID: -761741952
+      spriteID: 2fc84274ac930e34bac4a01d2c44d528
+      internalID: -1329507731
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_run_right_7
+      name: run_7
       rect:
         serializedVersion: 2
-        x: 105
+        x: 119
         y: 0
-        width: 15
-        height: 19
+        width: 17
+        height: 21
       alignment: 9
-      pivot: {x: 0.53333336, y: 0.47368422}
+      pivot: {x: 0.5294118, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0c222d5657aab3b4097424b2e2ca3f46
-      internalID: -1922033405
+      spriteID: d78ce00c540866141a0f31730f779151
+      internalID: -846511463
       vertices: []
       indices: 
       edges: []
@@ -275,14 +275,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      cowboy_run_right_0: -549368534
-      cowboy_run_right_1: 129300131
-      cowboy_run_right_2: -1624568761
-      cowboy_run_right_3: -2088484578
-      cowboy_run_right_4: 209891326
-      cowboy_run_right_5: 2058542322
-      cowboy_run_right_6: -761741952
-      cowboy_run_right_7: -1922033405
+      run_0: -409587797
+      run_1: -1438480446
+      run_2: -837398009
+      run_3: 113031312
+      run_4: 114926338
+      run_5: 1414696971
+      run_6: -1329507731
+      run_7: -846511463
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

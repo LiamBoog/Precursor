@@ -97,484 +97,484 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: cowboy_idle_0
+      name: idle_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e5218985041b5084bb4c2b13f06ae9bb
-      internalID: 1592959102
+      spriteID: 7e9b1ac31a4451c4dbd5a89c71b4045c
+      internalID: 574251828
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_idle_1
+      name: idle_1
       rect:
         serializedVersion: 2
-        x: 14
+        x: 16
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9a331e0c508350747870649782874352
-      internalID: -224750397
+      spriteID: b09bffa20bace3249b88d395b6f1da96
+      internalID: -664961687
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_idle_2
+      name: idle_2
       rect:
         serializedVersion: 2
-        x: 28
+        x: 32
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f1aad87baddfe174c9ccb36e831b97f4
-      internalID: 1800580269
+      spriteID: c6130e1623664bf458079fb3c962c4a7
+      internalID: 510479051
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_idle_3
+      name: idle_3
       rect:
         serializedVersion: 2
-        x: 42
+        x: 48
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7e0776bb8389168479a558b15611e312
-      internalID: 1901692009
+      spriteID: 82b094445c76c4d40b6d181312ca7d55
+      internalID: -1946004700
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_idle_4
+      name: idle_4
       rect:
         serializedVersion: 2
-        x: 56
+        x: 64
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 95350ecde80836d4c8f5802c93ae7213
-      internalID: -474347985
+      spriteID: e7d8501951f712941a28c787b5898a4a
+      internalID: 519124005
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_idle_5
+      name: idle_5
       rect:
         serializedVersion: 2
-        x: 70
+        x: 80
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b5c5343fa5f44544c9c78aac0f503709
-      internalID: 277567040
+      spriteID: b6bdaba3ed3b98d41ab3f7da9b34cee5
+      internalID: 997118997
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_idle_6
+      name: idle_6
       rect:
         serializedVersion: 2
-        x: 84
+        x: 96
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0bdfe534cc944bd4da348e34faf81a2f
-      internalID: -1195164748
+      spriteID: 12a2d9b6b8efc9247bf0e4ddf121616e
+      internalID: 246878618
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_idle_7
-      rect:
-        serializedVersion: 2
-        x: 98
-        y: 0
-        width: 14
-        height: 19
-      alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6229ee9a604650846af8ccef5f541998
-      internalID: 2055833987
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: cowboy_idle_8
+      name: idle_7
       rect:
         serializedVersion: 2
         x: 112
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ef8c98fcdbad53744a14cdaa42b44b27
-      internalID: -2121831195
+      spriteID: da11229a70559a84d969f3a213a13ddb
+      internalID: 510236126
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_idle_9
+      name: idle_8
       rect:
         serializedVersion: 2
-        x: 126
+        x: 128
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c7f5dd12d4c48eb42be16a23c061395f
-      internalID: 1595682471
+      spriteID: f6e80232ba86d534cb62ff8aafca518f
+      internalID: 1180065982
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_idle_10
+      name: idle_9
       rect:
         serializedVersion: 2
-        x: 140
+        x: 144
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d4152530dd09156448b24489a9fd6b0e
-      internalID: -1305537949
+      spriteID: 9c83299e000ccd64e8230a4689b1a1bc
+      internalID: -1029837525
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_idle_11
+      name: idle_10
       rect:
         serializedVersion: 2
-        x: 154
+        x: 160
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6fb4cafd91b544742933c2d0b79929a3
-      internalID: 1184527845
+      spriteID: b18797744f813e143869b3bbe54b5cb9
+      internalID: 2009650530
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_idle_12
+      name: idle_11
       rect:
         serializedVersion: 2
-        x: 168
+        x: 176
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2d55bdb4d4d88c8459c396aafd8394ff
-      internalID: -1110761146
+      spriteID: 7cafea1a0e2231d45ac728421d6658a2
+      internalID: 1560279171
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_idle_13
+      name: idle_12
       rect:
         serializedVersion: 2
-        x: 182
+        x: 192
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0833f48f3717b2641ab02a8c58639145
-      internalID: 1933598587
+      spriteID: 698e145de1925934e9ee03a29500548e
+      internalID: 80498655
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_idle_14
+      name: idle_13
       rect:
         serializedVersion: 2
-        x: 196
+        x: 208
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c0fe69903f01a8441af4fcb056bf9a23
-      internalID: 495933695
+      spriteID: e63f2bda645b58b4094a389b93923c2b
+      internalID: -1072598215
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_idle_15
-      rect:
-        serializedVersion: 2
-        x: 210
-        y: 0
-        width: 14
-        height: 19
-      alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 772ab5779eb70a240bd61318173fdb6b
-      internalID: -1305924429
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: cowboy_idle_16
+      name: idle_14
       rect:
         serializedVersion: 2
         x: 224
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c454093134395c548954ddfa94767545
-      internalID: -58893242
+      spriteID: 8b35599dc7d0c4345aac9d4a2517639e
+      internalID: -636691345
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_idle_17
+      name: idle_15
       rect:
         serializedVersion: 2
-        x: 238
+        x: 240
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ab246cd736f493e42987b32c4097def3
-      internalID: 889987335
+      spriteID: 5955a3d7c112b644f91a6a97d93a0320
+      internalID: -1276046941
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_idle_18
+      name: idle_16
       rect:
         serializedVersion: 2
-        x: 252
+        x: 256
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fc07ff38cc8fdb848af6b4e4e2dbf650
-      internalID: 1913959169
+      spriteID: 8b3fba484e561394e821f9a431f851f4
+      internalID: -77176311
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_idle_19
+      name: idle_17
       rect:
         serializedVersion: 2
-        x: 266
+        x: 272
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 43d449466f72bb340a8e72d191b5b4e0
-      internalID: -438795237
+      spriteID: a5346946ee4b88d439e4d594c0d14263
+      internalID: 860865759
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_idle_20
+      name: idle_18
       rect:
         serializedVersion: 2
-        x: 280
+        x: 288
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c796967c1e5090a479e1b92a08c7ef58
-      internalID: 197906118
+      spriteID: 6957083ae648ee14aad045fbad285b87
+      internalID: 2060651528
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_idle_21
+      name: idle_19
       rect:
         serializedVersion: 2
-        x: 294
+        x: 304
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8df7fdef64f0355409fb1b3605c5dc18
-      internalID: -605337874
+      spriteID: 66a6800768131ea4aa86e198f9f3f5d4
+      internalID: -86952411
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_idle_22
+      name: idle_20
       rect:
         serializedVersion: 2
-        x: 308
+        x: 320
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ed280d74cdd2364418aeaaa0bce061aa
-      internalID: 1740775804
+      spriteID: 5dc71e3c4aa527e4c930a521238746de
+      internalID: -16509637
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: idle_21
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 0
+        width: 16
+        height: 21
+      alignment: 9
+      pivot: {x: 0.5, y: 0.14285715}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48d803324c2169f428cde943d3168535
+      internalID: 1525289143
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: idle_22
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 0
+        width: 16
+        height: 21
+      alignment: 9
+      pivot: {x: 0.5, y: 0.14285715}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd5e9577f0097af43b77b6522dd75c86
+      internalID: -1833506437
       vertices: []
       indices: 
       edges: []
@@ -590,29 +590,29 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      cowboy_idle_0: 1592959102
-      cowboy_idle_1: -224750397
-      cowboy_idle_10: -1305537949
-      cowboy_idle_11: 1184527845
-      cowboy_idle_12: -1110761146
-      cowboy_idle_13: 1933598587
-      cowboy_idle_14: 495933695
-      cowboy_idle_15: -1305924429
-      cowboy_idle_16: -58893242
-      cowboy_idle_17: 889987335
-      cowboy_idle_18: 1913959169
-      cowboy_idle_19: -438795237
-      cowboy_idle_2: 1800580269
-      cowboy_idle_20: 197906118
-      cowboy_idle_21: -605337874
-      cowboy_idle_22: 1740775804
-      cowboy_idle_3: 1901692009
-      cowboy_idle_4: -474347985
-      cowboy_idle_5: 277567040
-      cowboy_idle_6: -1195164748
-      cowboy_idle_7: 2055833987
-      cowboy_idle_8: -2121831195
-      cowboy_idle_9: 1595682471
+      idle_0: 574251828
+      idle_1: -664961687
+      idle_10: 2009650530
+      idle_11: 1560279171
+      idle_12: 80498655
+      idle_13: -1072598215
+      idle_14: -636691345
+      idle_15: -1276046941
+      idle_16: -77176311
+      idle_17: 860865759
+      idle_18: 2060651528
+      idle_19: -86952411
+      idle_2: 510479051
+      idle_20: -16509637
+      idle_21: 1525289143
+      idle_22: -1833506437
+      idle_3: -1946004700
+      idle_4: 519124005
+      idle_5: 997118997
+      idle_6: 246878618
+      idle_7: 510236126
+      idle_8: 1180065982
+      idle_9: -1029837525
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

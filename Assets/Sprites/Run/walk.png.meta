@@ -97,253 +97,253 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: cowboy_walk_0
+      name: walk_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a7905969531f7494aa7c928f0da1b647
-      internalID: -1648789523
+      spriteID: 7d93066c0b4394d45af31cb58ab5085e
+      internalID: 334398554
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_walk_1
+      name: walk_1
       rect:
         serializedVersion: 2
-        x: 14
+        x: 16
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1239eb39dec2ca24787104caf12fe8e2
-      internalID: -245122044
+      spriteID: 0b8e6708b2d42f245a0ba2ab377bf4bd
+      internalID: 2090379905
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_walk_2
+      name: walk_2
       rect:
         serializedVersion: 2
-        x: 28
+        x: 32
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: af2a1e0b4009bf24387ebff4c385f5e9
-      internalID: -1802960603
+      spriteID: cf5e98939b053714fb3ff38158902ea6
+      internalID: -734765069
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_walk_3
+      name: walk_3
       rect:
         serializedVersion: 2
-        x: 42
+        x: 48
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bd2150a3494d1c84196b28027c7adb67
-      internalID: -1215028543
+      spriteID: 036021307929528498a4acd3450743c6
+      internalID: -2065416610
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_walk_4
+      name: walk_4
       rect:
         serializedVersion: 2
-        x: 56
+        x: 64
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 552937f2517ad68458bd6eb93b58967a
-      internalID: -1816701810
+      spriteID: 4087195263017fb4a8341f4f623fcde5
+      internalID: -1100717450
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_walk_5
+      name: walk_5
       rect:
         serializedVersion: 2
-        x: 70
+        x: 80
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f48f3ba6fc2c4304783c9c1c27a42067
-      internalID: 2087965037
+      spriteID: 6c8c82d6a658b37458cf255f77715b2b
+      internalID: 969330346
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_walk_6
+      name: walk_6
       rect:
         serializedVersion: 2
-        x: 84
+        x: 96
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7fc7f534067f6ff44a996bbccb3a885c
-      internalID: -1910251533
+      spriteID: 6e1e763ae3c5fd94ea823b8187ec9903
+      internalID: -954538082
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_walk_7
-      rect:
-        serializedVersion: 2
-        x: 98
-        y: 0
-        width: 14
-        height: 19
-      alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8ce63ed012212314db1bc9b8a21d6e62
-      internalID: 1479817346
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: cowboy_walk_8
+      name: walk_7
       rect:
         serializedVersion: 2
         x: 112
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f5249770976a0984a855ce0932781f93
-      internalID: 538182315
+      spriteID: f88be64a28caca349b1b3e923e21a99e
+      internalID: 2074736903
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_walk_9
+      name: walk_8
       rect:
         serializedVersion: 2
-        x: 126
+        x: 128
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a39770eed7066e74dbda15f7864178bd
-      internalID: -1705333490
+      spriteID: 572b28e67746d894595d38591167e645
+      internalID: 2028362382
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_walk_10
+      name: walk_9
       rect:
         serializedVersion: 2
-        x: 140
+        x: 144
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f17c9fe9709897046acb166c7320e05a
-      internalID: 1759739405
+      spriteID: c2e13fc98fc07c94ab3534064f463f90
+      internalID: -202937854
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cowboy_walk_11
+      name: walk_10
       rect:
         serializedVersion: 2
-        x: 154
+        x: 160
         y: 0
-        width: 14
-        height: 19
+        width: 16
+        height: 21
       alignment: 9
-      pivot: {x: 0.5, y: 0.47368422}
+      pivot: {x: 0.5, y: 0.14285715}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d0244c31a720ca04587964008ec357cb
-      internalID: -1017642910
+      spriteID: 93f04137a49de584398f9018a443ddf1
+      internalID: 1694436346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: walk_11
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 0
+        width: 16
+        height: 21
+      alignment: 9
+      pivot: {x: 0.5, y: 0.14285715}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71a5fdb40f5352f49988de41f42c5540
+      internalID: 1340854913
       vertices: []
       indices: 
       edges: []
@@ -359,18 +359,18 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      cowboy_walk_0: -1648789523
-      cowboy_walk_1: -245122044
-      cowboy_walk_10: 1759739405
-      cowboy_walk_11: -1017642910
-      cowboy_walk_2: -1802960603
-      cowboy_walk_3: -1215028543
-      cowboy_walk_4: -1816701810
-      cowboy_walk_5: 2087965037
-      cowboy_walk_6: -1910251533
-      cowboy_walk_7: 1479817346
-      cowboy_walk_8: 538182315
-      cowboy_walk_9: -1705333490
+      walk_0: 334398554
+      walk_1: 2090379905
+      walk_10: 1694436346
+      walk_11: 1340854913
+      walk_2: -734765069
+      walk_3: -2065416610
+      walk_4: -1100717450
+      walk_5: 969330346
+      walk_6: -954538082
+      walk_7: 2074736903
+      walk_8: 2028362382
+      walk_9: -202937854
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
