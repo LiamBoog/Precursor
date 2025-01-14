@@ -25,7 +25,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 100}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 29076
+  controlID: 29664
   draggingID: 0
 --- !u!114 &2
 MonoBehaviour:
@@ -197,7 +197,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Sprites
+    - Assets/Sprites/Jump
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -205,16 +205,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Sprites
+  - Assets/Sprites/Jump
   m_LastFoldersGridSize: 64
   m_LastProjectPath: C:\Users\Liam Boog\Documents\Unity Projects\Precursor
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 02750000
-    m_LastClickedID: 29954
-    m_ExpandedIDs: 000000006e7300007073000072730000747300007673000000ca9a3bffffff7f
+    m_SelectedIDs: 48750000
+    m_LastClickedID: 30024
+    m_ExpandedIDs: 000000006e730000707300007273000074730000767300000275000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -269,8 +269,8 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 6416ffff
     m_LastClickedInstanceID: -59804
-    m_HadKeyboardFocusLastEvent: 0
-    m_ExpandedInstanceIDs: c6230000eca6fefffc770000fe7700000276000040750000
+    m_HadKeyboardFocusLastEvent: 1
+    m_ExpandedInstanceIDs: c6230000eca6fefffc770000fe770000027600004075000062750000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -322,7 +322,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 0
-  controlID: 29077
+  controlID: 29665
   draggingID: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -348,7 +348,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 29078
+  controlID: 29666
   draggingID: 0
 --- !u!114 &7
 MonoBehaviour:
@@ -786,9 +786,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 5.143232, y: 2.0255334, z: -0.0082454495}
+    m_Target: {x: 5.0506554, y: 2.1013656, z: -0.0048057903}
     speed: 2
-    m_Value: {x: 5.143232, y: 2.0255334, z: -0.0082454495}
+    m_Value: {x: 5.0506554, y: 2.1013656, z: -0.0048057903}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -838,9 +838,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 2.148366
+    m_Target: 1.8040167
     speed: 2
-    m_Value: 2.148366
+    m_Value: 1.8040167
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -907,14 +907,14 @@ MonoBehaviour:
     - {fileID: -7279107683741033852, guid: 586405c207b62b44e8a7790e9c9c2b62, type: 2}
     - {fileID: 2360433178525530152, guid: 586405c207b62b44e8a7790e9c9c2b62, type: 2}
     m_ValueSerializationHelper:
-    - e00: 1.1059318
+    - e00: 2.0843291
       e01: 0
       e02: 0
-      e03: -62.524292
+      e03: -484.75037
       e10: 0
-      e11: 1.1059318
+      e11: 2.0843291
       e12: 0
-      e13: 85.823456
+      e13: -265.81262
       e20: 0
       e21: 0
       e22: 1
@@ -1024,8 +1024,8 @@ MonoBehaviour:
     y: 918
     width: 1650
     height: 381
-  m_MinSize: {x: 101, y: 121}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 100, y: 100}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 11}
   m_Panes:
   - {fileID: 11}
