@@ -20304,8 +20304,18 @@ MonoBehaviour:
   animator: {fileID: 1632814256}
   horizontalVelocity:
     timeConstant: 0.01
-  verticalVelocity:
-    timeConstant: 0.01
+  verticalVelocityParameter:
+    <Hash>k__BackingField: 731332534
+    <ParameterIndex>k__BackingField: 0
+    <Controller>k__BackingField: {fileID: 0}
+  horizontalVelocityParameter:
+    <Hash>k__BackingField: 731332534
+    <ParameterIndex>k__BackingField: 0
+    <Controller>k__BackingField: {fileID: 0}
+  groundedParameter:
+    <Hash>k__BackingField: 862969536
+    <ParameterIndex>k__BackingField: 0
+    <Controller>k__BackingField: {fileID: 0}
 --- !u!1001 &1681545694
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20368,7 +20378,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3552175233007192449, guid: cfaed687db67d81459399607058d2c75, type: 3}
       propertyPath: m_SpriteTilingProperty.pivot.x
-      value: 0.5294118
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3552175233007192449, guid: cfaed687db67d81459399607058d2c75, type: 3}
       propertyPath: m_SpriteTilingProperty.pivot.y
@@ -20384,7 +20394,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3552175233007192449, guid: cfaed687db67d81459399607058d2c75, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
-      value: 1.7
+      value: 1.6
       objectReference: {fileID: 0}
     - target: {fileID: 3552175233007192449, guid: cfaed687db67d81459399607058d2c75, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.y
