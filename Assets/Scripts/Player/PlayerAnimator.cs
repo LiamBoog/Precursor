@@ -5,13 +5,10 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField] private PlayerController playerController;
     [SerializeField] private Animator animator;
     [SerializeField] private ExpMovingAverageFloat horizontalVelocity;
-
     [SerializeField] private AnimatorControllerParameterHash verticalVelocityParameter;
     [SerializeField] private AnimatorControllerParameterHash horizontalVelocityParameter;
     [SerializeField] private AnimatorControllerParameterHash groundedParameter;
     
-    private AnimationState currentState;
-
     private void Update()
     {
         animator.SetFloat(verticalVelocityParameter, playerController.Velocity.y);
