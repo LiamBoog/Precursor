@@ -20,8 +20,8 @@ public abstract class ParameterSelectorEditor<T> : PropertyDrawer where T : Obje
     private const float HORIZONTAL_PADDING = 5f;
 
     protected abstract IEnumerable<Parameter> GetParameters(T target);
-    
-    protected static string GetBackingFieldName(string autoPropertyName) => $"<{autoPropertyName}>k__BackingField";
+
+    private static string GetBackingFieldName(string autoPropertyName) => $"<{autoPropertyName}>k__BackingField";
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {

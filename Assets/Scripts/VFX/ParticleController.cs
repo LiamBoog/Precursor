@@ -5,17 +5,14 @@ using UnityEngine.VFX;
 public class ParticleController : MonoBehaviour
 {
     [SerializeField] private VisualEffect visualEffect;
-    [SerializeField] private ParameterSelector<VisualEffect> positionProperty;
-    [SerializeField] private Vector2 position;
 
     private void OnEnable()
     {
-        SpawnParticle(position);
+        SpawnParticle();
     }
 
-    public void SpawnParticle(Vector2 position)
+    public void SpawnParticle()
     {
-        visualEffect.SetVector2(positionProperty, position);
         visualEffect.Play();
     }
 }
