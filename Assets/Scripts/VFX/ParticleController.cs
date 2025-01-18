@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -7,25 +5,17 @@ using UnityEngine.VFX;
 public class ParticleController : MonoBehaviour
 {
     [SerializeField] private VisualEffect visualEffect;
+    [SerializeField] private ParameterSelector<VisualEffect> positionProperty;
+    [SerializeField] private Vector2 position;
 
     private void OnEnable()
     {
-        StartCoroutine(Routine());
-        List<VFXExposedProperty> properties = new();
-        visualEffect.visualEffectAsset.GetExposedProperties(properties);
-        foreach (var property in properties)
-        {
-            Debug.Log(property.name);
-        }
+        SpawnParticle(position);
     }
 
-    private IEnumerator Routine()
+    public void SpawnParticle(Vector2 position)
     {
-        int n = 4;
-        while (n-- > 0)
-        {
-            visualEffect.Play();
-            yield return new WaitForSeconds(0.4f);
-        }
+        visualEffect.SetVector2(positionProperty, position);
+        visualEffect.Play();
     }
 }

@@ -152,6 +152,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visualEffect: {fileID: 350345268}
+  positionProperty:
+    <Id>k__BackingField: 1011
+    <ParameterIndex>k__BackingField: 3
+    <Target>k__BackingField: {fileID: 350345268}
 --- !u!4 &54325914
 Transform:
   m_ObjectHideFlags: 0
@@ -20470,17 +20474,17 @@ MonoBehaviour:
   horizontalVelocity:
     timeConstant: 0.01
   verticalVelocityParameter:
-    <Hash>k__BackingField: -1380605809
+    <Id>k__BackingField: -1380605809
     <ParameterIndex>k__BackingField: 1
-    <Controller>k__BackingField: {fileID: 9100000, guid: 586405c207b62b44e8a7790e9c9c2b62, type: 2}
+    <Target>k__BackingField: {fileID: 9100000, guid: 586405c207b62b44e8a7790e9c9c2b62, type: 2}
   horizontalVelocityParameter:
-    <Hash>k__BackingField: 731332534
+    <Id>k__BackingField: 731332534
     <ParameterIndex>k__BackingField: 0
-    <Controller>k__BackingField: {fileID: 9100000, guid: 586405c207b62b44e8a7790e9c9c2b62, type: 2}
+    <Target>k__BackingField: {fileID: 9100000, guid: 586405c207b62b44e8a7790e9c9c2b62, type: 2}
   groundedParameter:
-    <Hash>k__BackingField: 862969536
+    <Id>k__BackingField: 862969536
     <ParameterIndex>k__BackingField: 2
-    <Controller>k__BackingField: {fileID: 9100000, guid: 586405c207b62b44e8a7790e9c9c2b62, type: 2}
+    <Target>k__BackingField: {fileID: 9100000, guid: 586405c207b62b44e8a7790e9c9c2b62, type: 2}
 --- !u!1001 &1681545694
 PrefabInstance:
   m_ObjectHideFlags: 0

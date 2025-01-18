@@ -1,33 +1,46 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.Animations;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(AnimatorControllerParameterHash))]
-public class AnimatorControllerParameterHashDrawer : PropertyDrawer
+public abstract class ParameterSelectorEditor<T> : PropertyDrawer where T : Object
 {
+    protected struct Parameter
+    {
+        public string Name { get; }
+        public int Hash { get; }
+
+        public Parameter(string name, int hash)
+        {
+            Name = name;
+            Hash = hash;
+        }
+    }
+    
     private const float HORIZONTAL_PADDING = 5f;
+
+    protected abstract IEnumerable<Parameter> GetParameters(T target);
     
-    private static string GetBackingFieldName(string autoPropertyName) => $"<{autoPropertyName}>k__BackingField";
-    
+    protected static string GetBackingFieldName(string autoPropertyName) => $"<{autoPropertyName}>k__BackingField";
+
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         EditorGUI.BeginProperty(position, label, property);
-
-        SerializedProperty controllerProperty = property.FindPropertyRelative(GetBackingFieldName(nameof(AnimatorControllerParameterHash.Controller)));
-        SerializedProperty hashProperty = property.FindPropertyRelative(GetBackingFieldName(nameof(AnimatorControllerParameterHash.Hash)));
-        SerializedProperty parameterIndexProperty = property.FindPropertyRelative(GetBackingFieldName(nameof(AnimatorControllerParameterHash.ParameterIndex)));
+        
+        SerializedProperty targetProperty = property.FindPropertyRelative(GetBackingFieldName(nameof(ParameterSelector<T>.Target)));
+        SerializedProperty hashProperty = property.FindPropertyRelative(GetBackingFieldName(nameof(ParameterSelector<T>.Id)));
+        SerializedProperty parameterIndexProperty = property.FindPropertyRelative(GetBackingFieldName(nameof(ParameterSelector<T>.ParameterIndex)));
 
         (Rect controllerRect, Rect parameterSelectorRect) = GetPropertyRects(EditorGUI.PrefixLabel(position, label));
-        EditorGUI.PropertyField(controllerRect, controllerProperty, GUIContent.none);
-        if (controllerProperty.objectReferenceValue is AnimatorController controller)
+        EditorGUI.PropertyField(controllerRect, targetProperty, GUIContent.none);
+        if (targetProperty.objectReferenceValue is T target)
         {
-            AnimatorControllerParameter[] parameters = controller.parameters;
+            IEnumerable<Parameter> parameters = GetParameters(target);
             GUIContent[] options = parameters
-                .Select(p => new GUIContent(p.name))
+                .Select(p => new GUIContent(p.Name))
                 .ToArray();
             parameterIndexProperty.intValue = parameterIndexProperty.intValue == -1 ? 0 : ParameterSelectorField(options);
-            hashProperty.intValue = parameters[parameterIndexProperty.intValue].nameHash;
+            hashProperty.intValue = parameters.ElementAt(parameterIndexProperty.intValue).Hash;
         }
         else
         {

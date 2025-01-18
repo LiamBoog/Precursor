@@ -26,7 +26,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 100}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 585
+  controlID: 95
   draggingID: 0
 --- !u!114 &2
 MonoBehaviour:
@@ -134,7 +134,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts/VFX
+    - Assets/Editor
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -142,16 +142,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scripts/VFX
+  - Assets/Editor
   m_LastFoldersGridSize: 64
   m_LastProjectPath: C:\Users\Liam Boog\Documents\Unity Projects\Precursor
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 847c0000
-    m_LastClickedID: 31876
-    m_ExpandedIDs: 00000000507800005278000054780000567800005878000000ca9a3bffffff7f
+    m_SelectedIDs: e4790000
+    m_LastClickedID: 31204
+    m_ExpandedIDs: 00000000627800006478000066780000687800006a78000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -179,7 +179,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000507800005278000054780000567800005878000000ca9a3bffffff7f
+    m_ExpandedIDs: 00000000627800006478000066780000687800006a780000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -204,8 +204,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: d08cffff
-    m_LastClickedInstanceID: -29488
+    m_SelectedInstanceIDs: f0760000
+    m_LastClickedInstanceID: 30448
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000eca6fefffc770000fe7700000276000040750000e2960000
     m_RenameOverlay:
@@ -259,7 +259,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 586
+  controlID: 96
   draggingID: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -592,7 +592,7 @@ MonoBehaviour:
       snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 0
       id: UnityEditor.SceneViewCameraOverlay
-      index: 12
+      index: 16
       layout: 4
       size: {x: 0, y: 0}
       sizeOverriden: 0
@@ -704,7 +704,7 @@ MonoBehaviour:
       containerId: overlay-container--right
       floating: 0
       collapsed: 0
-      displayed: 0
+      displayed: 1
       snapOffset: {x: 48, y: 48}
       snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 0
@@ -750,9 +750,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 3.4598355, y: 0.34822026, z: -0.01592094}
+    m_Target: {x: 2.1359434, y: 0.31255507, z: -0.028346587}
     speed: 2
-    m_Value: {x: 3.4598355, y: 0.34822026, z: -0.01592094}
+    m_Value: {x: 2.1359434, y: 0.31255507, z: -0.028346587}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -802,9 +802,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 3.4515972
+    m_Target: 4.6941724
     speed: 2
-    m_Value: 3.4515972
+    m_Value: 4.6941724
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -866,7 +866,7 @@ MonoBehaviour:
   m_SerializedViewNames: []
   m_SerializedViewValues: []
   m_PlayModeViewName: GameView
-  m_ShowGizmos: 0
+  m_ShowGizmos: 1
   m_TargetDisplay: 0
   m_ClearColor: {r: 0, g: 0, b: 0, a: 0}
   m_TargetSize: {x: 1692, y: 876}
@@ -876,7 +876,7 @@ MonoBehaviour:
   m_EnterPlayModeBehavior: 0
   m_UseMipMap: 0
   m_VSyncEnabled: 0
-  m_Gizmos: 0
+  m_Gizmos: 1
   m_Stats: 1
   m_SelectedSizes: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
   m_ZoomArea:
@@ -896,7 +896,7 @@ MonoBehaviour:
     m_HSlider: 0
     m_VSlider: 0
     m_IgnoreScrollWheelUntilClicked: 0
-    m_EnableMouseInput: 1
+    m_EnableMouseInput: 0
     m_EnableSliderZoomHorizontal: 0
     m_EnableSliderZoomVertical: 0
     m_UniformScale: 1
@@ -1165,7 +1165,7 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: -29488
+  m_LastSelectedObjectID: 30448
 --- !u!114 &13
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -1229,9 +1229,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: d08cffff
-      m_LastClickedID: -29488
-      m_ExpandedIDs: 16fbffff
+      m_SelectedIDs: f0760000
+      m_LastClickedID: 30448
+      m_ExpandedIDs: ecfafffff87600000a770000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 

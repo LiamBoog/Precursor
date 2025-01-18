@@ -1,3 +1,4 @@
+using UnityEditor.Animations;
 using UnityEngine;
 
 public class PlayerAnimator : MonoBehaviour
@@ -5,9 +6,9 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField] private PlayerController playerController;
     [SerializeField] private Animator animator;
     [SerializeField] private ExpMovingAverageFloat horizontalVelocity;
-    [SerializeField] private AnimatorControllerParameterHash verticalVelocityParameter;
-    [SerializeField] private AnimatorControllerParameterHash horizontalVelocityParameter;
-    [SerializeField] private AnimatorControllerParameterHash groundedParameter;
+    [SerializeField] private ParameterSelector<AnimatorController> verticalVelocityParameter;
+    [SerializeField] private ParameterSelector<AnimatorController> horizontalVelocityParameter;
+    [SerializeField] private ParameterSelector<AnimatorController> groundedParameter;
     
     private void Update()
     {
