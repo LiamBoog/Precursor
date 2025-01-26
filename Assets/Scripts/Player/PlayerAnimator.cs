@@ -1,8 +1,6 @@
-using System;
 using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
 
 public class PlayerAnimator : MonoBehaviour
 {
@@ -14,22 +12,6 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField] private ParameterSelector<AnimatorController> groundedParameter;
     [SerializeField] private UnityEvent onGrounded;
     [SerializeField] private UnityEvent onJump;
-    [SerializeField] private InputActionReference jump;
-
-    private void OnEnable()
-    {
-        jump.action.performed += OnJump;
-    }
-
-    private void OnDisable()
-    {
-        jump.action.performed -= OnJump;
-    }
-
-    private void OnJump(InputAction.CallbackContext _)
-    {
-        //onJump.Invoke();
-    }
 
     private void Update()
     {
