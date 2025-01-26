@@ -144,7 +144,6 @@ GameObject:
   - component: {fileID: 350345269}
   - component: {fileID: 350345268}
   - component: {fileID: 350345267}
-  - component: {fileID: 350345270}
   m_Layer: 0
   m_Name: Landing Effect
   m_TagString: Untagged
@@ -260,19 +259,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1632814261}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &350345270
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 350345266}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d9f94fcfc14f9e4f886148e5609aa76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  visualEffect: {fileID: 350345268}
 --- !u!1 &839083118
 GameObject:
   m_ObjectHideFlags: 0
@@ -20459,9 +20445,9 @@ MonoBehaviour:
   onGrounded:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 350345270}
-        m_TargetAssemblyTypeName: ParticleController, Assembly-CSharp
-        m_MethodName: SpawnParticle
+      - m_Target: {fileID: 350345268}
+        m_TargetAssemblyTypeName: UnityEngine.VFX.VisualEffect, UnityEngine
+        m_MethodName: Play
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -20474,9 +20460,9 @@ MonoBehaviour:
   onJump:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1927003503}
-        m_TargetAssemblyTypeName: ParticleController, Assembly-CSharp
-        m_MethodName: SpawnParticle
+      - m_Target: {fileID: 1927003502}
+        m_TargetAssemblyTypeName: UnityEngine.VFX.VisualEffect, UnityEngine
+        m_MethodName: Play
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -20840,7 +20826,6 @@ GameObject:
   - component: {fileID: 1927003500}
   - component: {fileID: 1927003502}
   - component: {fileID: 1927003501}
-  - component: {fileID: 1927003503}
   m_Layer: 0
   m_Name: Jump Effect
   m_TagString: Untagged
@@ -20956,19 +20941,6 @@ VisualEffect:
         m_Overridden: 1
     m_Bool:
       m_Array: []
---- !u!114 &1927003503
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1927003499}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d9f94fcfc14f9e4f886148e5609aa76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  visualEffect: {fileID: 1927003502}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
