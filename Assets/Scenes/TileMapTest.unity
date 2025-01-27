@@ -20442,6 +20442,10 @@ MonoBehaviour:
     <Id>k__BackingField: 862969536
     <ParameterIndex>k__BackingField: 2
     <Target>k__BackingField: {fileID: 9100000, guid: 586405c207b62b44e8a7790e9c9c2b62, type: 2}
+  wallParameter:
+    <Id>k__BackingField: -1278787384
+    <ParameterIndex>k__BackingField: 3
+    <Target>k__BackingField: {fileID: 9100000, guid: 586405c207b62b44e8a7790e9c9c2b62, type: 2}
   onGrounded:
     m_PersistentCalls:
       m_Calls:
@@ -20472,7 +20476,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  jump: {fileID: 6384440746060477519, guid: cbac4485a791a924082cae6b593cb872, type: 3}
 --- !u!4 &1632814261 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2319500440127631333, guid: cfaed687db67d81459399607058d2c75, type: 3}

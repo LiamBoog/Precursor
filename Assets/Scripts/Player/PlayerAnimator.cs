@@ -1,6 +1,7 @@
 using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 public class PlayerAnimator : MonoBehaviour
 {
@@ -10,12 +11,14 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField] private ParameterSelector<AnimatorController> verticalVelocityParameter;
     [SerializeField] private ParameterSelector<AnimatorController> horizontalVelocityParameter;
     [SerializeField] private ParameterSelector<AnimatorController> groundedParameter;
+    [FormerlySerializedAs("onWallParameter")] [SerializeField] private ParameterSelector<AnimatorController> wallParameter;
     [SerializeField] private UnityEvent onGrounded;
     [SerializeField] private UnityEvent onJump;
 
     private void Update()
     {
         animator.SetFloat(verticalVelocityParameter, playerController.Velocity.y);
+        animator.SetInteger(wallParameter, playerController.WallCheck());
         
         bool grounded = playerController.GroundCheck();
         if (grounded && !animator.GetBool(groundedParameter))
