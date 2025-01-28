@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-public abstract class ParameterSelectorEditor<T> : PropertyDrawer where T : Object
+public abstract class ParameterSelectorDrawer<T> : PropertyDrawer where T : Object
 {
     protected struct Parameter
     {

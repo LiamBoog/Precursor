@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.VFX;
 
 [CustomPropertyDrawer(typeof(ParameterSelector<VisualEffect>))]
-public class VisualEffectParameterSelector : ParameterSelectorEditor<VisualEffect>
+public class VisualEffectParameterSelectorDrawer : ParameterSelectorDrawer<VisualEffect>
 {
     protected override IEnumerable<Parameter> GetParameters(VisualEffect target)
     {
