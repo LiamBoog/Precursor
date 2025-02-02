@@ -55,7 +55,7 @@ public class WallSwingState : SwingingState
         kinematics.position = anchor + rope;
         kinematics.velocity = Mathf.Deg2Rad * angularVelocity * radius * new Vector2(-rope.y, rope.x).normalized;
 
-        Debug.DrawLine(anchor, kinematics.position, Color.blue);
+        player.DrawRope(anchor, kinematics.position);
         Debug.DrawRay(anchor, radius * (Quaternion.Euler(0f, 0f, 90f * Math.Sign(angle)) * Vector2.down), Color.yellow);
  
         motion = null;

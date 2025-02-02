@@ -216,7 +216,7 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
             interrupts.Add(collision);
             movementController.Update(0f, ref kinematics, interrupts);
         }
-        //Debug.DrawRay(transform.position, displacement, Color.blue, 2f);
+        Debug.DrawRay(transform.position, displacement, Color.blue, 2f);
         
         // Apply motion
         transform.position += (Vector3) displacement;
