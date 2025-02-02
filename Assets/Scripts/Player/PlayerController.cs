@@ -94,7 +94,8 @@ public interface IPlayerInfo
     bool GroundCheck();
     int WallCheck();
     bool GrappleRaycast(out Vector2 anchor);
-    IEnumerable<Vector2> Touching(IEnumerable<Vector2> directions);
+    void DrawRope(Vector2 a, Vector2 b);
+    void ShowRope(bool show);
 }
 
 public struct JumpInterrupt : IInterrupt
@@ -150,6 +151,8 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
     
     [SerializeField] private CollisionResolver collisionResolver;
     [SerializeField] private LayerMask grappleLayer;
+
+    [SerializeField] private Rope rope;
 
     private MovementStateMachine movementController;
     private Vector2 velocity;
@@ -257,6 +260,16 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
     public IEnumerable<Vector2> Touching(IEnumerable<Vector2> directions)
     {
         return directions.Where(d => collisionResolver.Touching(d));
+    }
+    
+    public void DrawRope(Vector2 a, Vector2 b)
+    {
+        rope.SetPositions(a, b);
+    }
+
+    public void ShowRope(bool show)
+    {
+        rope.Show(show);
     }
 
     private void OnJump(InputAction.CallbackContext _)

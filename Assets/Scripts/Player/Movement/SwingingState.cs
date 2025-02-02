@@ -65,6 +65,8 @@ public class SwingingState : MovementState
         kinematics.velocity = Mathf.Deg2Rad * angularVelocity * radius * new Vector2(-rope.y, rope.x).normalized;
         
         Debug.DrawLine(anchor, kinematics.position, Color.blue);
+        player.ShowRope(true);
+        player.DrawRope(anchor, kinematics.position);
         Debug.DrawRay(anchor, radius * (Quaternion.Euler(0f, 0f, parameters.MaxSwingAngle) * Vector2.down), Color.yellow);
         Debug.DrawRay(anchor, radius * (Quaternion.Euler(0f, 0f, -parameters.MaxSwingAngle) * Vector2.down), Color.yellow);
         

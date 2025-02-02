@@ -40,6 +40,7 @@ public abstract partial class MovementState
     {
         parameters = movementParameters;
         player = playerInfo;
+        player.ShowRope(this is AnchoredState || this is SwingingState);
     }
 
     public virtual MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
