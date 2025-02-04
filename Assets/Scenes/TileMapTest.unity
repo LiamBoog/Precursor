@@ -133,17 +133,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf11f0e6cb1bd64aa39c917769e1ac0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &291862491 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5802470800299224662, guid: 0828d87e799b4b649a1b0ec213e959c7, type: 3}
+  m_PrefabInstance: {fileID: 5018144282760201307}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &830573726 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6452919686901968637, guid: 0828d87e799b4b649a1b0ec213e959c7, type: 3}
   m_PrefabInstance: {fileID: 5018144282760201307}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 291862491}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fca3188d9e0f7b64e99d0e18425043c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!210 &830573730
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 291862491}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: -2
+  m_SortAtRoot: 0
 --- !u!1 &839083118
 GameObject:
   m_ObjectHideFlags: 0
@@ -22539,11 +22556,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
       propertyPath: angleParameter.<Id>k__BackingField
-      value: -1052743155
+      value: -1261520819
       objectReference: {fileID: 0}
     - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
       propertyPath: swingParameter.<Id>k__BackingField
       value: 1474486160
+      objectReference: {fileID: 0}
+    - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
+      propertyPath: hangingParameter.<Id>k__BackingField
+      value: -964854668
       objectReference: {fileID: 0}
     - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
       propertyPath: swingingParameter.<Id>k__BackingField
@@ -22558,7 +22579,19 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 9100000, guid: 586405c207b62b44e8a7790e9c9c2b62, type: 2}
     - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
+      propertyPath: swingInputParameter.<Id>k__BackingField
+      value: 1474486160
+      objectReference: {fileID: 0}
+    - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
+      propertyPath: hangingParameter.<Target>k__BackingField
+      value: 
+      objectReference: {fileID: 9100000, guid: 586405c207b62b44e8a7790e9c9c2b62, type: 2}
+    - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
       propertyPath: swingingParameter.<Target>k__BackingField
+      value: 
+      objectReference: {fileID: 9100000, guid: 586405c207b62b44e8a7790e9c9c2b62, type: 2}
+    - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
+      propertyPath: swingInputParameter.<Target>k__BackingField
       value: 
       objectReference: {fileID: 9100000, guid: 586405c207b62b44e8a7790e9c9c2b62, type: 2}
     - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
@@ -22578,12 +22611,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 9100000, guid: 586405c207b62b44e8a7790e9c9c2b62, type: 2}
     - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
+      propertyPath: hangingParameter.<ParameterIndex>k__BackingField
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
       propertyPath: swingingParameter.<ParameterIndex>k__BackingField
-      value: 4
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
+      propertyPath: swingInputParameter.<ParameterIndex>k__BackingField
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
       propertyPath: angularVelocityParameter.<ParameterIndex>k__BackingField
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3729502043963725366, guid: cfaed687db67d81459399607058d2c75, type: 3}
       propertyPath: rope
@@ -22837,10 +22878,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6409354067810804803, guid: 0828d87e799b4b649a1b0ec213e959c7, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6409354067810804803, guid: 0828d87e799b4b649a1b0ec213e959c7, type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5802470800299224662, guid: 0828d87e799b4b649a1b0ec213e959c7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 830573730}
   m_SourcePrefab: {fileID: 100100000, guid: 0828d87e799b4b649a1b0ec213e959c7, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
