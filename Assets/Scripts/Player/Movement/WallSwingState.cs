@@ -32,7 +32,7 @@ public class WallSwingState : SwingingState
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
         if (interrupts.Any(i => i is ICollision || i is JumpInterrupt { type: JumpInterrupt.Type.Cancelled }))
-            return new SwingingState(parameters, player, anchor);
+            return new SwingingState(parameters, player, Anchor);
         
         return base.ProcessInterrupts(ref kinematics, interrupts);
     }
@@ -41,7 +41,7 @@ public class WallSwingState : SwingingState
     {
         onFirstUpdate?.Invoke(ref kinematics);
         
-        Vector2 ropeDirection = (kinematics.position - anchor).normalized;
+        Vector2 ropeDirection = (kinematics.position - Anchor).normalized;
         Vector2 velocityDirection = new Vector2(-ropeDirection.y, ropeDirection.x);
         Vector2 tangentialVelocity = Vector3.Project(kinematics.velocity, velocityDirection);
         
@@ -52,14 +52,14 @@ public class WallSwingState : SwingingState
         IdealPendulumCurve(ref t, ref angle, ref angularVelocity);
         
         Vector2 rope = radius * (Quaternion.Euler(0f, 0f, angle - previousAngle) * ropeDirection);
-        kinematics.position = anchor + rope;
+        kinematics.position = Anchor + rope;
         kinematics.velocity = Mathf.Deg2Rad * angularVelocity * radius * new Vector2(-rope.y, rope.x).normalized;
 
-        player.DrawRope(anchor, kinematics.position);
-        Debug.DrawRay(anchor, radius * (Quaternion.Euler(0f, 0f, 90f * Math.Sign(angle)) * Vector2.down), Color.yellow);
+        player.DrawRope(Anchor, kinematics.position);
+        Debug.DrawRay(Anchor, radius * (Quaternion.Euler(0f, 0f, 90f * Math.Sign(angle)) * Vector2.down), Color.yellow);
  
         motion = null;
-        return t > 0f ? new SwingingState(parameters, player, anchor) : this;
+        return t > 0f ? new SwingingState(parameters, player, Anchor) : this;
     }
     
     private void IdealPendulumCurve(ref float t, ref float angle, ref float angularVelocity)

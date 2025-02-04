@@ -172,6 +172,7 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
     public IInputBuffer JumpBuffer => jumpBuffer;
     public Vector2 Position => transform.position;
     public Vector2 Velocity => velocity;
+    public MovementState State => movementController.State;
 
     private void OnEnable()
     {

@@ -22537,6 +22537,54 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
+      propertyPath: angleParameter.<Id>k__BackingField
+      value: -1052743155
+      objectReference: {fileID: 0}
+    - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
+      propertyPath: swingParameter.<Id>k__BackingField
+      value: 1474486160
+      objectReference: {fileID: 0}
+    - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
+      propertyPath: swingingParameter.<Id>k__BackingField
+      value: 1474486160
+      objectReference: {fileID: 0}
+    - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
+      propertyPath: angleParameter.<Target>k__BackingField
+      value: 
+      objectReference: {fileID: 9100000, guid: 586405c207b62b44e8a7790e9c9c2b62, type: 2}
+    - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
+      propertyPath: swingParameter.<Target>k__BackingField
+      value: 
+      objectReference: {fileID: 9100000, guid: 586405c207b62b44e8a7790e9c9c2b62, type: 2}
+    - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
+      propertyPath: swingingParameter.<Target>k__BackingField
+      value: 
+      objectReference: {fileID: 9100000, guid: 586405c207b62b44e8a7790e9c9c2b62, type: 2}
+    - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
+      propertyPath: angularVelocityParameter.<Id>k__BackingField
+      value: -1261520819
+      objectReference: {fileID: 0}
+    - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
+      propertyPath: angleParameter.<ParameterIndex>k__BackingField
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
+      propertyPath: swingParameter.<ParameterIndex>k__BackingField
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
+      propertyPath: angularVelocityParameter.<Target>k__BackingField
+      value: 
+      objectReference: {fileID: 9100000, guid: 586405c207b62b44e8a7790e9c9c2b62, type: 2}
+    - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
+      propertyPath: swingingParameter.<ParameterIndex>k__BackingField
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3720095014111846052, guid: cfaed687db67d81459399607058d2c75, type: 3}
+      propertyPath: angularVelocityParameter.<ParameterIndex>k__BackingField
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 3729502043963725366, guid: cfaed687db67d81459399607058d2c75, type: 3}
       propertyPath: rope
       value: 

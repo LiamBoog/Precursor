@@ -13,17 +13,17 @@ public class SwingingState : MovementState
     private const double BISECTION_PRECISION = 1e-14d;
     private const int BISECTION_MAX_ITERATIONS = 100;
 
-    protected Vector2 anchor;
+    public Vector2 Anchor { get; }
     protected float radius;
     private Action<KinematicState<Vector2>> onFirstUpdate;
 
     public SwingingState(MovementParameters movementParameters, IPlayerInfo playerInfo, Vector2 anchor) : base(movementParameters, playerInfo)
     {
-        this.anchor = anchor;
+        this.Anchor = anchor;
         onFirstUpdate = kinematics =>
         {
             onFirstUpdate = null;
-            radius = GetAnchoredRadius(kinematics, this.anchor);
+            radius = GetAnchoredRadius(kinematics, this.Anchor);
         };
     }
 
@@ -32,7 +32,7 @@ public class SwingingState : MovementState
         if (interrupts.Any(i => i is JumpInterrupt { type: JumpInterrupt.Type.Started }))
         {
             if (player.WallCheck() != 0)
-                return new WallSwingState(parameters, player, anchor);
+                return new WallSwingState(parameters, player, Anchor);
             
             return new JumpingState(parameters, player, kinematics);
         }
@@ -41,7 +41,7 @@ public class SwingingState : MovementState
             return new FallingState(parameters, player, parameters.FallGravity);
         
         if (interrupts.Any(i => i is GrappleInterrupt) && player.WallCheck() != 0)
-            return new VerticalGrappleState(parameters, player, anchor);
+            return new VerticalGrappleState(parameters, player, Anchor);
         
         return base.ProcessInterrupts(ref kinematics, interrupts);
     }
@@ -50,7 +50,7 @@ public class SwingingState : MovementState
     {
         onFirstUpdate?.Invoke(kinematics);
 
-        Vector2 ropeDirection = (kinematics.position - anchor).normalized;
+        Vector2 ropeDirection = (kinematics.position - Anchor).normalized;
         Vector2 velocityDirection = new Vector2(-ropeDirection.y, ropeDirection.x);
         Vector2 tangentialVelocity = Vector3.Project(kinematics.velocity, velocityDirection);
         
@@ -61,14 +61,14 @@ public class SwingingState : MovementState
         DrivenUnderdampedPendulumCurve(ref t, ref angle, ref angularVelocity);
 
         Vector2 rope = radius * (Quaternion.Euler(0f, 0f, angle - previousAngle) * ropeDirection);
-        kinematics.position = anchor + rope;
+        kinematics.position = Anchor + rope;
         kinematics.velocity = Mathf.Deg2Rad * angularVelocity * radius * new Vector2(-rope.y, rope.x).normalized;
         
-        Debug.DrawLine(anchor, kinematics.position, Color.blue);
+        Debug.DrawLine(Anchor, kinematics.position, Color.blue);
         player.ShowRope(true);
-        player.DrawRope(anchor, kinematics.position);
-        Debug.DrawRay(anchor, radius * (Quaternion.Euler(0f, 0f, parameters.MaxSwingAngle) * Vector2.down), Color.yellow);
-        Debug.DrawRay(anchor, radius * (Quaternion.Euler(0f, 0f, -parameters.MaxSwingAngle) * Vector2.down), Color.yellow);
+        player.DrawRope(Anchor, kinematics.position);
+        Debug.DrawRay(Anchor, radius * (Quaternion.Euler(0f, 0f, parameters.MaxSwingAngle) * Vector2.down), Color.yellow);
+        Debug.DrawRay(Anchor, radius * (Quaternion.Euler(0f, 0f, -parameters.MaxSwingAngle) * Vector2.down), Color.yellow);
         
         motion = null;
         return this;
