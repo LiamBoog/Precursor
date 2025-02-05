@@ -35,7 +35,7 @@ public class PlayerAnimator : MonoBehaviour
         {
             onGrounded.Invoke(); // TODO - Should make a nicer way to do this
         }
-        if (!grounded && animator.GetBool(groundedParameter))
+        if (!grounded && animator.GetBool(groundedParameter) && playerController.Velocity.y > 0f)
         {
             onJump.Invoke();
         }
