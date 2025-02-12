@@ -1500,8 +1500,8 @@
     "m_ObjectId": "1e8ee99d604641cd88e3791913604d9a",
     "m_Title": "Determine if Pixel Should be On",
     "m_Position": {
-        "x": -548.999755859375,
-        "y": 288.0
+        "x": -548.9998779296875,
+        "y": 287.9999694824219
     }
 }
 
@@ -5274,7 +5274,7 @@
     "m_Title": "Sample Target Curve",
     "m_Position": {
         "x": -1356.9998779296875,
-        "y": 229.0
+        "y": 228.99996948242188
     }
 }
 

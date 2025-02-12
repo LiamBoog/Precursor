@@ -14,6 +14,7 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField] private ParameterSelector<AnimatorController> hangingParameter;
     [SerializeField] private ParameterSelector<AnimatorController> swingingParameter;
     [SerializeField] private ParameterSelector<AnimatorController> angularVelocityParameter;
+    [SerializeField] private ParameterSelector<AnimatorController> grapplingParameter;
     
     [SerializeField] private UnityEvent onGrounded;
     [SerializeField] private UnityEvent onJump;
@@ -26,6 +27,7 @@ public class PlayerAnimator : MonoBehaviour
         SetGroundedProperty();
         SetHorizontalVelocityProperty();
         SetSwingingProperties();
+        SetGrapplingProperty();
     }
 
     private void SetGroundedProperty()
@@ -70,5 +72,10 @@ public class PlayerAnimator : MonoBehaviour
 
         animator.SetBool(swingingParameter, playerController.Aim.x * angularVelocity > 0f);
         animator.SetFloat(angularVelocityParameter, angularVelocity);
+    }
+
+    private void SetGrapplingProperty()
+    {
+        animator.SetBool(grapplingParameter, playerController.State is GrappleState);
     }
 }
