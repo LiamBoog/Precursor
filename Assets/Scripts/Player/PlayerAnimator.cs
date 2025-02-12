@@ -16,6 +16,7 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField] private ParameterSelector<AnimatorController> angularVelocityParameter;
     [SerializeField] private ParameterSelector<AnimatorController> grapplingParameter;
     [SerializeField] private ParameterSelector<AnimatorController> stationaryParameter;
+    [SerializeField] private ParameterSelector<AnimatorController> impactingParameter;
     
     [SerializeField] private UnityEvent onGrounded;
     [SerializeField] private UnityEvent onJump;
@@ -26,6 +27,7 @@ public class PlayerAnimator : MonoBehaviour
         animator.SetInteger(wallParameter, playerController.WallCheck());
         animator.SetBool(grapplingParameter, playerController.State is GrappleState);
         animator.SetBool(stationaryParameter, Mathf.Abs(playerController.Velocity.x) < 0.01f);
+        animator.SetBool(impactingParameter, playerController.Velocity.x != 0f &&  playerController.State is ImpactState);
 
         SetGroundedProperty();
         SetHorizontalVelocityProperty();
