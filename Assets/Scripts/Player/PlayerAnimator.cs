@@ -27,7 +27,7 @@ public class PlayerAnimator : MonoBehaviour
         animator.SetInteger(wallParameter, playerController.WallCheck());
         animator.SetBool(grapplingParameter, playerController.State is GrappleState);
         animator.SetBool(stationaryParameter, Mathf.Abs(playerController.Velocity.x) < 0.01f);
-        animator.SetBool(impactingParameter, playerController.Velocity.x != 0f &&  playerController.State is ImpactState);
+        animator.SetBool(impactingParameter, playerController.State is ImpactState);
 
         SetGroundedProperty();
         SetHorizontalVelocityProperty();
