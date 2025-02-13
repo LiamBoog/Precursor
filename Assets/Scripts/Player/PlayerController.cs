@@ -254,7 +254,7 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
         Vector2 direction = Quaternion.Euler(0f, 0f, snappedAngle) * Vector3.up;
         
         ShowRope(true);
-        DrawRope(transform.position);
+        DrawRope((Vector2) transform.position + direction * movementParameters.RopeLength);
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, movementParameters.RopeLength, grappleLayer);
         anchor = hit.point;
         return hit;

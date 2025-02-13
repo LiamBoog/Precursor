@@ -8,10 +8,12 @@ public class ImpactState : MovementState
     
     private Vector2 direction;
     private ImpactInitializer onFirstUpdate;
+    private int wall;
 
     public ImpactState(MovementParameters movementParameters, IPlayerInfo playerInfo, Vector2 direction) : base(movementParameters, playerInfo)
     {
         this.direction = direction;
+        wall = playerInfo.WallCheck();
         onFirstUpdate = (ref KinematicState<Vector2> kinematics) =>
         {
             kinematics.velocity = parameters.ImpactSpeed * direction;
@@ -50,9 +52,9 @@ public class ImpactState : MovementState
 
     private MovementState GetJumpState(KinematicState<Vector2> kinematics)
     {
-        return player.GroundCheck() ? 
+        return kinematics.velocity.y == 0f ? 
             new GrappleJumpState(parameters, player, kinematics) :
-            new GrappleWallJumpState(parameters, player, kinematics);
+            new GrappleWallJumpState(parameters, player, kinematics, wall);
     }
 
     private KinematicSegment<Vector2>[] ImpactCurve(ref float t, ref KinematicState<Vector2> kinematics)

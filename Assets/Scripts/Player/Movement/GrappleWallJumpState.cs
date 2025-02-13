@@ -35,11 +35,11 @@ public class GrappleWallJumpState : MovementState
     
     private MovementState innerState;
     
-    public GrappleWallJumpState(MovementParameters movementParameters, IPlayerInfo playerInfo, KinematicState<Vector2> initialKinematics) : base(movementParameters, playerInfo)
+    public GrappleWallJumpState(MovementParameters movementParameters, IPlayerInfo playerInfo, KinematicState<Vector2> initialKinematics, int wall) : base(movementParameters, playerInfo)
     {
         float boost = (initialKinematics.velocity.magnitude - movementParameters.TopSpeed) / (movementParameters.ImpactSpeed - movementParameters.TopSpeed);
         GrappleWallJumpMovementParameters newMovementParameters = new GrappleWallJumpMovementParameters(movementParameters, boost);
-        innerState = new WallJumpState(newMovementParameters, playerInfo, player.WallCheck(), initialKinematics);
+        innerState = new WallJumpState(newMovementParameters, playerInfo, wall, initialKinematics);
     }
 
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
