@@ -24,7 +24,10 @@ public class ImpactState : MovementState
     public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
     {
         if (interrupts.FirstOrDefault(i => i is JumpInterrupt) is JumpInterrupt { type: JumpInterrupt.Type.Started })
-                return GetJumpState(kinematics);
+            return GetJumpState(kinematics);
+
+        if (interrupts.Any(i => i is ICollision))
+            return new FallingState(parameters, player, parameters.FallGravity);
         
         return base.ProcessInterrupts(ref kinematics, interrupts);
     }
