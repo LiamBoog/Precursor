@@ -45,7 +45,7 @@ public class GrappleState : MovementState
         );
         t -= moveTime;
 
-        player.DrawRope(anchor, kinematics.position);
+        player.DrawRope(anchor);
         if (t > 0f)
             return new FallingState(parameters, player, parameters.FallGravity);
 

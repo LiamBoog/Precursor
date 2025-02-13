@@ -94,7 +94,7 @@ public interface IPlayerInfo
     bool GroundCheck();
     int WallCheck();
     bool GrappleRaycast(out Vector2 anchor);
-    void DrawRope(Vector2 a, Vector2 b);
+    void DrawRope(Vector2 anchor);
     void ShowRope(bool show);
 }
 
@@ -153,6 +153,7 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
     [SerializeField] private LayerMask grappleLayer;
 
     [SerializeField] private Rope rope;
+    [SerializeField] private Transform ropeOrigin;
 
     private MovementStateMachine movementController;
     private Vector2 velocity;
@@ -253,7 +254,7 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
         Vector2 direction = Quaternion.Euler(0f, 0f, snappedAngle) * Vector3.up;
         
         ShowRope(true);
-        DrawRope(transform.position, (Vector2) transform.position + movementParameters.RopeLength * direction);
+        DrawRope(transform.position);
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, movementParameters.RopeLength, grappleLayer);
         anchor = hit.point;
         return hit;
@@ -264,9 +265,9 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
         return directions.Where(d => collisionResolver.Touching(d));
     }
     
-    public void DrawRope(Vector2 a, Vector2 b)
+    public void DrawRope(Vector2 anchor)
     {
-        rope.SetPositions(a, b);
+        rope.SetPositions(anchor, ropeOrigin.position);
     }
 
     public void ShowRope(bool show)

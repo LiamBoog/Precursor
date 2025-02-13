@@ -74,7 +74,7 @@ public class AnchoredState : MovementState
         }
         
         player.ShowRope(true);
-        player.DrawRope(anchor, kinematics.position);
+        player.DrawRope(anchor);
         Debug.DrawLine(anchor, kinematics.position, Color.blue);
 
         return this;

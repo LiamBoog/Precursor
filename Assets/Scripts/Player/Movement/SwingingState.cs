@@ -66,7 +66,7 @@ public class SwingingState : MovementState
         
         Debug.DrawLine(Anchor, kinematics.position, Color.blue);
         player.ShowRope(true);
-        player.DrawRope(Anchor, kinematics.position);
+        player.DrawRope(Anchor);
         Debug.DrawRay(Anchor, radius * (Quaternion.Euler(0f, 0f, parameters.MaxSwingAngle) * Vector2.down), Color.yellow);
         Debug.DrawRay(Anchor, radius * (Quaternion.Euler(0f, 0f, -parameters.MaxSwingAngle) * Vector2.down), Color.yellow);
         
