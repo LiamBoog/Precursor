@@ -12,7 +12,7 @@ public class VerticalGrappleJump : MovementState
         }
 
         public override float MaxJumpHeight { get; }
-        protected override float JumpDuration { get; }
+        public override float JumpDuration { get; }
     }
 
     private MovementState innerState;

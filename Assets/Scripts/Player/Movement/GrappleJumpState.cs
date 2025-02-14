@@ -45,16 +45,16 @@ public class GrappleJumpState : MovementState
             getAcceleration = () => GetAcceleration(ImpactSpeed, velocityScalingFactor * AccelerationDistance);
             getDeceleration = () => GetAcceleration(ImpactSpeed, velocityScalingFactor * DecelerationDistance);
             MaxJumpDistance = velocityScalingFactor * baseParameters.MaxJumpDistance;
+            JumpDuration = baseParameters.JumpDuration;
         }
         
         public override float TopSpeed => currentTopSpeed;
 
-        protected override float MaxHorizontalJumpSpeed => ImpactSpeed;
-
         public override float Acceleration => getAcceleration();
         public override float Deceleration => getDeceleration();
         public override float MaxJumpDistance { get; }
-        
+        public override float JumpDuration { get; }
+
         public void SetTopSpeed(float newTopSpeed) => currentTopSpeed = newTopSpeed;
     }
 

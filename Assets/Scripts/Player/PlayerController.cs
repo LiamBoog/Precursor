@@ -57,7 +57,7 @@ public class MovementParameters
 
     protected virtual float MaxHorizontalJumpSpeed => TopSpeed;
     private float ImpactDuration => 2f * impactDistance / (ImpactSpeed + TopSpeed);
-    protected virtual float JumpDuration => MaxJumpDistance / MaxHorizontalJumpSpeed;
+    public virtual float JumpDuration => MaxJumpDistance / MaxHorizontalJumpSpeed;
 
     public virtual float Acceleration => GetAcceleration(TopSpeed, AccelerationDistance);
     public virtual float Deceleration => GetAcceleration(TopSpeed, DecelerationDistance);
