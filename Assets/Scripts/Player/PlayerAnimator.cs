@@ -63,6 +63,7 @@ public class PlayerAnimator : MonoBehaviour
         if (playerController.State is not SwingingState swingingState)
         {
             animator.SetBool(hangingParameter, false);
+            animator.SetBool(swingingParameter, false);
             return;
         }
         animator.SetBool(hangingParameter, true);
