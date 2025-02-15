@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class VerticalGrappleJump : MovementState
@@ -23,6 +24,12 @@ public class VerticalGrappleJump : MovementState
         innerState = new JumpingState(newParameters, player, initialKinematics);
     }
 
+    public override MovementState ProcessInterrupts(ref KinematicState<Vector2> kinematics, IEnumerable<IInterrupt> interrupts)
+    {
+        innerState = innerState.ProcessInterrupts(ref kinematics, interrupts);
+        return this;
+    }
+
     public override MovementState UpdateKinematics(ref float t, ref KinematicState<Vector2> kinematics, out KinematicSegment<Vector2>[] motion)
     {
         innerState = innerState.UpdateKinematics(ref t, ref kinematics, out motion);
@@ -31,7 +38,7 @@ public class VerticalGrappleJump : MovementState
             innerState.parameters = parameters;
             return innerState;
         }
-
+        
         return this;
     }
 }
