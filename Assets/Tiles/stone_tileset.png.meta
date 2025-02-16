@@ -483,6 +483,77 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: stone_tileset_15
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 789ab35fdc3c7704d8940cf1abaddc76
+      internalID: -71710771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stone_tileset_16
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 0
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -5, y: 0}
+        - {x: -5, y: -5}
+        - {x: 5, y: -5}
+        - {x: 5, y: 0}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44b5568fa3bae4846953b94e6f13a3f3
+      internalID: -498751722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stone_tileset_17
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 0
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -5, y: 5}
+        - {x: -5, y: 0}
+        - {x: 5, y: 0}
+        - {x: 5, y: 5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1a4eb3a32d933e49b7efefcdf4867d2
+      internalID: -24265400
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -501,6 +572,9 @@ TextureImporter:
       stone_tileset_12: 1042334702
       stone_tileset_13: 995294468
       stone_tileset_14: -739029770
+      stone_tileset_15: -71710771
+      stone_tileset_16: -498751722
+      stone_tileset_17: -24265400
       stone_tileset_2: 1207967700
       stone_tileset_3: 1214700161
       stone_tileset_4: 1650981684
