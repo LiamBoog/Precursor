@@ -204,6 +204,12 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
         grapple.action.performed -= OnGrapple;
     }
 
+    public void ResetMotion()
+    {
+        velocity = default;
+        movementController = new(movementParameters, this);
+    }
+
     private void Update()
     {
         // Compute new kinematics

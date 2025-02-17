@@ -7,7 +7,14 @@ public class DeathReset : MonoBehaviour
         Vector2 initialPosition = transform.position;
         foreach (DeathBox deathBox in FindObjectsByType<DeathBox>(FindObjectsSortMode.None))
         {
-            deathBox.OnDeath += () => transform.position = initialPosition;
+            deathBox.OnDeath += () =>
+            {
+                transform.position = initialPosition;
+                if (!TryGetComponent(out PlayerController player))
+                    return;
+                
+                player.ResetMotion();
+            };
         }
     }
 }
