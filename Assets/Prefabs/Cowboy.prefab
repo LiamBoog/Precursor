@@ -482,11 +482,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2093549089998307079, guid: 68a5c64be62cc684aaa626288890b837, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.919797
+      value: 4.9
       objectReference: {fileID: 0}
     - target: {fileID: 2093549089998307079, guid: 68a5c64be62cc684aaa626288890b837, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.4861586
+      value: 0.19
       objectReference: {fileID: 0}
     - target: {fileID: 2093549089998307079, guid: 68a5c64be62cc684aaa626288890b837, type: 3}
       propertyPath: m_LocalPosition.z
@@ -552,6 +552,10 @@ PrefabInstance:
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8871924266420299984, guid: 68a5c64be62cc684aaa626288890b837, type: 3}
+      propertyPath: collisionLayers.m_Bits
+      value: 320
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -574,6 +578,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5127175880758180961, guid: 68a5c64be62cc684aaa626288890b837, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3720095014111846052}
+    - targetCorrespondingSourceObject: {fileID: 5127175880758180961, guid: 68a5c64be62cc684aaa626288890b837, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5850370262677003922}
   m_SourcePrefab: {fileID: 100100000, guid: 68a5c64be62cc684aaa626288890b837, type: 3}
 --- !u!4 &2319500440127631333 stripped
 Transform:
@@ -703,3 +710,15 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &5850370262677003922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8798382060370734211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c6b82415c1662a4bb9d5519d6c527e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
