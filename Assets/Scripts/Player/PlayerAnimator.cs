@@ -1,4 +1,3 @@
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -7,16 +6,16 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField] private PlayerController playerController;
     [SerializeField] private Animator animator;
     [SerializeField] private ExpMovingAverageFloat horizontalVelocity;
-    [SerializeField] private ParameterSelector<AnimatorController> verticalVelocityParameter;
-    [SerializeField] private ParameterSelector<AnimatorController> horizontalVelocityParameter;
-    [SerializeField] private ParameterSelector<AnimatorController> groundedParameter;
-    [SerializeField] private ParameterSelector<AnimatorController> wallParameter;
-    [SerializeField] private ParameterSelector<AnimatorController> hangingParameter;
-    [SerializeField] private ParameterSelector<AnimatorController> swingingParameter;
-    [SerializeField] private ParameterSelector<AnimatorController> angularVelocityParameter;
-    [SerializeField] private ParameterSelector<AnimatorController> grapplingParameter;
-    [SerializeField] private ParameterSelector<AnimatorController> stationaryParameter;
-    [SerializeField] private ParameterSelector<AnimatorController> impactingParameter;
+    [SerializeField] private ParameterSelector<Animator> verticalVelocityParameter;
+    [SerializeField] private ParameterSelector<Animator> horizontalVelocityParameter;
+    [SerializeField] private ParameterSelector<Animator> groundedParameter;
+    [SerializeField] private ParameterSelector<Animator> wallParameter;
+    [SerializeField] private ParameterSelector<Animator> hangingParameter;
+    [SerializeField] private ParameterSelector<Animator> swingingParameter;
+    [SerializeField] private ParameterSelector<Animator> angularVelocityParameter;
+    [SerializeField] private ParameterSelector<Animator> grapplingParameter;
+    [SerializeField] private ParameterSelector<Animator> stationaryParameter;
+    [SerializeField] private ParameterSelector<Animator> impactingParameter;
     
     [SerializeField] private UnityEvent onGrounded;
     [SerializeField] private UnityEvent onJump;

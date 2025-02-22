@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.Animations;
+using UnityEngine;
 
-[CustomPropertyDrawer(typeof(ParameterSelector<AnimatorController>))]
-public class AnimatorControllerParameterSelectorDrawer : ParameterSelectorDrawer<AnimatorController>
+[CustomPropertyDrawer(typeof(ParameterSelector<Animator>))]
+public class AnimatorControllerParameterSelectorDrawer : ParameterSelectorDrawer<Animator>
 {
-    protected override IEnumerable<Parameter> GetParameters(AnimatorController target) => target.parameters.Select(p => new Parameter(p.name, p.nameHash));
+    protected override IEnumerable<Parameter> GetParameters(Animator target) => target.parameters.Select(p => new Parameter(p.name, p.nameHash));
 }
