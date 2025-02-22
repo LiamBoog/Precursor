@@ -159,6 +159,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: tutotial_sprites_3
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 0
+        width: 112
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe368f50768b9c44a8fc15f6f347507b
+      internalID: -1085952423
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -173,6 +194,7 @@ TextureImporter:
       tutotial_sprites_0: -1795617918
       tutotial_sprites_1: 170232909
       tutotial_sprites_2: -1039137205
+      tutotial_sprites_3: -1085952423
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
