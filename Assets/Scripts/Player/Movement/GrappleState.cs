@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 public class GrappleState : MovementState
@@ -20,7 +19,7 @@ public class GrappleState : MovementState
             {
                 Vector2 incomingDirection = (anchor - kinematics.position).normalized;
                 Vector2 slideDirection = Vector3.Cross(collision.Normal, Vector3.Cross(incomingDirection, collision.Normal)).normalized;
-                return new ImpactState(parameters, player, slideDirection);
+                return new ImpactState(parameters, player, slideDirection, collision.Normal);
             }
             
             return new FallingState(parameters, player, parameters.FallGravity);

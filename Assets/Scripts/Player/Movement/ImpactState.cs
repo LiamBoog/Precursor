@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,10 +11,10 @@ public class ImpactState : MovementState
     private ImpactInitializer onFirstUpdate;
     private int wall;
 
-    public ImpactState(MovementParameters movementParameters, IPlayerInfo playerInfo, Vector2 direction) : base(movementParameters, playerInfo)
+    public ImpactState(MovementParameters movementParameters, IPlayerInfo playerInfo, Vector2 direction, Vector2 surfaceNormal) : base(movementParameters, playerInfo)
     {
         this.direction = direction;
-        wall = playerInfo.WallCheck();
+        wall = Math.Sign(surfaceNormal.x);
         onFirstUpdate = (ref KinematicState<Vector2> kinematics) =>
         {
             kinematics.velocity = parameters.ImpactSpeed * direction;
