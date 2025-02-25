@@ -6,16 +6,16 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField] private PlayerController playerController;
     [SerializeField] private Animator animator;
     [SerializeField] private ExpMovingAverageFloat horizontalVelocity;
-    [SerializeField] private ParameterSelector<Animator> verticalVelocityParameter;
-    [SerializeField] private ParameterSelector<Animator> horizontalVelocityParameter;
-    [SerializeField] private ParameterSelector<Animator> groundedParameter;
-    [SerializeField] private ParameterSelector<Animator> wallParameter;
-    [SerializeField] private ParameterSelector<Animator> hangingParameter;
-    [SerializeField] private ParameterSelector<Animator> swingingParameter;
-    [SerializeField] private ParameterSelector<Animator> angularVelocityParameter;
-    [SerializeField] private ParameterSelector<Animator> grapplingParameter;
-    [SerializeField] private ParameterSelector<Animator> stationaryParameter;
-    [SerializeField] private ParameterSelector<Animator> impactingParameter;
+    [SerializeField] private AnimatorParameterSelector verticalVelocityParameter;
+    [SerializeField] private AnimatorParameterSelector horizontalVelocityParameter;
+    [SerializeField] private AnimatorParameterSelector groundedParameter;
+    [SerializeField] private AnimatorParameterSelector wallParameter;
+    [SerializeField] private AnimatorParameterSelector hangingParameter;
+    [SerializeField] private AnimatorParameterSelector swingingParameter;
+    [SerializeField] private AnimatorParameterSelector angularVelocityParameter;
+    [SerializeField] private AnimatorParameterSelector grapplingParameter;
+    [SerializeField] private AnimatorParameterSelector stationaryParameter;
+    [SerializeField] private AnimatorParameterSelector impactingParameter;
     
     [SerializeField] private UnityEvent onGrounded;
     [SerializeField] private UnityEvent onJump;

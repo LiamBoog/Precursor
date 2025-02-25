@@ -2,14 +2,15 @@ using UnityEngine;
 
 public class Rope : MonoBehaviour
 {
-    [SerializeField] private ParameterSelector<Material> aProperty;
-    [SerializeField] private ParameterSelector<Material> bProperty;
-    [SerializeField] private ParameterSelector<Material> ppiProperty;
+    [SerializeField] private MaterialPropertySelector aProperty;
+    [SerializeField] private MaterialPropertySelector bProperty;
+    [SerializeField] private MaterialPropertySelector ppiProperty;
     [SerializeField] private new Renderer renderer;
 
     public void SetPositions(Vector2 a, Vector2 b)
     {
         renderer.material.SetVector(aProperty, a);
+        Debug.LogError((Shader.PropertyToID("outputBuffer0"), ppiProperty.Id, Shader.PropertyToID("PPI")));
         renderer.material.SetVector(bProperty, b);
 
         transform.position = (a + b) / 2f;
