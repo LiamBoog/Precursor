@@ -151,6 +151,7 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
     
     [SerializeField] private CollisionResolver collisionResolver;
     [SerializeField] private LayerMask grappleLayer;
+    [SerializeField] private LayerMask nonGrappleLayer;
 
     [SerializeField] private Rope rope;
     [SerializeField] private Transform ropeOrigin;
@@ -261,9 +262,17 @@ public class PlayerController : MonoBehaviour, IPlayerInfo, ICameraTarget
         
         ShowRope(true);
         DrawRope((Vector2) transform.position + direction * movementParameters.RopeLength);
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, movementParameters.RopeLength, grappleLayer);
-        anchor = hit.point;
-        return hit;
+        if (Physics2D.Raycast(transform.position, direction, movementParameters.RopeLength, nonGrappleLayer))
+        {
+        }
+        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, direction, movementParameters.RopeLength, grappleLayer | nonGrappleLayer);
+        if (hits.Length < 1 || hits.Any(h => Math.Abs(h.distance - hits[0].distance) < 0.1f && (nonGrappleLayer & (1 << h.collider.gameObject.layer)) != 0)) // Check if the first or second(!) hit is a non-grapple layer
+        {
+            anchor = default;
+            return false;
+        }
+        anchor = hits[0].point;
+        return true;
     }
 
     public IEnumerable<Vector2> Touching(IEnumerable<Vector2> directions)
