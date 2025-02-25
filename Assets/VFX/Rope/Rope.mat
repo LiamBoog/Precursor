@@ -53,14 +53,15 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - Line_Width: 1
     - PPI: 7.5
     - _EnableExternalAlpha: 0
     - _Line_Width: 1
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - A: {r: -6.42, g: 2.97, b: 0, a: 0}
-    - B: {r: -1.99, g: 5.1, b: 0, a: 0}
+    - A: {r: 0, g: 0, b: 0, a: 0}
+    - B: {r: 1, g: 1, b: 0, a: 0}
     - _A: {r: 0, g: 0, b: 0, a: 0}
     - _B: {r: 1, g: 0, b: 0, a: 0}
     - _Color: {r: 0.1882353, g: 0.20784314, b: 0.22745098, a: 1}

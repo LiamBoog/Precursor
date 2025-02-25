@@ -10,7 +10,6 @@ public class Rope : MonoBehaviour
     public void SetPositions(Vector2 a, Vector2 b)
     {
         renderer.material.SetVector(aProperty, a);
-        Debug.LogError((Shader.PropertyToID("outputBuffer0"), ppiProperty.Id, Shader.PropertyToID("PPI")));
         renderer.material.SetVector(bProperty, b);
 
         transform.position = (a + b) / 2f;
