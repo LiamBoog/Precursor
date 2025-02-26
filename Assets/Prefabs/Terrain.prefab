@@ -129,7 +129,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b152cdadb37e7464081d2bb9b6e8bc65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Tile: {fileID: 0}
+  _renderTile: {fileID: 0}
+  _enableTilemapCollider: 0
+  _gameObjectOrigin: 0
 --- !u!1 &8957875934663018742
 GameObject:
   m_ObjectHideFlags: 0
@@ -141,7 +143,7 @@ GameObject:
   - component: {fileID: 6190701609105060581}
   - component: {fileID: 3146416551577659157}
   - component: {fileID: 8327941902781005252}
-  - component: {fileID: 8106530869041407338}
+  - component: {fileID: 5529177821563798289}
   m_Layer: 0
   m_Name: RenderTilemap
   m_TagString: Untagged
@@ -251,7 +253,7 @@ TilemapRenderer:
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
---- !u!19719996 &8106530869041407338
+--- !u!19719996 &5529177821563798289
 TilemapCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
