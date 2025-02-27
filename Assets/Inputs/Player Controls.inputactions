@@ -9,7 +9,7 @@
                     "name": "Jump",
                     "type": "Button",
                     "id": "fad19b65-2cfc-4303-89d4-3371d7e43100",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -179,6 +179,17 @@
                     "name": "",
                     "id": "5d633217-d2ca-447c-9167-3bd06a7f877b",
                     "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Anchor",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dd7baf92-7ccd-499f-80d9-72aee71a4980",
+                    "path": "<Keyboard>/leftMeta",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
